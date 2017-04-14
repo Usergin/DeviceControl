@@ -1,19 +1,20 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
-@Table(name = "TelephoneBook", schema = "mydb", catalog = "")
-@IdClass(TelephoneBookEntityPK.class)
-public class TelephoneBookEntity {
+@Table(name = "Call", schema = "mydb", catalog = "")
+@IdClass(CallEntityPK.class)
+public class CallEntity {
     private int id;
     private int deviceId;
     private String number;
-    private String name;
-    private String info;
+    private Timestamp date;
+    private int typeEventId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -36,7 +37,7 @@ public class TelephoneBookEntity {
     }
 
     @Basic
-    @Column(name = "number", nullable = true, length = 45)
+    @Column(name = "number", nullable = false, length = 45)
     public String getNumber() {
         return number;
     }
@@ -46,23 +47,23 @@ public class TelephoneBookEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
-    public String getName() {
-        return name;
+    @Column(name = "date", nullable = false)
+    public Timestamp getDate() {
+        return date;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 
-    @Basic
-    @Column(name = "info", nullable = true, length = -1)
-    public String getInfo() {
-        return info;
+    @Id
+    @Column(name = "type_event_id", nullable = false)
+    public int getTypeEventId() {
+        return typeEventId;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setTypeEventId(int typeEventId) {
+        this.typeEventId = typeEventId;
     }
 
     @Override
@@ -70,13 +71,13 @@ public class TelephoneBookEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TelephoneBookEntity that = (TelephoneBookEntity) o;
+        CallEntity that = (CallEntity) o;
 
         if (id != that.id) return false;
         if (deviceId != that.deviceId) return false;
+        if (typeEventId != that.typeEventId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (info != null ? !info.equals(that.info) : that.info != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
     }
@@ -86,8 +87,8 @@ public class TelephoneBookEntity {
         int result = id;
         result = 31 * result + deviceId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (info != null ? info.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + typeEventId;
         return result;
     }
 }

@@ -1,9 +1,9 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
 @Table(name = "Settings", schema = "mydb", catalog = "")
@@ -19,6 +19,7 @@ public class SettingsEntity {
     private byte listApp;
     private byte listPhoneBook;
     private byte isHideIcon;
+    private DeviceEntity deviceById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -154,5 +155,15 @@ public class SettingsEntity {
         result = 31 * result + (int) listPhoneBook;
         result = 31 * result + (int) isHideIcon;
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getDeviceById() {
+        return deviceById;
+    }
+
+    public void setDeviceById(DeviceEntity deviceById) {
+        this.deviceById = deviceById;
     }
 }

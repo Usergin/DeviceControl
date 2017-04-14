@@ -1,42 +1,51 @@
 package com.shiz.repository.db;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Created by oldman on 07.04.17.
  */
-//@Component
-//@Qualifier("hibernateSessionFactory")
 public class HibernateSessionFactory {
+    private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory() {
+    static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            // loads configuration and mappings
-            Configuration configuration = new Configuration().configure();
-            ServiceRegistry serviceRegistry
-                    = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties()).build();
+            try {
+                // Create registry
+                registry = new StandardServiceRegistryBuilder()
+                        .configure("hibernate.cfg.xml")
+                        .build();
 
-            // builds a session factory from the service registry
-            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+                MetadataSources sources = new MetadataSources(registry);
+                Metadata metadata = sources.getMetadataBuilder().build();
+                sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (registry != null) {
+                    StandardServiceRegistryBuilder.destroy(registry);
+                }
+            }
         }
-
         return sessionFactory;
     }
 
-
-
-    public static void shutdown() {
+    static void shutdown() {
         // Close caches and connection pools
-        getSessionFactory().close();
+        if (registry != null) {
+            StandardServiceRegistryBuilder.destroy(registry);
+        }
     }
 
 }

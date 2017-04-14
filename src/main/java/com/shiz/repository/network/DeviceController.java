@@ -1,6 +1,7 @@
 package com.shiz.repository.network;
 
 import com.shiz.model.Device;
+import com.shiz.model.respose.BaseResponse;
 import com.shiz.model.respose.InformationResponse;
 import com.shiz.model.respose.NewDeviceResponse;
 import com.shiz.model.respose.PeriodicalResponse;
@@ -38,12 +39,12 @@ public class DeviceController {
         return dbService.getSettingsDevice(request);
     }
 
-    @RequestMapping(value = "device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Device getDevice(@PathVariable String id) {
-        System.out.println("deviceId " + id);
-        return dbService.getDevice(Integer.valueOf(id));
-    }
+//    @RequestMapping(value = "device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public Device getDevice(@PathVariable String id) {
+//        System.out.println("deviceId " + id);
+//        return dbService.getDevice(Integer.valueOf(id));
+//    }
 
     @RequestMapping(value = "device/{id}/call_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -105,7 +106,7 @@ public class DeviceController {
      */
     @RequestMapping(value = "/init", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<NewDeviceResponse> setNewDevice(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setNewDevice(@RequestBody String request) {
           return dbService.setNewDevice(request);
     }
 

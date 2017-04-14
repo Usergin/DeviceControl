@@ -1,9 +1,9 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
 @Table(name = "Information", schema = "mydb", catalog = "")
@@ -22,6 +22,7 @@ public class InformationEntity {
     private String sdk;
     private String screenSize;
     private int networkId;
+    private DeviceEntity deviceById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -193,5 +194,15 @@ public class InformationEntity {
         result = 31 * result + (screenSize != null ? screenSize.hashCode() : 0);
         result = 31 * result + networkId;
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getDeviceById() {
+        return deviceById;
+    }
+
+    public void setDeviceById(DeviceEntity deviceById) {
+        this.deviceById = deviceById;
     }
 }

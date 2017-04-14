@@ -1,9 +1,9 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
 @Table(name = "TypeEvent", schema = "mydb", catalog = "")

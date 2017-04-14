@@ -1,10 +1,10 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
 @Table(name = "App", schema = "mydb", catalog = "")
@@ -57,7 +57,7 @@ public class AppEntity {
     }
 
     @Basic
-    @Column(name = "info", nullable = true, length = -1)
+    @Column(name = "info", nullable = true, length = 255)
     public String getInfo() {
         return info;
     }

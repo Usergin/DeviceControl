@@ -1,11 +1,11 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 public class BatteryStatusEntityPK implements Serializable {
     private int id;

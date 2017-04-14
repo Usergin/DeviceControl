@@ -1,20 +1,19 @@
-package com.shiz.db;
+package com.shiz.dao;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 07.04.17.
+ * Created by oldman on 14.04.17.
  */
 @Entity
-@Table(name = "ServiceEvent", schema = "mydb", catalog = "")
-@IdClass(ServiceEventEntityPK.class)
-public class ServiceEventEntity {
+@Table(name = "DeviceStatus", schema = "mydb", catalog = "")
+@IdClass(DeviceStatusEntityPK.class)
+public class DeviceStatusEntity {
     private int id;
     private int deviceId;
-    private String area;
-    private String event;
     private Timestamp date;
+    private String status;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -37,26 +36,6 @@ public class ServiceEventEntity {
     }
 
     @Basic
-    @Column(name = "area", nullable = false, length = 45)
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    @Basic
-    @Column(name = "event", nullable = false, length = -1)
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
-    }
-
-    @Basic
     @Column(name = "date", nullable = false)
     public Timestamp getDate() {
         return date;
@@ -66,18 +45,27 @@ public class ServiceEventEntity {
         this.date = date;
     }
 
+    @Basic
+    @Column(name = "status", nullable = false, length = 45)
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ServiceEventEntity that = (ServiceEventEntity) o;
+        DeviceStatusEntity that = (DeviceStatusEntity) o;
 
         if (id != that.id) return false;
         if (deviceId != that.deviceId) return false;
-        if (area != null ? !area.equals(that.area) : that.area != null) return false;
-        if (event != null ? !event.equals(that.event) : that.event != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
     }
@@ -86,9 +74,8 @@ public class ServiceEventEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + deviceId;
-        result = 31 * result + (area != null ? area.hashCode() : 0);
-        result = 31 * result + (event != null ? event.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 }
