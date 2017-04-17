@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 public class DeviceStatusEntityPK implements Serializable {
     private int id;

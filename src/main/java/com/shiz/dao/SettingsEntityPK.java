@@ -5,11 +5,10 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 public class SettingsEntityPK implements Serializable {
     private int id;
-    private int deviceId;
 
     @Column(name = "id", nullable = false)
     @Id
@@ -21,15 +20,6 @@ public class SettingsEntityPK implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "device_id", nullable = false)
-    @Id
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -39,7 +29,6 @@ public class SettingsEntityPK implements Serializable {
         SettingsEntityPK that = (SettingsEntityPK) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
 
         return true;
     }
@@ -47,7 +36,6 @@ public class SettingsEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
-        return result;
+         return result;
     }
 }

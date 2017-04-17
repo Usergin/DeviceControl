@@ -1,17 +1,19 @@
 package com.shiz.dao;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 public class AppEntityPK implements Serializable {
     private int id;
-    private int deviceId;
 
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     public int getId() {
         return id;
@@ -19,16 +21,6 @@ public class AppEntityPK implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Column(name = "device_id", nullable = false)
-    @Id
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Override
@@ -39,7 +31,6 @@ public class AppEntityPK implements Serializable {
         AppEntityPK that = (AppEntityPK) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
 
         return true;
     }
@@ -47,7 +38,7 @@ public class AppEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         return result;
     }
+
 }

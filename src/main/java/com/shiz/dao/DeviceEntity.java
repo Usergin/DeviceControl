@@ -1,22 +1,34 @@
 package com.shiz.dao;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static javax.persistence.FetchType.LAZY;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
-@Table(name = "Device", schema = "mydb", catalog = "")
-@IdClass(DeviceEntityPK.class)
+@Table(name = "Device", schema = "mydb")
 public class DeviceEntity {
     private int id;
     private String imei;
     private int deviceId;
-    private AppEntity appByDeviceId;
-    private BatteryStatusEntity batteryStatusByDeviceId;
-    private CallEntity callByDeviceId;
+    private Set<AppEntity> appDeviceById = new HashSet<AppEntity>() {
+    };
+//    private Collection<BatteryStatusEntity> batDeviceById;
+//    private Collection<CallEntity> callDeviceById;
+//    private Collection<InformationEntity> infoDeviceById;
+//    private Collection<LocationEntity> locDeviceById;
+//    private Collection<MessageEntity> msgDeviceById;
+//    private Collection<NetworkStatusEntity> networkDeviceById;
+    private SettingsEntity settingsDeviceById;
+//    private Collection<TelephoneBookEntity> telBookDeviceById;
 
-    @Id
+    @Basic
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -68,33 +80,93 @@ public class DeviceEntity {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
-    public AppEntity getAppByDeviceId() {
-        return appByDeviceId;
+    @OneToMany(mappedBy = "deviceById", cascade = CascadeType.ALL, orphanRemoval = true)
+    public Set<AppEntity> getAppDeviceById() {
+        return appDeviceById;
     }
 
-    public void setAppByDeviceId(AppEntity appByDeviceId) {
-        this.appByDeviceId = appByDeviceId;
+    public void setAppDeviceById(Set<AppEntity> appDeviceById) {
+        this.appDeviceById = appDeviceById;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
-    public BatteryStatusEntity getBatteryStatusByDeviceId() {
-        return batteryStatusByDeviceId;
+    public void addCAppDeviceById(AppEntity appDeviceById) {
+        appDeviceById.setDeviceById(this);
+        getAppDeviceById().add(appDeviceById);
     }
 
-    public void setBatteryStatusByDeviceId(BatteryStatusEntity batteryStatusByDeviceId) {
-        this.batteryStatusByDeviceId = batteryStatusByDeviceId;
+    public void removeAppDeviceById(AppEntity appDeviceById) {
+        getAppDeviceById().remove(appDeviceById);
+    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<BatteryStatusEntity> getBatDeviceById() {
+//        return batDeviceById;
+//    }
+//
+//    public void setBatDeviceById(Collection<BatteryStatusEntity> batDeviceById) {
+//        this.batDeviceById = batDeviceById;
+//    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<CallEntity> getCallDeviceById() {
+//        return callDeviceById;
+//    }
+//
+//    public void setCallDeviceById(Collection<CallEntity> callDeviceById) {
+//        this.callDeviceById = callDeviceById;
+//    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<InformationEntity> getInfoDeviceById() {
+//        return infoDeviceById;
+//    }
+//
+//    public void setInfoDeviceById(Collection<InformationEntity> infoDeviceById) {
+//        this.infoDeviceById = infoDeviceById;
+//    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<LocationEntity> getLocDeviceById() {
+//        return locDeviceById;
+//    }
+//
+//    public void setLocDeviceById(Collection<LocationEntity> locDeviceById) {
+//        this.locDeviceById = locDeviceById;
+//    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<MessageEntity> getMsgDeviceById() {
+//        return msgDeviceById;
+//    }
+//
+//    public void setMsgDeviceById(Collection<MessageEntity> msgDeviceById) {
+//        this.msgDeviceById = msgDeviceById;
+//    }
+//
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<NetworkStatusEntity> getNetworkDeviceById() {
+//        return networkDeviceById;
+//    }
+//
+//    public void setNetworkDeviceById(Collection<NetworkStatusEntity> networkDeviceById) {
+//        this.networkDeviceById = networkDeviceById;
+//    }
+//
+    @OneToOne(mappedBy = "deviceById", cascade = CascadeType.ALL, orphanRemoval = true)
+    public SettingsEntity getSettingsDeviceById() {
+        return settingsDeviceById;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
-    public CallEntity getCallByDeviceId() {
-        return callByDeviceId;
+    public void setSettingsDeviceById(SettingsEntity settingsDeviceById) {
+        this.settingsDeviceById = settingsDeviceById;
     }
 
-    public void setCallByDeviceId(CallEntity callByDeviceId) {
-        this.callByDeviceId = callByDeviceId;
-    }
+//    @OneToMany(mappedBy = "deviceById")
+//    public Collection<TelephoneBookEntity> getTelBookDeviceById() {
+//        return telBookDeviceById;
+//    }
+//
+//    public void setTelBookDeviceById(Collection<TelephoneBookEntity> telBookDeviceById) {
+//        this.telBookDeviceById = telBookDeviceById;
+//    }
 }

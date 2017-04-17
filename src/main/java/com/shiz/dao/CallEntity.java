@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
 @Table(name = "Call", schema = "mydb", catalog = "")
@@ -14,7 +14,6 @@ public class CallEntity {
     private int deviceId;
     private String number;
     private Timestamp date;
-    private int typeEventId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -56,16 +55,6 @@ public class CallEntity {
         this.date = date;
     }
 
-    @Id
-    @Column(name = "type_event_id", nullable = false)
-    public int getTypeEventId() {
-        return typeEventId;
-    }
-
-    public void setTypeEventId(int typeEventId) {
-        this.typeEventId = typeEventId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +64,6 @@ public class CallEntity {
 
         if (id != that.id) return false;
         if (deviceId != that.deviceId) return false;
-        if (typeEventId != that.typeEventId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
@@ -88,7 +76,6 @@ public class CallEntity {
         result = 31 * result + deviceId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + typeEventId;
         return result;
     }
 }

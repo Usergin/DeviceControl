@@ -3,7 +3,7 @@ package com.shiz.dao;
 import javax.persistence.*;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
 @Table(name = "TypeEvent", schema = "mydb", catalog = "")

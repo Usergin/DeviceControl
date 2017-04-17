@@ -6,44 +6,33 @@
 <hibernate-configuration>
 
     <session-factory>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mydb</property>
         <property name="hibernate.connection.requireSSL">false</property>
+        <property name="hibernate.connection.verifyServerCertificate">false</property>
         <property name="hibernate.connection.autocommit">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.username">root</property>
         <!--<property name="hibernate.dbcp.initialSize">8</property>-->
         <!--<property name="hibernate.dbcp.maxActive">20</property>-->
         <!--<property name="hibernate.dbcp.maxIdle">20</property>-->
         <!--<property name="hibernate.dbcp.minIdle">0</property>-->
         <property name="show_sql">true</property>
         <!--<property name="hbm2ddl.auto">create</property>-->
-
-        <!--<mapping class="com.shiz.daoo.AppEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.BatteryStatusEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.CallEntity"/>-->
         <mapping class="com.shiz.dao.DeviceEntity"/>
         <mapping class="com.shiz.dao.AppEntity"/>
-        <mapping class="com.shiz.dao.BatteryStatusEntity"/>
-        <mapping class="com.shiz.dao.CallEntity"/>
-        <mapping class="com.shiz.dao.DeviceStatusEntity"/>
-        <mapping class="com.shiz.dao.InformationEntity"/>
-        <mapping class="com.shiz.dao.LocationEntity"/>
-        <mapping class="com.shiz.dao.MessageEntity"/>
-        <mapping class="com.shiz.dao.NetworkEntity"/>
-        <mapping class="com.shiz.dao.NetworkStatusEntity"/>
+        <!--<mapping class="com.shiz.dao.BatteryStatusEntity"/>-->
+        <!--<mapping class="com.shiz.dao.CallEntity"/>-->
+        <!--<mapping class="com.shiz.dao.DeviceStatusEntity"/>-->
+        <!--<mapping class="com.shiz.dao.InformationEntity"/>-->
+        <!--<mapping class="com.shiz.dao.LocationEntity"/>-->
+        <!--<mapping class="com.shiz.dao.MessageEntity"/>-->
+        <!--<mapping class="com.shiz.dao.NetworkStatusEntity"/>-->
         <mapping class="com.shiz.dao.SettingsEntity"/>
-        <mapping class="com.shiz.dao.TelephoneBookEntity"/>
-        <mapping class="com.shiz.dao.TypeEventEntity"/>
-        <!--<mapping class="com.shiz.daoo.DeviceStatusEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.InformationEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.LocationEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.MessageEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.NetworkEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.NetworkStatusEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.ServiceEventEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.SettingsEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.TelephoneBookEntity"/>-->
-        <!--<mapping class="com.shiz.daoo.TypeEventEntity"/>-->
+        <!--<mapping class="com.shiz.dao.TelephoneBookEntity"/>-->
+        <!--<mapping class="com.shiz.dao.TypeEventEntity"/>-->
+
 
         <!-- DB schema will be updated if needed -->
         <!--<class-cache class="org.hibernate.jpa.test.Item" usage="read-write"/>-->

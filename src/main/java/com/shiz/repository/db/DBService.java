@@ -54,9 +54,9 @@ public class DBService {
         String hql = "from DeviceEntity where imei like :imei";
         Query query = session.createQuery(hql).setParameter("imei", "%" + imei + "%");
         DeviceEntity deviceEntity = null;
-        try{
-             deviceEntity = (DeviceEntity) query.getSingleResult();
-             return deviceEntity.getDeviceId();
+        try {
+            deviceEntity = (DeviceEntity) query.getSingleResult();
+            return deviceEntity.getDeviceId();
         } catch (NoResultException nre) {
             return -1;
         } catch (NonUniqueResultException nure) {
@@ -68,13 +68,9 @@ public class DBService {
         Session session = sessionFactory.openSession();
         session.createQuery("from DeviceEntity");
         List<Device> deviceList = null;
-        try{
+        try {
             deviceList = (List<Device>) session.createQuery("from DeviceEntity");
-        // имитируем обращение к БД
-//        for (int i = 0; i < 10; i++) {
-//            deviceList.add(new Device(i, "123123", "Htc One " + i, "123serial", new Location(12.12321, 43.23121, 24, 1231242342L)));
-        }
-        catch (NoResultException nre) {
+        } catch (NoResultException nre) {
             return null;
         } catch (NonUniqueResultException nure) {
             return null;
@@ -102,6 +98,7 @@ public class DBService {
                 DeviceEntity deviceEntity = new DeviceEntity();
                 deviceEntity.setImei(initialDeviceRequest.getImei());
                 deviceEntity.setDeviceId(uuid);
+
                 session.save(deviceEntity);
                 transaction.commit();
                 session.close();

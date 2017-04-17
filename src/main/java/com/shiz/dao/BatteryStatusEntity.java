@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
-@Table(name = "BatteryStatus", schema = "mydb", catalog = "")
+@Table(name = "BatteryStatus", schema = "mydb")
 @IdClass(BatteryStatusEntityPK.class)
 public class BatteryStatusEntity {
     private int id;

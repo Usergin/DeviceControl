@@ -23,10 +23,22 @@ public class HibernateSessionFactory {
         if (sessionFactory == null) {
             try {
                 // Create registry
+
+//                Configuration cnf = new Configuration();
+//
+//                // Properties
+//                cnf.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+//                cnf.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/mydb");
+//                cnf.setProperty("hibernate.connection.username", "root");
+//                cnf.setProperty("hibernate.connection.password", "root");
+//                cnf.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+//                cnf.setProperty("hibernate.hbm2ddl.auto", "update");
+//                cnf.setProperty("hibernate.show_sql", "true");
+//                cnf.setProperty(" hibernate.connection.pool_size", "1");
+
                 registry = new StandardServiceRegistryBuilder()
                         .configure("hibernate.cfg.xml")
                         .build();
-
                 MetadataSources sources = new MetadataSources(registry);
                 Metadata metadata = sources.getMetadataBuilder().build();
                 sessionFactory = metadata.getSessionFactoryBuilder().build();

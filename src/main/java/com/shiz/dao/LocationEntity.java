@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
 @Table(name = "Location", schema = "mydb", catalog = "")
@@ -17,6 +17,7 @@ public class LocationEntity {
     private double accurancy;
     private String method;
     private Timestamp date;
+    private DeviceEntity deviceById;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -121,5 +122,15 @@ public class LocationEntity {
         result = 31 * result + (method != null ? method.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getDeviceById() {
+        return deviceById;
+    }
+
+    public void setDeviceById(DeviceEntity deviceById) {
+        this.deviceById = deviceById;
     }
 }

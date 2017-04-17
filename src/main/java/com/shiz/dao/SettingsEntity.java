@@ -3,14 +3,13 @@ package com.shiz.dao;
 import javax.persistence.*;
 
 /**
- * Created by oldman on 14.04.17.
+ * Created by oldman on 17.04.17.
  */
 @Entity
-@Table(name = "Settings", schema = "mydb", catalog = "")
+@Table(name = "Settings", schema = "mydb")
 @IdClass(SettingsEntityPK.class)
 public class SettingsEntity {
     private int id;
-    private int deviceId;
     private byte isLocation;
     private byte isSms;
     private byte isCall;
@@ -29,16 +28,6 @@ public class SettingsEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -129,7 +118,6 @@ public class SettingsEntity {
         SettingsEntity that = (SettingsEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (isLocation != that.isLocation) return false;
         if (isSms != that.isSms) return false;
         if (isCall != that.isCall) return false;
@@ -145,7 +133,6 @@ public class SettingsEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (int) isLocation;
         result = 31 * result + (int) isSms;
         result = 31 * result + (int) isCall;
@@ -157,8 +144,8 @@ public class SettingsEntity {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "device_id")
     public DeviceEntity getDeviceById() {
         return deviceById;
     }
