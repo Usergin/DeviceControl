@@ -1,12 +1,12 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "Information", schema = "mydb", catalog = "")
+@Table(name = "Information", schema = "mydb")
 @IdClass(InformationEntityPK.class)
 public class InformationEntity {
     private int id;
@@ -30,8 +30,7 @@ public class InformationEntity {
     private String networkType;
     private String network;
     private String operatorName;
-    private DeviceEntity deviceById;
-
+    private DeviceEntity deviceByDeviceId;
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -299,14 +298,14 @@ public class InformationEntity {
         result = 31 * result + (operatorName != null ? operatorName.hashCode() : 0);
         return result;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
-    public DeviceEntity getDeviceById() {
-        return deviceById;
+    @OneToOne
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getDeviceByDeviceId() {
+        return deviceByDeviceId;
     }
 
-    public void setDeviceById(DeviceEntity deviceById) {
-        this.deviceById = deviceById;
+    public void setDeviceByDeviceId(DeviceEntity deviceByDeviceId) {
+        this.deviceByDeviceId = deviceByDeviceId;
     }
+
 }

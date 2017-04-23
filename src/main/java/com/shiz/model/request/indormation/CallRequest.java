@@ -12,7 +12,7 @@ import java.util.List;
 public class CallRequest extends BaseRequest {
     private List<Call> data;
 
-    public CallRequest( List<Call> data, String imei, String device) {
+    public CallRequest( List<Call> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

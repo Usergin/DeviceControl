@@ -1,12 +1,12 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "TelephoneBook", schema = "mydb", catalog = "")
+@Table(name = "TelephoneBook", schema = "mydb")
 @IdClass(TelephoneBookEntityPK.class)
 public class TelephoneBookEntity {
     private int id;
@@ -14,8 +14,7 @@ public class TelephoneBookEntity {
     private String number;
     private String name;
     private String info;
-    private DeviceEntity deviceById;
-
+    private DeviceEntity telBookByDeviceId;
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -91,14 +90,14 @@ public class TelephoneBookEntity {
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
     }
-
     @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
-    public DeviceEntity getDeviceById() {
-        return deviceById;
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getTelBookByDeviceId() {
+        return telBookByDeviceId;
     }
 
-    public void setDeviceById(DeviceEntity deviceById) {
-        this.deviceById = deviceById;
+    public void setTelBookByDeviceId(DeviceEntity telBookByDeviceId) {
+        this.telBookByDeviceId = telBookByDeviceId;
     }
+
 }

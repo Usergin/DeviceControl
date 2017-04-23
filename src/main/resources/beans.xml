@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:context="http://www.springframework.org/schema/context"
+
        xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
       http://www.springframework.org/schema/context
@@ -13,9 +15,9 @@
           class="com.shiz.repository.network.GsonFactory"
           factory-method="create"/>
 
-    <!--<bean id="hibernateSessionFactory"-->
-          <!--class="com.shiz.repository.dao.HibernateSessionFactory"-->
-         <!--/>-->
+    <!--<bean id="DeviceDao"-->
+    <!--class="com.shiz.repository.db.entity.DeviceDao"-->
+    <!--/>-->
 
     <bean name="dbService"
           class="com.shiz.repository.db.DBService"/>

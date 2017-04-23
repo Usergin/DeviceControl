@@ -1,14 +1,15 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
-public class SettingsEntityPK implements Serializable {
+public class BatteryStatusEntityPK implements Serializable {
     private int id;
+    private int deviceId;
 
     @Column(name = "id", nullable = false)
     @Id
@@ -20,15 +21,25 @@ public class SettingsEntityPK implements Serializable {
         this.id = id;
     }
 
+    @Column(name = "device_id", nullable = false)
+    @Id
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SettingsEntityPK that = (SettingsEntityPK) o;
+        BatteryStatusEntityPK that = (BatteryStatusEntityPK) o;
 
         if (id != that.id) return false;
+        if (deviceId != that.deviceId) return false;
 
         return true;
     }
@@ -36,6 +47,7 @@ public class SettingsEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-         return result;
+        result = 31 * result + deviceId;
+        return result;
     }
 }

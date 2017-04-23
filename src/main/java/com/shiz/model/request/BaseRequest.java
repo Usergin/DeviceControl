@@ -5,9 +5,9 @@ package com.shiz.model.request;
  */
 public class BaseRequest {
     private String imei;
-    private String device;
+    private int device;
 
-    public BaseRequest(String imei, String device) {
+    public BaseRequest(String imei, int device) {
         this.imei = imei;
         this.device = device;
     }
@@ -20,11 +20,11 @@ public class BaseRequest {
         this.imei = imei;
     }
 
-    public String getDevice() {
+    public int getDevice() {
         return device;
     }
 
-    public void setDevice(String device) {
+    public void setDevice(int device) {
         this.device = device;
     }
 

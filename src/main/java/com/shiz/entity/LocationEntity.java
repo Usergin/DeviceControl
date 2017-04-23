@@ -1,13 +1,13 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "Location", schema = "mydb", catalog = "")
+@Table(name = "Location", schema = "mydb")
 @IdClass(LocationEntityPK.class)
 public class LocationEntity {
     private int id;
@@ -17,7 +17,7 @@ public class LocationEntity {
     private double accurancy;
     private String method;
     private Timestamp date;
-    private DeviceEntity deviceById;
+    private DeviceEntity locationByDeviceId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -89,6 +89,16 @@ public class LocationEntity {
         this.date = date;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getLocationByDeviceId() {
+        return locationByDeviceId;
+    }
+
+    public void setLocationByDeviceId(DeviceEntity locationByDeviceId) {
+        this.locationByDeviceId = locationByDeviceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,15 +132,5 @@ public class LocationEntity {
         result = 31 * result + (method != null ? method.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
-    public DeviceEntity getDeviceById() {
-        return deviceById;
-    }
-
-    public void setDeviceById(DeviceEntity deviceById) {
-        this.deviceById = deviceById;
     }
 }

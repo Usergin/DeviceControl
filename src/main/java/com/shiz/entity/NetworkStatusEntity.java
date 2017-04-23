@@ -1,10 +1,10 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
 @Table(name = "NetworkStatus", schema = "mydb", catalog = "")
@@ -15,8 +15,7 @@ public class NetworkStatusEntity {
     private String state;
     private String ip;
     private Timestamp date;
-    private DeviceEntity deviceById;
-
+    private DeviceEntity networkStatusByDeviceId;
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -67,6 +66,16 @@ public class NetworkStatusEntity {
         this.date = date;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getNetworkStatusByDeviceId() {
+        return networkStatusByDeviceId;
+    }
+
+    public void setNetworkStatusByDeviceId(DeviceEntity networkStatusByDeviceId) {
+        this.networkStatusByDeviceId = networkStatusByDeviceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,15 +100,5 @@ public class NetworkStatusEntity {
         result = 31 * result + (ip != null ? ip.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "device_id", nullable = false)
-    public DeviceEntity getDeviceById() {
-        return deviceById;
-    }
-
-    public void setDeviceById(DeviceEntity deviceById) {
-        this.deviceById = deviceById;
     }
 }

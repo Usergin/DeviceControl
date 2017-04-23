@@ -11,7 +11,7 @@ import java.util.List;
 public class TelephoneBookRequest extends BaseRequest {
     private List<Contact> data;
 
-    public TelephoneBookRequest(List<Contact> data, String imei, String device) {
+    public TelephoneBookRequest(List<Contact> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

@@ -12,7 +12,7 @@ import java.util.List;
 public class BatteryStatusRequest extends BaseRequest {
     private ChargingEvent data;
 
-    public BatteryStatusRequest(ChargingEvent data, String imei, String device) {
+    public BatteryStatusRequest(ChargingEvent data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

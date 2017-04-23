@@ -2,7 +2,8 @@ package com.shiz.repository.db;
 
 import com.google.gson.Gson;
 import com.shiz.Constants;
-import com.shiz.dao.DeviceEntity;
+import com.shiz.entity.AppEntity;
+import com.shiz.entity.DeviceEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
 import com.shiz.model.data.Contact;
@@ -12,45 +13,46 @@ import com.shiz.model.request.InitialDeviceRequest;
 import com.shiz.model.request.PeriodicalRequest;
 import com.shiz.model.request.indormation.*;
 import com.shiz.model.respose.*;
+import com.shiz.repository.db.dao.DeviceDao;
 import com.shiz.repository.exception.DeviceException;
 import com.shiz.repository.exception.ErrorExceptionResponse;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by oldman on 04.04.17.
  */
 @Component
 @Qualifier("DBService")
-public class DBService {
+@Transactional(readOnly = true)
+public class DBService{
     @Autowired
     @Qualifier("gson")
     Gson gson;
+    @Autowired
+    DeviceDao deviceDao;
     //    @Autowired
 //    @Qualifier("hibernateSessionFactory")
-    private SessionFactory sessionFactory;
+//    private SessionFactory sessionFactory;
+//
+//
+//    public DBService() {
+//        sessionFactory = HibernateSessionFactory.getSessionFactory();
+//    }
 
-
-    public DBService() {
-        sessionFactory = HibernateSessionFactory.getSessionFactory();
-    }
-
-    public int getDeviceId(String imei, Session session) {
+    public int getDeviceIdByImei(String imei, Session session) {
         String hql = "from DeviceEntity where imei like :imei";
         Query query = session.createQuery(hql).setParameter("imei", "%" + imei + "%");
         DeviceEntity deviceEntity = null;
@@ -64,17 +66,31 @@ public class DBService {
         }
     }
 
-    public List<Device> getDevices() {
-        Session session = sessionFactory.openSession();
-        session.createQuery("from DeviceEntity");
-        List<Device> deviceList = null;
+    public DeviceEntity getDevice(int deviceId, Session session) {
+        String hql = "from DeviceEntity where deviceId = :device_id";
+        Query query = session.createQuery(hql).setParameter("device_id",  deviceId);
+        DeviceEntity deviceEntity = null;
         try {
-            deviceList = (List<Device>) session.createQuery("from DeviceEntity");
+            deviceEntity = (DeviceEntity) query.getSingleResult();
+            return deviceEntity;
         } catch (NoResultException nre) {
             return null;
         } catch (NonUniqueResultException nure) {
             return null;
         }
+    }
+
+    public List<Device> getDevices() {
+//        Session session = sessionFactory.openSession();
+//        session.createQuery("from DeviceEntity");
+        List<Device> deviceList = null;
+//        try {
+//            deviceList = (List<Device>) session.createQuery("from DeviceEntity");
+//        } catch (NoResultException nre) {
+//            return null;
+//        } catch (NonUniqueResultException nure) {
+//            return null;
+//        }
         return deviceList;
     }
 
@@ -87,28 +103,52 @@ public class DBService {
         }
     }
 
+
+    @Transactional(readOnly = false)
     public ResponseEntity<BaseResponse> setNewDevice(String request) {
         InitialDeviceRequest initialDeviceRequest = gson.fromJson(request, InitialDeviceRequest.class);
         if (initialDeviceRequest != null) {
-            Session session = sessionFactory.openSession();
-            int deviceId = getDeviceId(initialDeviceRequest.getImei(), session);
-            if (deviceId == -1) {
-                int uuid = Math.abs(UUID.randomUUID().hashCode());
-                Transaction transaction = session.beginTransaction();
-                DeviceEntity deviceEntity = new DeviceEntity();
-                deviceEntity.setImei(initialDeviceRequest.getImei());
-                deviceEntity.setDeviceId(uuid);
+            int deviceId = -1;
+            try {
+                deviceId = deviceDao.getDeviceIdByImei(initialDeviceRequest.getImei());
+                if (deviceId == -1) {
+                    int uuid = Math.abs(UUID.randomUUID().hashCode());
+                    DeviceEntity deviceEntity = new DeviceEntity();
+                    deviceEntity.setImei(initialDeviceRequest.getImei());
+                    deviceEntity.setDeviceId(uuid);
+                    deviceDao.addDevice(deviceEntity);
+                    NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
+                    return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
+                }else {
+                    ErrorNewDeviceResponse errorResponse = new ErrorNewDeviceResponse(0, "Device already registered", deviceId);
+                    return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+                }
 
-                session.save(deviceEntity);
-                transaction.commit();
-                session.close();
-                System.out.print("Set new device " + initialDeviceRequest.getImei() + " uuid " + uuid);
-                NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
-                return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
-            } else {
-                ErrorNewDeviceResponse errorResponse = new ErrorNewDeviceResponse(0, "Device already registered", deviceId);
-                return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ErrorExceptionResponse(0, "Error request");
             }
+
+//
+//            Session session = sessionFactory.openSession();
+//            int deviceId = getDeviceIdByImei(initialDeviceRequest.getImei(), session);
+//            if (deviceId == -1) {
+//                int uuid = Math.abs(UUID.randomUUID().hashCode());
+//                Transaction transaction = session.beginTransaction();
+//                DeviceEntity deviceEntity = new DeviceEntity();
+//                deviceEntity.setImei(initialDeviceRequest.getImei());
+//                deviceEntity.setDeviceId(uuid);
+//                session.save(deviceEntity);
+//                transaction.commit();
+//                session.close();
+//                System.out.print("Set new device " + initialDeviceRequest.getImei() + " uuid " + uuid);
+//                NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
+//                return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
+//            } else {
+//                session.close();
+//                ErrorNewDeviceResponse errorResponse = new ErrorNewDeviceResponse(0, "Device already registered", deviceId);
+//                return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+//            }
         } else {
             throw new ErrorExceptionResponse(0, "Error request");
         }
@@ -179,14 +219,26 @@ public class DBService {
         // имитируем обращение к БД
         InstallAppRequest installAppRequest = gson.fromJson(request, InstallAppRequest.class);
         if (installAppRequest != null) {
-            for (InstallApp call : installAppRequest.getData()) {
-                System.out.print("type  " + call.getName());
+            System.out.print("installAppRequest  " + installAppRequest.getDevice());
+//            Session session = sessionFactory.openSession();
+//            DeviceEntity deviceEntity =  getDevice(installAppRequest.getDevice(), session);
+//            if(deviceEntity != null) {
+//                Collection<AppEntity> appEntities = new HashSet<>();
+//                for (InstallApp installApp : installAppRequest.getData()) {
+//                    System.out.print("type  " + installApp.getName());
+//                    AppEntity appEntity = new AppEntity();
+//                    appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+//                    appEntity.setInfo(installApp.getInfo());
+//                    appEntity.setInfo(installApp.getName());
+//                    appEntities.add(appEntity);
+//                }
+//                deviceEntity.addAppByDeviceId(appEntities);
             }
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
             return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
-        } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
-        }
+//        } else {
+//            throw new ErrorExceptionResponse(0, "Error on server");
+//        }
     }
 
     public ResponseEntity<InformationResponse> setDeviceBatteryStatus(String request) {
@@ -361,5 +413,4 @@ public class DBService {
             throw new DeviceException(deviceId);
         }
     }
-
 }

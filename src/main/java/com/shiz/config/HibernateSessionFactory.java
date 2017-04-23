@@ -1,4 +1,4 @@
-package com.shiz.repository.db;
+package com.shiz.config;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -15,11 +15,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Created by oldman on 07.04.17.
  */
+
 public class HibernateSessionFactory {
     private static StandardServiceRegistry registry;
     private static SessionFactory sessionFactory;
 
-    static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 // Create registry

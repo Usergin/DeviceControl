@@ -1,41 +1,42 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "App", schema = "mydb")
-@IdClass(AppEntityPK.class)
-public class AppEntity {
+@Table(name = "App")
+//@IdClass(AppEntityPK.class)
+public class AppEntity  implements Serializable {
     private int id;
-    private DeviceEntity deviceById;
+    private int deviceId;
     private String name;
     private Timestamp dateInstalled;
     private String info;
-
-    @ManyToOne
-    @JoinColumn(name = "device_id")
-    public DeviceEntity getDeviceById() {
-        return deviceById;
-    }
-
-    public void setDeviceById(DeviceEntity deviceById) {
-        this.deviceById = deviceById;
-    }
-
+    private DeviceEntity appByDeviceId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false,  insertable = true, updatable = true)
+    @GeneratedValue
+    @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Id
+    @Column(name = "device_id", nullable = false)
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Basic
@@ -76,7 +77,7 @@ public class AppEntity {
         AppEntity appEntity = (AppEntity) o;
 
         if (id != appEntity.id) return false;
-//        if (deviceId != appEntity.deviceId) return false;
+        if (deviceId != appEntity.deviceId) return false;
         if (name != null ? !name.equals(appEntity.name) : appEntity.name != null) return false;
         if (dateInstalled != null ? !dateInstalled.equals(appEntity.dateInstalled) : appEntity.dateInstalled != null)
             return false;
@@ -88,10 +89,20 @@ public class AppEntity {
     @Override
     public int hashCode() {
         int result = id;
-//        result = 31 * result + deviceId;
+        result = 31 * result + deviceId;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (dateInstalled != null ? dateInstalled.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    public DeviceEntity getAppByDeviceId() {
+        return appByDeviceId;
+    }
+
+    public void setAppByDeviceId(DeviceEntity appByDeviceId) {
+        this.appByDeviceId = appByDeviceId;
     }
 }

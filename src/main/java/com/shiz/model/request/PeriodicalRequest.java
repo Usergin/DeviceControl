@@ -10,7 +10,7 @@ public class PeriodicalRequest extends BaseRequest {
 
     private Settings settings;
 
-    public PeriodicalRequest(Settings settings, String imei, String device) {
+    public PeriodicalRequest(Settings settings, String imei, int device) {
         super(imei, device);
         this.settings = settings;
     }

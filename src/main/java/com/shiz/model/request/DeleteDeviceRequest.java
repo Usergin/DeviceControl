@@ -8,7 +8,7 @@ public class DeleteDeviceRequest extends BaseRequest{
     private String device;
     private String mode;
 
-    public DeleteDeviceRequest(String mode, String imei, String device) {
+    public DeleteDeviceRequest(String mode, String imei, int device) {
         super(imei, device);
         this.mode = mode;
     }

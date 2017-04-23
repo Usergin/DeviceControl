@@ -1,13 +1,13 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
-public class InformationEntityPK implements Serializable {
+public class TelephoneBookEntityPK implements Serializable {
     private int id;
     private int deviceId;
 
@@ -36,7 +36,7 @@ public class InformationEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        InformationEntityPK that = (InformationEntityPK) o;
+        TelephoneBookEntityPK that = (TelephoneBookEntityPK) o;
 
         if (id != that.id) return false;
         if (deviceId != that.deviceId) return false;

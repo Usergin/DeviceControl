@@ -1,22 +1,23 @@
-package com.shiz.dao;
+package com.shiz.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 17.04.17.
+ * Created by oldman on 19.04.17.
  */
 @Entity
 @Table(name = "BatteryStatus", schema = "mydb")
 @IdClass(BatteryStatusEntityPK.class)
 public class BatteryStatusEntity {
     private int id;
-    private int deviceId;
     private String level;
     private Timestamp date;
     private String status;
     private String batteryStatus;
     private String typeCharging;
+    private int deviceId;
+    private DeviceEntity batteryByDeviceId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -26,16 +27,6 @@ public class BatteryStatusEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -88,6 +79,16 @@ public class BatteryStatusEntity {
         this.typeCharging = typeCharging;
     }
 
+    @Id
+    @Column(name = "device_id", nullable = false)
+    public int getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -110,12 +111,22 @@ public class BatteryStatusEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (level != null ? level.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (batteryStatus != null ? batteryStatus.hashCode() : 0);
         result = 31 * result + (typeCharging != null ? typeCharging.hashCode() : 0);
+        result = 31 * result + deviceId;
         return result;
     }
+    @ManyToOne
+    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    public DeviceEntity getBatteryByDeviceId() {
+        return batteryByDeviceId;
+    }
+
+    public void setBatteryByDeviceId(DeviceEntity batteryByDeviceId) {
+        this.batteryByDeviceId = batteryByDeviceId;
+    }
+
 }

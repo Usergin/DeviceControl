@@ -1,6 +1,5 @@
 package com.shiz;
 
-import com.shiz.repository.db.HibernateSessionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,18 +11,20 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-//@PropertySource("classpath:application.properties")
-@EnableAutoConfiguration(exclude={
-//        JndiConnectionFactoryAutoConfiguration.class,
+@PropertySource("classpath:application.properties")
+@EnableAutoConfiguration(exclude = {
+        JndiConnectionFactoryAutoConfiguration.class,
         DataSourceAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
-//        JpaRepositoriesAutoConfiguration.class,
-//        DataSourceTransactionManagerAutoConfiguration.class
+        JpaRepositoriesAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class
 })
 public class DeviceControlApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DeviceControlApplication.class, args);
+
     }
+
 
 }

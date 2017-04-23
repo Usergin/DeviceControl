@@ -11,7 +11,7 @@ import java.util.List;
 public class LocationRequest extends BaseRequest {
     private List<Location> data;
 
-    public LocationRequest(List<Location> data, String imei, String device) {
+    public LocationRequest(List<Location> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

@@ -9,7 +9,7 @@ import com.shiz.model.request.BaseRequest;
 public class NetworkStatusRequest extends BaseRequest {
     private NetworkEvent data;
 
-    public NetworkStatusRequest(NetworkEvent data, String imei, String device) {
+    public NetworkStatusRequest(NetworkEvent data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

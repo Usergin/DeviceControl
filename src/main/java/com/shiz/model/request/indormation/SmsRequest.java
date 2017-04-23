@@ -11,7 +11,7 @@ import java.util.List;
 public class SmsRequest extends BaseRequest {
     private List<SMS> data;
 
-    public SmsRequest( List<SMS> data, String imei, String device) {
+    public SmsRequest( List<SMS> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }
