@@ -2,16 +2,15 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.repository.exception.ErrorExceptionResponse;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by oldman on 22.04.17.
@@ -21,40 +20,74 @@ public class DeviceDaoImpl implements DeviceDao {
 
     private SessionFactory sessionFactory;
 
-        public DeviceDaoImpl() {
+    public DeviceDaoImpl() {
         sessionFactory = HibernateSessionFactory.getSessionFactory();
     }
 
-    protected Session getSession() {
-        return this.sessionFactory.getCurrentSession();
+    @Override
+    public int addDevice(DeviceEntity deviceEntity) throws Exception {
+        Session session = null;
+        int deviceId = -1;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            deviceId = ((DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI)
+                    .setParameter("imei", deviceEntity.getImei())
+                    .getSingleResult()).getDeviceId();
+            return deviceId;
+        } catch (NoResultException | NonUniqueResultException nre) {
+            session.save(deviceEntity);
+            session.getTransaction().commit();
+            return deviceEntity.getDeviceId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+        }
+        finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
     @Override
-    public DeviceEntity addDevice(DeviceEntity deviceEntity) throws SQLException, Exception {
-        getSession().saveOrUpdate(deviceEntity);
-        return deviceEntity;
+    public void addDevicesList(List<DeviceEntity> deviceEntity) throws SQLException, Exception {
+        sessionFactory.getCurrentSession().saveOrUpdate(deviceEntity);
     }
 
     @Override
-    public void addDevicesList(Collection<DeviceEntity> deviceEntity) throws SQLException, Exception {
-        getSession().saveOrUpdate(deviceEntity);
+    public List getAllDevice() throws SQLException, Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            return  session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
+                    .getResultList();
+        } catch (NoResultException | NonUniqueResultException nre) {
+            throw new ErrorExceptionResponse(0, "Not found device");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+        }
+//        return sessionFactory.getCurrentSession().createQuery("from DeviceEntity t").list();
     }
 
     @Override
-    public Collection<DeviceEntity> getAllDevice() throws SQLException, Exception {
-        return getSession().createQuery("from DeviceEntity t").list();
-    }
-
-    @Override
-    public void deleteAllDevice(Collection<DeviceEntity> deviceEntityCollection) throws SQLException, Exception {
+    public void deleteAllDevice(List<DeviceEntity> deviceEntityCollection) throws SQLException, Exception {
         sessionFactory.getCurrentSession().delete(deviceEntityCollection);
     }
 
     @Override
     public DeviceEntity getDeviceByDeviceId(int deviceId) throws SQLException, Exception {
         DeviceEntity deviceEntity = null;
+        Session session = null;
         try {
-            deviceEntity = (DeviceEntity) getSession()
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            deviceEntity = (DeviceEntity) session
                     .createQuery("from DeviceEntity where deviceId = :device_id")
                     .setParameter("device_id", deviceId).getSingleResult();
             return deviceEntity;
@@ -62,16 +95,21 @@ public class DeviceDaoImpl implements DeviceDao {
             return null;
         } catch (NonUniqueResultException nure) {
             return null;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
     @Override
     public int getDeviceIdByImei(String imei) throws SQLException, Exception {
-        DeviceEntity deviceEntity = null;
+        Session session = sessionFactory.getCurrentSession();
         try {
-            deviceEntity = (DeviceEntity) getSession()
-                    .createQuery("from DeviceEntity where imei like :imei")
-                    .setParameter("imei", "%" + imei + "%").getSingleResult();
+            DeviceEntity deviceEntity = (DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI)
+                    .setParameter("imei", imei)
+                    .getSingleResult();
             return deviceEntity.getDeviceId();
         } catch (NoResultException nre) {
             return -1;
@@ -79,4 +117,5 @@ public class DeviceDaoImpl implements DeviceDao {
             return -1;
         }
     }
+
 }

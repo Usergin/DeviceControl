@@ -25,8 +25,14 @@ public class DeviceController {
 
     @RequestMapping(value = "/devices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Device> getDevices() {
+    public ResponseEntity<BaseResponse> getDevices() {
         return dbService.getDevices();
+    }
+
+    @RequestMapping(value = "/device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> getDeviceById(@PathVariable int id) {
+        return dbService.getDevice(id);
     }
 
     /*

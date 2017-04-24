@@ -1,4 +1,6 @@
-package com.shiz.model.respose;
+package com.shiz.model.respose.error;
+
+import com.shiz.model.respose.BaseResponse;
 
 /**
  * Created by oldman on 05.04.17.

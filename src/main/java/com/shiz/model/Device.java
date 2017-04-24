@@ -141,6 +141,7 @@ public class Device {
     public static DeviceBuilder newBuilder() {
         return new DeviceBuilder();
     }
+
     public static final class DeviceBuilder {
         private int id;
         private String imei;

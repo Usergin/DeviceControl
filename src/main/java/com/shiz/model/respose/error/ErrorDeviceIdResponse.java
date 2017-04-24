@@ -1,13 +1,13 @@
-package com.shiz.model.respose;
+package com.shiz.model.respose.error;
 
 /**
  * Created by oldman on 14.04.17.
  */
-public class ErrorNewDeviceResponse  extends ErrorResponse{
+public class ErrorDeviceIdResponse extends ErrorResponse {
     private int device;
 
 
-    public ErrorNewDeviceResponse(int code, String error, int device) {
+    public ErrorDeviceIdResponse(int code, String error, int device) {
         super(code, error);
         this.device = device;
     }

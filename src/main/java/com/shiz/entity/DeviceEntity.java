@@ -9,7 +9,10 @@ import java.util.Collection;
  */
 @Entity
 @Table(name = "Device")
-//@IdClass(DeviceEntityPK.class)
+@NamedQueries({
+        @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_ALL, query = "from DeviceEntity"),
+        @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where id = :id"),
+        @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI, query = "from DeviceEntity where imei like :imei")})
 public class DeviceEntity implements Serializable{
     @Id
     @Column(name = "id")
@@ -22,6 +25,11 @@ public class DeviceEntity implements Serializable{
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "appByDeviceId", cascade=CascadeType.ALL)
     private Collection<AppEntity> appByDeviceId;
 
+    public static class NamedQuery {
+        public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
+        public static final String DEVICE_FIND_BY_ID = "DeviceEntity.findById";
+        public static final String DEVICE_FIND_BY_IMEI = "DeviceEntity.findByImei";
+    }
 //    private Collection<BatteryStatusEntity> batteryStatusByDeviceId;
 //    private Collection<CallEntity> callByDeviceId;
 //    private Collection<DeviceStatusEntity> deviceStatusByDeviceId;

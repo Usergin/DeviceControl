@@ -2,7 +2,6 @@ package com.shiz.repository.db;
 
 import com.google.gson.Gson;
 import com.shiz.Constants;
-import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
@@ -13,31 +12,35 @@ import com.shiz.model.request.InitialDeviceRequest;
 import com.shiz.model.request.PeriodicalRequest;
 import com.shiz.model.request.indormation.*;
 import com.shiz.model.respose.*;
+import com.shiz.model.respose.error.ErrorDeviceIdResponse;
+import com.shiz.model.respose.error.ErrorResponse;
 import com.shiz.repository.db.dao.DeviceDao;
 import com.shiz.repository.exception.DeviceException;
 import com.shiz.repository.exception.ErrorExceptionResponse;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by oldman on 04.04.17.
  */
-@Component
+@Service
 @Qualifier("DBService")
-@Transactional(readOnly = true)
-public class DBService{
+public class DBService {
     @Autowired
     @Qualifier("gson")
     Gson gson;
@@ -52,6 +55,7 @@ public class DBService{
 //        sessionFactory = HibernateSessionFactory.getSessionFactory();
 //    }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int getDeviceIdByImei(String imei, Session session) {
         String hql = "from DeviceEntity where imei like :imei";
         Query query = session.createQuery(hql).setParameter("imei", "%" + imei + "%");
@@ -66,32 +70,40 @@ public class DBService{
         }
     }
 
-    public DeviceEntity getDevice(int deviceId, Session session) {
-        String hql = "from DeviceEntity where deviceId = :device_id";
-        Query query = session.createQuery(hql).setParameter("device_id",  deviceId);
-        DeviceEntity deviceEntity = null;
+    public ResponseEntity<BaseResponse> getDevice(int deviceId) {
         try {
-            deviceEntity = (DeviceEntity) query.getSingleResult();
-            return deviceEntity;
-        } catch (NoResultException nre) {
-            return null;
-        } catch (NonUniqueResultException nure) {
-            return null;
+            DeviceEntity deviceEntity = deviceDao.getDeviceByDeviceId(deviceId);
+            Device device = Device.newBuilder()
+                    .imei(deviceEntity.getImei())
+                    .id(deviceEntity.getDeviceId())
+                    .build();
+            DeviceResponse deviceResponse = new DeviceResponse(1, device);
+            return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, "not device",
+                    deviceId);
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 
-    public List<Device> getDevices() {
-//        Session session = sessionFactory.openSession();
-//        session.createQuery("from DeviceEntity");
-        List<Device> deviceList = null;
-//        try {
-//            deviceList = (List<Device>) session.createQuery("from DeviceEntity");
-//        } catch (NoResultException nre) {
-//            return null;
-//        } catch (NonUniqueResultException nure) {
-//            return null;
-//        }
-        return deviceList;
+    public ResponseEntity<BaseResponse> getDevices() {
+        List<DeviceEntity> deviceEntityList = new ArrayList<>();
+        List<Device> deviceList = new ArrayList<>();
+        try {
+            deviceEntityList = deviceDao.getAllDevice();
+            for (DeviceEntity deviceEntity : deviceEntityList) {
+                Device device = Device.newBuilder()
+                        .imei(deviceEntity.getImei())
+                        .id(deviceEntity.getDeviceId())
+                        .build();
+                deviceList.add(device);
+            }
+            AllDevicesResponse deviceResponse = new AllDevicesResponse(1, deviceList);
+            return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse(0, "not devices");
+            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        }
     }
 
     public Device getLocationDevice(int deviceId) {
@@ -103,55 +115,30 @@ public class DBService{
         }
     }
 
-
-    @Transactional(readOnly = false)
     public ResponseEntity<BaseResponse> setNewDevice(String request) {
         InitialDeviceRequest initialDeviceRequest = gson.fromJson(request, InitialDeviceRequest.class);
         if (initialDeviceRequest != null) {
-            int deviceId = -1;
             try {
-                deviceId = deviceDao.getDeviceIdByImei(initialDeviceRequest.getImei());
-                if (deviceId == -1) {
-                    int uuid = Math.abs(UUID.randomUUID().hashCode());
-                    DeviceEntity deviceEntity = new DeviceEntity();
-                    deviceEntity.setImei(initialDeviceRequest.getImei());
-                    deviceEntity.setDeviceId(uuid);
-                    deviceDao.addDevice(deviceEntity);
+                int uuid = Math.abs(UUID.randomUUID().hashCode());
+                DeviceEntity deviceEntity = new DeviceEntity();
+                deviceEntity.setImei(initialDeviceRequest.getImei());
+                deviceEntity.setDeviceId(uuid);
+                int deviceId = deviceDao.addDevice(deviceEntity);
+                System.out.print(deviceId + " " + uuid);
+                if (uuid == deviceId) {
                     NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
                     return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
-                }else {
-                    ErrorNewDeviceResponse errorResponse = new ErrorNewDeviceResponse(0, "Device already registered", deviceId);
+                } else {
+                    ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, "Device already registered",
+                            deviceId);
                     return new ResponseEntity<>(errorResponse, HttpStatus.OK);
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new ErrorExceptionResponse(0, "Error request");
+                throw new ErrorExceptionResponse(0, "Error: " + e.getMessage());
             }
-
-//
-//            Session session = sessionFactory.openSession();
-//            int deviceId = getDeviceIdByImei(initialDeviceRequest.getImei(), session);
-//            if (deviceId == -1) {
-//                int uuid = Math.abs(UUID.randomUUID().hashCode());
-//                Transaction transaction = session.beginTransaction();
-//                DeviceEntity deviceEntity = new DeviceEntity();
-//                deviceEntity.setImei(initialDeviceRequest.getImei());
-//                deviceEntity.setDeviceId(uuid);
-//                session.save(deviceEntity);
-//                transaction.commit();
-//                session.close();
-//                System.out.print("Set new device " + initialDeviceRequest.getImei() + " uuid " + uuid);
-//                NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
-//                return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
-//            } else {
-//                session.close();
-//                ErrorNewDeviceResponse errorResponse = new ErrorNewDeviceResponse(0, "Device already registered", deviceId);
-//                return new ResponseEntity<>(errorResponse, HttpStatus.OK);
-//            }
-        } else {
+        } else
             throw new ErrorExceptionResponse(0, "Error request");
-        }
     }
 
 
@@ -233,9 +220,9 @@ public class DBService{
 //                    appEntities.add(appEntity);
 //                }
 //                deviceEntity.addAppByDeviceId(appEntities);
-            }
-            InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+        }
+        InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
+        return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
 //        } else {
 //            throw new ErrorExceptionResponse(0, "Error on server");
 //        }
