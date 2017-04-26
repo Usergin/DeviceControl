@@ -1,8 +1,10 @@
 package com.shiz.repository.db.dao;
 
+import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,8 +13,6 @@ import java.util.List;
 public interface DeviceDao {
     public int addDevice(DeviceEntity deviceEntity) throws SQLException, Exception;
 
-    public void addDevicesList(List<DeviceEntity> deviceEntity) throws SQLException, Exception;
-
     public List getAllDevice() throws SQLException, Exception;
 
     public void deleteAllDevice(List<DeviceEntity> deviceEntityCollection) throws SQLException, Exception;
@@ -20,4 +20,8 @@ public interface DeviceDao {
     public DeviceEntity getDeviceByDeviceId(int deviceId) throws SQLException, Exception;
 
     public int getDeviceIdByImei(String imei) throws SQLException, Exception;
+
+    public void deleteDeviceById(int deviceId) throws SQLException, Exception;
+
+    public int addAppList(int deviceId, List<AppEntity> appEntities) throws SQLException, Exception;
 }

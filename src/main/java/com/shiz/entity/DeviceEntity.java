@@ -1,8 +1,10 @@
 package com.shiz.entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Created by oldman on 19.04.17.
@@ -11,26 +13,29 @@ import java.util.Collection;
 @Table(name = "Device")
 @NamedQueries({
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_ALL, query = "from DeviceEntity"),
-        @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where id = :id"),
+        @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where deviceId = :device_id"),
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI, query = "from DeviceEntity where imei like :imei")})
 public class DeviceEntity implements Serializable{
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Basic
     @Column(name = "imei", nullable = false, length = 45)
     private String imei;
     @Column(name = "device_id")
     private int deviceId;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "appByDeviceId", cascade=CascadeType.ALL)
-    private Collection<AppEntity> appByDeviceId;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "appByDeviceId", cascade={CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private Set<AppEntity> appByDeviceId = new HashSet<>(); ;
 
     public static class NamedQuery {
         public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
         public static final String DEVICE_FIND_BY_ID = "DeviceEntity.findById";
         public static final String DEVICE_FIND_BY_IMEI = "DeviceEntity.findByImei";
     }
-//    private Collection<BatteryStatusEntity> batteryStatusByDeviceId;
+
+    //    private Collection<BatteryStatusEntity> batteryStatusByDeviceId;
 //    private Collection<CallEntity> callByDeviceId;
 //    private Collection<DeviceStatusEntity> deviceStatusByDeviceId;
 //    private Collection<LocationEntity> locationByDeviceId;
@@ -86,18 +91,22 @@ public class DeviceEntity implements Serializable{
         return result;
     }
 
-    public Collection<AppEntity> getAppByDeviceId() {
+    public Set<AppEntity> getAppByDeviceId() {
         return appByDeviceId;
     }
 
-    public void setAppByDeviceId(Collection<AppEntity> appByDeviceId) {
+    public void setAppByDeviceId(Set<AppEntity> appByDeviceId) {
         this.appByDeviceId = appByDeviceId;
     }
 
+    public void addApp(AppEntity app) {
+        if(!getAppByDeviceId().contains(app))
+          this.appByDeviceId.add(app);
+    }
 
-    public void addAppByDeviceId(Collection<AppEntity> appByDeviceIdList) {
+    public void addAppsList(List appByDeviceIdList) {
         if(appByDeviceIdList != null)
-        this.appByDeviceId.addAll(appByDeviceIdList);
+            this.appByDeviceId.addAll(appByDeviceIdList);
     }
 //    @OneToMany(mappedBy = "batteryByDeviceId")
 //    public Collection<BatteryStatusEntity> getBatteryStatusByDeviceId() {

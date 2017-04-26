@@ -39,74 +39,74 @@ public class DeviceController {
     getter
      */
 
-    @RequestMapping(value = "/sync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<PeriodicalResponse> onSyncMessage(@RequestBody String request) {
-        return dbService.getSettingsDevice(request);
-    }
-
+//    @RequestMapping(value = "/sync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<PeriodicalResponse> onSyncMessage(@RequestBody String request) {
+//        return dbService.getSettingsDevice(request);
+//    }
+//
 //    @RequestMapping(value = "device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody
 //    public Device getDevice(@PathVariable String id) {
 //        System.out.println("deviceId " + id);
 //        return dbService.getDevice(Integer.valueOf(id));
 //    }
-
-    @RequestMapping(value = "device/{id}/call_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceCallList(@PathVariable String id) {
-        System.out.println("getDeviceSmsList deviceId " + id);
-        return dbService.getCallList(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/sms_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceSmsList(@PathVariable String id) {
-        System.out.println("getDeviceSmsList deviceId " + id);
-        return dbService.getSmsList(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/location_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceLocation(@PathVariable String id) {
-        System.out.println("getDeviceSmsList deviceId " + id);
-        return dbService.getDeviceLocation(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/app_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getInstallAppList(@PathVariable String id) {
-        System.out.println("getDeviceSmsList deviceId " + id);
-        return dbService.getInstallAppList(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/telbook", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceTelephoneBook(@PathVariable String id) {
-        System.out.println("getDeviceSmsList deviceId " + id);
-        return dbService.getDeviceTelephoneBook(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceStatus(@PathVariable String id) {
-        System.out.println("getDeviceBatteryStatus deviceId " + id);
-        return dbService.getDeviceStatus(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/network", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceNetworkStatus(@PathVariable String id) {
-        System.out.println("getDeviceBatteryStatus deviceId " + id);
-        return dbService.getDeviceNetworkStatus(Integer.valueOf(id));
-    }
-
-    @RequestMapping(value = "device/{id}/battery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Device> getDeviceBatteryStatus(@PathVariable String id) {
-        System.out.println("getDeviceBatteryStatus deviceId " + id);
-        return dbService.getDeviceBatteryStatus(Integer.valueOf(id));
-    }
+//
+//    @RequestMapping(value = "device/{id}/call_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceCallList(@PathVariable String id) {
+//        System.out.println("getDeviceSmsList deviceId " + id);
+//        return dbService.getCallList(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/sms_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceSmsList(@PathVariable String id) {
+//        System.out.println("getDeviceSmsList deviceId " + id);
+//        return dbService.getSmsList(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/location_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceLocation(@PathVariable String id) {
+//        System.out.println("getDeviceSmsList deviceId " + id);
+//        return dbService.getDeviceLocation(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/app_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getInstallAppList(@PathVariable String id) {
+//        System.out.println("getDeviceSmsList deviceId " + id);
+//        return dbService.getInstallAppList(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/telbook", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceTelephoneBook(@PathVariable String id) {
+//        System.out.println("getDeviceSmsList deviceId " + id);
+//        return dbService.getDeviceTelephoneBook(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceStatus(@PathVariable String id) {
+//        System.out.println("getDeviceBatteryStatus deviceId " + id);
+//        return dbService.getDeviceStatus(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/network", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceNetworkStatus(@PathVariable String id) {
+//        System.out.println("getDeviceBatteryStatus deviceId " + id);
+//        return dbService.getDeviceNetworkStatus(Integer.valueOf(id));
+//    }
+//
+//    @RequestMapping(value = "device/{id}/battery", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Device> getDeviceBatteryStatus(@PathVariable String id) {
+//        System.out.println("getDeviceBatteryStatus deviceId " + id);
+//        return dbService.getDeviceBatteryStatus(Integer.valueOf(id));
+//    }
     /*
     setter
      */

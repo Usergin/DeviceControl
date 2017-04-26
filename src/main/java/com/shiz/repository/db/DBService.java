@@ -2,6 +2,7 @@ package com.shiz.repository.db;
 
 import com.google.gson.Gson;
 import com.shiz.Constants;
+import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
@@ -30,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by oldman on 04.04.17.
@@ -55,7 +53,7 @@ public class DBService {
 //        sessionFactory = HibernateSessionFactory.getSessionFactory();
 //    }
 
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+//    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public int getDeviceIdByImei(String imei, Session session) {
         String hql = "from DeviceEntity where imei like :imei";
         Query query = session.createQuery(hql).setParameter("imei", "%" + imei + "%");
@@ -203,23 +201,23 @@ public class DBService {
     }
 
     public ResponseEntity<InformationResponse> setListInstallApp(String request) {
-        // имитируем обращение к БД
         InstallAppRequest installAppRequest = gson.fromJson(request, InstallAppRequest.class);
-        if (installAppRequest != null) {
+        if (installAppRequest != null && installAppRequest.getData() != null) {
             System.out.print("installAppRequest  " + installAppRequest.getDevice());
-//            Session session = sessionFactory.openSession();
-//            DeviceEntity deviceEntity =  getDevice(installAppRequest.getDevice(), session);
-//            if(deviceEntity != null) {
-//                Collection<AppEntity> appEntities = new HashSet<>();
-//                for (InstallApp installApp : installAppRequest.getData()) {
-//                    System.out.print("type  " + installApp.getName());
-//                    AppEntity appEntity = new AppEntity();
-//                    appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
-//                    appEntity.setInfo(installApp.getInfo());
-//                    appEntity.setInfo(installApp.getName());
-//                    appEntities.add(appEntity);
-//                }
-//                deviceEntity.addAppByDeviceId(appEntities);
+            List<AppEntity> appEntities = new ArrayList<>();
+            for (InstallApp installApp : installAppRequest.getData()) {
+                System.out.print("type  " + installApp.getName());
+                AppEntity appEntity = new AppEntity();
+                appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                appEntity.setInfo(installApp.getInfo());
+                appEntity.setName(installApp.getName());
+                appEntities.add(appEntity);
+            }
+            try {
+                deviceDao.addAppList(installAppRequest.getDevice(), appEntities);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
         return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
@@ -271,133 +269,133 @@ public class DBService {
         }
     }
 
-    /*
-    getters
-     */
-    public ResponseEntity<PeriodicalResponse> getSettingsDevice(String request) {
-        // имитируем обращение к БД
-        PeriodicalRequest periodicalRequest = gson.fromJson(request, PeriodicalRequest.class);
-
-        if (periodicalRequest != null) {
-            Settings settings = Settings.newBuilder()
-                    .is_call(false)
-                    .is_location(true)
-                    .is_sms(true)
-                    .list_app(false)
-                    .list_call(false)
-                    .list_phone_book(false)
-                    .list_app(false)
-                    .build();
-            PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.CONTINUE_TO_WORK_RESPONSE, settings);
-            return new ResponseEntity<PeriodicalResponse>(periodicalResponse, HttpStatus.OK);
-        } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
-        }
-    }
-
-    public ResponseEntity<Device> getCallList(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Call call = new Call("12321321", "asd", Date.from(Instant.EPOCH));
-            List<Call> smsList = new ArrayList<>();
-            smsList.add(call);
-            Device device = Device.newBuilder().call_list(smsList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-
-    public ResponseEntity<Device> getSmsList(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            SMS sms = new SMS("12321321", "asd", Date.from(Instant.EPOCH));
-            List<SMS> smsList = new ArrayList<>();
-            smsList.add(sms);
-            Device device = Device.newBuilder().sms_list(smsList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-
-    public ResponseEntity<Device> getDeviceLocation(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Location sms = new Location(12.12321, 43.23121, 24, 1231242342L);
-            List<Location> locationList = new ArrayList<>();
-            locationList.add(sms);
-            Device device = Device.newBuilder().location(locationList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-    public ResponseEntity<Device> getDeviceNetworkStatus(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Contact contact = new Contact("12321", "123121", "sadasdsa");
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            Device device = Device.newBuilder().contact_list(contactList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-    public ResponseEntity<Device> getDeviceStatus(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Contact contact = new Contact("12321", "123121", "sadasdsa");
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            Device device = Device.newBuilder().contact_list(contactList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-    public ResponseEntity<Device> getDeviceBatteryStatus(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Contact contact = new Contact("12321", "123121", "sadasdsa");
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            Device device = Device.newBuilder().contact_list(contactList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-    public ResponseEntity<Device> getInstallAppList(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Contact contact = new Contact("12321", "123121", "sadasdsa");
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            Device device = Device.newBuilder().contact_list(contactList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
-
-    public ResponseEntity<Device> getDeviceTelephoneBook(int deviceId) {
-        // имитируем обращение к БД
-        if (deviceId == 2) {
-            Contact contact = new Contact("12321", "123121", "sadasdsa");
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            Device device = Device.newBuilder().contact_list(contactList).build();
-            return new ResponseEntity<Device>(device, HttpStatus.OK);
-        } else {
-            throw new DeviceException(deviceId);
-        }
-    }
+//    /*
+//    getters
+//     */
+//    public ResponseEntity<PeriodicalResponse> getSettingsDevice(String request) {
+//        // имитируем обращение к БД
+//        PeriodicalRequest periodicalRequest = gson.fromJson(request, PeriodicalRequest.class);
+//
+//        if (periodicalRequest != null) {
+//            Settings settings = Settings.newBuilder()
+//                    .is_call(false)
+//                    .is_location(true)
+//                    .is_sms(true)
+//                    .list_app(false)
+//                    .list_call(false)
+//                    .list_phone_book(false)
+//                    .list_app(false)
+//                    .build();
+//            PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.CONTINUE_TO_WORK_RESPONSE, settings);
+//            return new ResponseEntity<PeriodicalResponse>(periodicalResponse, HttpStatus.OK);
+//        } else {
+//            throw new ErrorExceptionResponse(0, "Error on server");
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getCallList(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Call call = new Call("12321321", "asd", Date.from(Instant.EPOCH));
+//            List<Call> smsList = new ArrayList<>();
+//            smsList.add(call);
+//            Device device = Device.newBuilder().call_list(smsList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//
+//    public ResponseEntity<Device> getSmsList(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            SMS sms = new SMS("12321321", "asd", Date.from(Instant.EPOCH));
+//            List<SMS> smsList = new ArrayList<>();
+//            smsList.add(sms);
+//            Device device = Device.newBuilder().sms_list(smsList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//
+//    public ResponseEntity<Device> getDeviceLocation(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Location sms = new Location(12.12321, 43.23121, 24, 1231242342L);
+//            List<Location> locationList = new ArrayList<>();
+//            locationList.add(sms);
+//            Device device = Device.newBuilder().location(locationList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getDeviceNetworkStatus(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Contact contact = new Contact("12321", "123121", "sadasdsa");
+//            List<Contact> contactList = new ArrayList<>();
+//            contactList.add(contact);
+//            Device device = Device.newBuilder().contact_list(contactList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getDeviceStatus(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Contact contact = new Contact("12321", "123121", "sadasdsa");
+//            List<Contact> contactList = new ArrayList<>();
+//            contactList.add(contact);
+//            Device device = Device.newBuilder().contact_list(contactList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getDeviceBatteryStatus(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Contact contact = new Contact("12321", "123121", "sadasdsa");
+//            List<Contact> contactList = new ArrayList<>();
+//            contactList.add(contact);
+//            Device device = Device.newBuilder().contact_list(contactList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getInstallAppList(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Contact contact = new Contact("12321", "123121", "sadasdsa");
+//            List<Contact> contactList = new ArrayList<>();
+//            contactList.add(contact);
+//            Device device = Device.newBuilder().contact_list(contactList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
+//
+//    public ResponseEntity<Device> getDeviceTelephoneBook(int deviceId) {
+//        // имитируем обращение к БД
+//        if (deviceId == 2) {
+//            Contact contact = new Contact("12321", "123121", "sadasdsa");
+//            List<Contact> contactList = new ArrayList<>();
+//            contactList.add(contact);
+//            Device device = Device.newBuilder().contact_list(contactList).build();
+//            return new ResponseEntity<Device>(device, HttpStatus.OK);
+//        } else {
+//            throw new DeviceException(deviceId);
+//        }
+//    }
 }

@@ -12,14 +12,14 @@ import java.sql.Timestamp;
 //@IdClass(AppEntityPK.class)
 public class AppEntity  implements Serializable {
     private int id;
-    private int deviceId;
+//    private int deviceId;
     private String name;
     private Timestamp dateInstalled;
     private String info;
     private DeviceEntity appByDeviceId;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;
@@ -29,15 +29,15 @@ public class AppEntity  implements Serializable {
         this.id = id;
     }
 
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
+//    @Id
+//    @Column(name = "device_id", nullable = false)
+//    public int getDeviceId() {
+//        return deviceId;
+//    }
+//
+//    public void setDeviceId(int deviceId) {
+//        this.deviceId = deviceId;
+//    }
 
     @Basic
     @Column(name = "name", nullable = false, length = 45)
@@ -77,7 +77,7 @@ public class AppEntity  implements Serializable {
         AppEntity appEntity = (AppEntity) o;
 
         if (id != appEntity.id) return false;
-        if (deviceId != appEntity.deviceId) return false;
+//        if (deviceId != appEntity.deviceId) return false;
         if (name != null ? !name.equals(appEntity.name) : appEntity.name != null) return false;
         if (dateInstalled != null ? !dateInstalled.equals(appEntity.dateInstalled) : appEntity.dateInstalled != null)
             return false;
@@ -89,7 +89,7 @@ public class AppEntity  implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
+//        result = 31 * result + deviceId;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (dateInstalled != null ? dateInstalled.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
@@ -97,7 +97,7 @@ public class AppEntity  implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "device_id")
     public DeviceEntity getAppByDeviceId() {
         return appByDeviceId;
     }
