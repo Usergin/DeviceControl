@@ -6,18 +6,18 @@ import com.shiz.model.respose.BaseResponse;
  * Created by oldman on 05.04.17.
  */
 public class ErrorResponse extends BaseResponse {
-     private String  error;
+     private int  error;
 
-    public ErrorResponse(int code, String error) {
+    public ErrorResponse(int code, int error) {
         super(code);
         this.error = error;
     }
 
-    public String getError() {
+    public int getError() {
         return error;
     }
 
-    public void setError(String device) {
+    public void setError(int device) {
         this.error = device;
     }
 }

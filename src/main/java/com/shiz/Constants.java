@@ -21,18 +21,25 @@ public class Constants {
     public final static int NEW_SETTINGS_RESPONSE = 2;
     public final static int REMOVED_RESPONSE = 3;
 
-    /*
-    if error
-     */
-    public final static int DEVICE_NOT_FOUND = 0;
-    public final static int BAD_IMEI = 1;
-    public final static int BAD_TYPE = 2;
-    public final static int BAD_MODE_FOR_DELETE = 3;
-    public final static int OTHER_ERROR = 4;
+
 
 
     /*
     for device state
      */
     enum EVENT {Device, Battery_state, Network}
+
+    /*
+   if error
+    */
+    public final static int BAD_IMEI = 1;
+    public final static int BAD_TYPE = 2;
+    public final static int BAD_MODE_FOR_DELETE = 3;
+    public final static int OTHER_ERROR = 4;
+
+    public final static int ERROR_ON_SERVER = 0;
+    public final static int BAD_REQUEST= 1;
+    public final static int NOT_FOUND_DEVICE = 2;
+    public final static int NOT_FOUND_DEVICES = 3;
+    public final static int DEVICE_ALREADY_REGISTERED = 4;
 }

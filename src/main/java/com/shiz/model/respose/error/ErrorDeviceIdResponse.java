@@ -7,7 +7,7 @@ public class ErrorDeviceIdResponse extends ErrorResponse {
     private int device;
 
 
-    public ErrorDeviceIdResponse(int code, String error, int device) {
+    public ErrorDeviceIdResponse(int code, int error, int device) {
         super(code, error);
         this.device = device;
     }

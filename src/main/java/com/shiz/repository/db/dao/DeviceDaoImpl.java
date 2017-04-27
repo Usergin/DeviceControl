@@ -46,8 +46,7 @@ public class DeviceDaoImpl implements DeviceDao {
             session.getTransaction().commit();
             return deviceEntity.getDeviceId();
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+            return -1;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -104,11 +103,12 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
                     .getResultList();
         } catch (NoResultException | NonUniqueResultException nre) {
-            throw new ErrorExceptionResponse(0, "Not found device");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+           return null;
         }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+//        }
     }
 
     @Override
@@ -133,31 +133,21 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-//            AppEntity appEntity = new AppEntity();
-//            appEntity.setName("sadsa");
-////            appEntity.setDateInstalled(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
-//            appEntity.setInfo("asdasda");
-////            appEntity.setDeviceId(deviceEntity.getDeviceId());
-//            appEntity.setAppByDeviceId(deviceEntity);
 
-//            deviceEntity.getAppByDeviceId().add(appEntity);
             for (int i = 0; i < appEntities.size(); i++) {
                 AppEntity installApp = appEntities.get(i);
                 installApp.setAppByDeviceId(deviceEntity);
                 appEntities.set(i, installApp);
                 session.save(installApp);
             }
-//            System.out.print("device_id " + deviceEntity.getId() + " app " + deviceEntity.getAppByDeviceId());
             deviceEntity.getAppByDeviceId().addAll(appEntities);
-//            System.out.print("addApp ");
             session.merge(deviceEntity);
             session.getTransaction().commit();
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
-            throw new ErrorExceptionResponse(0, "Not found device");
+           return 0;
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
+           return -1;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

@@ -1,18 +1,13 @@
 package com.shiz.repository.network;
 
-import com.shiz.model.Device;
 import com.shiz.model.respose.BaseResponse;
 import com.shiz.model.respose.InformationResponse;
-import com.shiz.model.respose.NewDeviceResponse;
-import com.shiz.model.respose.PeriodicalResponse;
 import com.shiz.repository.db.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * Created by oldman on 04.04.17.
@@ -26,13 +21,13 @@ public class DeviceController {
     @RequestMapping(value = "/devices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> getDevices() {
-        return dbService.getDevices();
+        return dbService.getDevicesList();
     }
 
     @RequestMapping(value = "/device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> getDeviceById(@PathVariable int id) {
-        return dbService.getDevice(id);
+        return dbService.getDeviceByDeviceId(id);
     }
 
     /*
@@ -47,9 +42,9 @@ public class DeviceController {
 //
 //    @RequestMapping(value = "device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody
-//    public Device getDevice(@PathVariable String id) {
+//    public Device getDeviceByDeviceId(@PathVariable String id) {
 //        System.out.println("deviceId " + id);
-//        return dbService.getDevice(Integer.valueOf(id));
+//        return dbService.getDeviceByDeviceId(Integer.valueOf(id));
 //    }
 //
 //    @RequestMapping(value = "device/{id}/call_list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -118,49 +113,49 @@ public class DeviceController {
 
     @RequestMapping(value = "/call", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setCallListDevice(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setCallListDevice(@RequestBody String request) {
         return dbService.setCallData(request);
     }
 
     @RequestMapping(value = "/sms", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setSmsListDevice(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setSmsListDevice(@RequestBody String request) {
         return dbService.setSmsData(request);
     }
 
     @RequestMapping(value = "/location", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setDeviceLocation(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setDeviceLocation(@RequestBody String request) {
         return dbService.setDeviceLocation(request);
     }
 
     @RequestMapping(value = "/list/telbook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setDeviceTelephoneBook(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setDeviceTelephoneBook(@RequestBody String request) {
         return dbService.setDeviceTelephoneBook(request);
     }
 
     @RequestMapping(value = "/list/app", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setDeviceInstallApp(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setDeviceInstallApp(@RequestBody String request) {
         return dbService.setListInstallApp(request);
     }
 
     @RequestMapping(value = "/service/status", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse> setDeviceStatus(@RequestBody String request) {
+    public ResponseEntity<BaseResponse> setDeviceStatus(@RequestBody String request) {
         return dbService.setDeviceStatus(request);
     }
 
     @RequestMapping(value = "/service/battery", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse>  setDeviceBatteryState(@RequestBody String request) {
+    public ResponseEntity<BaseResponse>  setDeviceBatteryState(@RequestBody String request) {
         return dbService.setDeviceBatteryStatus(request);
     }
 
     @RequestMapping(value = "/service/network", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<InformationResponse>  setList(@RequestBody String request) {
+    public ResponseEntity<BaseResponse>  setList(@RequestBody String request) {
         return dbService.setDeviceNetworkStatus(request);
     }
 }

@@ -7,10 +7,8 @@ import com.shiz.entity.DeviceEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
 import com.shiz.model.data.Contact;
-import com.shiz.model.data.Settings;
 import com.shiz.model.data.event.*;
 import com.shiz.model.request.InitialDeviceRequest;
-import com.shiz.model.request.PeriodicalRequest;
 import com.shiz.model.request.indormation.*;
 import com.shiz.model.respose.*;
 import com.shiz.model.respose.error.ErrorDeviceIdResponse;
@@ -26,12 +24,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by oldman on 04.04.17.
@@ -53,7 +50,8 @@ public class DBService {
 //        sessionFactory = HibernateSessionFactory.getSessionFactory();
 //    }
 
-//    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    //    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+
     public int getDeviceIdByImei(String imei, Session session) {
         String hql = "from DeviceEntity where imei like :imei";
         Query query = session.createQuery(hql).setParameter("imei", "%" + imei + "%");
@@ -68,7 +66,7 @@ public class DBService {
         }
     }
 
-    public ResponseEntity<BaseResponse> getDevice(int deviceId) {
+    public ResponseEntity<BaseResponse> getDeviceByDeviceId(int deviceId) {
         try {
             DeviceEntity deviceEntity = deviceDao.getDeviceByDeviceId(deviceId);
             Device device = Device.newBuilder()
@@ -78,29 +76,34 @@ public class DBService {
             DeviceResponse deviceResponse = new DeviceResponse(1, device);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, "not device",
+            ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, Constants.NOT_FOUND_DEVICE,
                     deviceId);
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<BaseResponse> getDevices() {
+    public ResponseEntity<BaseResponse> getDevicesList() {
         List<DeviceEntity> deviceEntityList = new ArrayList<>();
         List<Device> deviceList = new ArrayList<>();
         try {
             deviceEntityList = deviceDao.getAllDevice();
-            for (DeviceEntity deviceEntity : deviceEntityList) {
-                Device device = Device.newBuilder()
-                        .imei(deviceEntity.getImei())
-                        .id(deviceEntity.getDeviceId())
-                        .build();
-                deviceList.add(device);
+            if (deviceEntityList != null && deviceEntityList.size() != 0) {
+                for (DeviceEntity deviceEntity : deviceEntityList) {
+                    Device device = Device.newBuilder()
+                            .imei(deviceEntity.getImei())
+                            .id(deviceEntity.getDeviceId())
+                            .build();
+                    deviceList.add(device);
+                }
+                AllDevicesResponse deviceResponse = new AllDevicesResponse(1, deviceList);
+                return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+            } else {
+                ErrorResponse errorResponse = new ErrorResponse(0, Constants.NOT_FOUND_DEVICES);
+                return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
             }
-            AllDevicesResponse deviceResponse = new AllDevicesResponse(1, deviceList);
-            return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (Exception e) {
-            ErrorResponse errorResponse = new ErrorResponse(0, "not devices");
-            return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -127,20 +130,21 @@ public class DBService {
                     NewDeviceResponse newDeviceResponse = new NewDeviceResponse(1, uuid);
                     return new ResponseEntity<>(newDeviceResponse, HttpStatus.OK);
                 } else {
-                    ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, "Device already registered",
+                    ErrorDeviceIdResponse errorResponse = new ErrorDeviceIdResponse(0, Constants.DEVICE_ALREADY_REGISTERED,
                             deviceId);
                     return new ResponseEntity<>(errorResponse, HttpStatus.OK);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new ErrorExceptionResponse(0, "Error: " + e.getMessage());
+                ErrorResponse errorResponse = new ErrorResponse(0, Constants.ERROR_ON_SERVER);
+                return new ResponseEntity<>(errorResponse, HttpStatus.OK);
             }
-        } else
-            throw new ErrorExceptionResponse(0, "Error request");
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
-
-    public ResponseEntity<InformationResponse> setCallData(String request) {
+    public ResponseEntity<BaseResponse> setCallData(String request) {
         // имитируем обращение к БД
         CallRequest informationRequest = gson.fromJson(request, CallRequest.class);
 
@@ -150,13 +154,14 @@ public class DBService {
             }
 
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<InformationResponse> setSmsData(String request) {
+    public ResponseEntity<BaseResponse> setSmsData(String request) {
         // имитируем обращение к БД
         SmsRequest informationRequest = gson.fromJson(request, SmsRequest.class);
         if (informationRequest != null) {
@@ -165,14 +170,15 @@ public class DBService {
             }
 
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
 
-    public ResponseEntity<InformationResponse> setDeviceLocation(String request) {
+    public ResponseEntity<BaseResponse> setDeviceLocation(String request) {
         // имитируем обращение к БД
         LocationRequest informationRequest = gson.fromJson(request, LocationRequest.class);
         if (informationRequest != null) {
@@ -180,13 +186,14 @@ public class DBService {
                 System.out.print("type  " + call.getLatitude());
             }
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<InformationResponse> setDeviceTelephoneBook(String request) {
+    public ResponseEntity<BaseResponse> setDeviceTelephoneBook(String request) {
         // имитируем обращение к БД
         TelephoneBookRequest telephoneBookRequest = gson.fromJson(request, TelephoneBookRequest.class);
         if (telephoneBookRequest != null) {
@@ -194,13 +201,14 @@ public class DBService {
                 System.out.print("type  " + call.getName());
             }
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<InformationResponse> setListInstallApp(String request) {
+    public ResponseEntity<BaseResponse> setListInstallApp(String request) {
         InstallAppRequest installAppRequest = gson.fromJson(request, InstallAppRequest.class);
         if (installAppRequest != null && installAppRequest.getData() != null) {
             System.out.print("installAppRequest  " + installAppRequest.getDevice());
@@ -216,31 +224,31 @@ public class DBService {
             try {
                 deviceDao.addAppList(installAppRequest.getDevice(), appEntities);
             } catch (Exception e) {
-                e.printStackTrace();
+                ErrorResponse errorResponse = new ErrorResponse(0, Constants.NOT_FOUND_DEVICE);
+                return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+
             }
         }
         InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-        return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
-//        } else {
-//            throw new ErrorExceptionResponse(0, "Error on server");
-//        }
+        return new ResponseEntity<>(informationResponse, HttpStatus.OK);
     }
 
-    public ResponseEntity<InformationResponse> setDeviceBatteryStatus(String request) {
+    public ResponseEntity<BaseResponse> setDeviceBatteryStatus(String request) {
         // имитируем обращение к БД
         BatteryStatusRequest informationRequest = gson.fromJson(request, BatteryStatusRequest.class);
         if (informationRequest != null) {
             ChargingEvent call = informationRequest.getData();
             System.out.print("type  " + call.getBattery_status());
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
 
-    public ResponseEntity<InformationResponse> setDeviceStatus(String request) {
+    public ResponseEntity<BaseResponse> setDeviceStatus(String request) {
         // имитируем обращение к БД
         DeviceStatusRequest informationRequest = gson.fromJson(request, DeviceStatusRequest.class);
         if (informationRequest != null) {
@@ -248,14 +256,15 @@ public class DBService {
             System.out.print("type  " + deviceEvent.getStatus());
 
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 
 
-    public ResponseEntity<InformationResponse> setDeviceNetworkStatus(String request) {
+    public ResponseEntity<BaseResponse> setDeviceNetworkStatus(String request) {
         // имитируем обращение к БД
         NetworkStatusRequest informationRequest = gson.fromJson(request, NetworkStatusRequest.class);
         if (informationRequest != null) {
@@ -263,9 +272,10 @@ public class DBService {
             System.out.print("type  " + deviceEvent.getState());
 
             InformationResponse informationResponse = new InformationResponse(Constants.CONTINUE_TO_WORK_RESPONSE);
-            return new ResponseEntity<InformationResponse>(informationResponse, HttpStatus.OK);
+            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
         } else {
-            throw new ErrorExceptionResponse(0, "Error on server");
+            ErrorResponse errorResponse = new ErrorResponse(0, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
     }
 

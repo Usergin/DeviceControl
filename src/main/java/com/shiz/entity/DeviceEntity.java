@@ -25,8 +25,8 @@ public class DeviceEntity implements Serializable{
     private String imei;
     @Column(name = "device_id")
     private int deviceId;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "appByDeviceId", cascade={CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "appByDeviceId", orphanRemoval = true)
+//    @Cascade(value = org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private Set<AppEntity> appByDeviceId = new HashSet<>(); ;
 
     public static class NamedQuery {
