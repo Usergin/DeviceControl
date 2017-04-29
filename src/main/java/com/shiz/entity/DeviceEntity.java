@@ -100,8 +100,10 @@ public class DeviceEntity implements Serializable{
     }
 
     public void addApp(AppEntity app) {
-        if(!getAppByDeviceId().contains(app))
-          this.appByDeviceId.add(app);
+        if(!getAppByDeviceId().contains(app)) {
+            System.out.print(app.getName());
+            this.appByDeviceId.add(app);
+        }
     }
 
     public void addAppsList(List appByDeviceIdList) {

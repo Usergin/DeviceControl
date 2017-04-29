@@ -17,9 +17,10 @@ public class Constants {
     /*
     for periodical request
      */
-    public final static int CONTINUE_TO_WORK_RESPONSE = 1;
-    public final static int NEW_SETTINGS_RESPONSE = 2;
-    public final static int REMOVED_RESPONSE = 3;
+    public final static int STATE_ERROR = 0;
+    public final static int STATE_OK = 1;
+    public final static int STATE_NEW_SETTINGS = 2;
+    public final static int STATE_REMOVED = 3;
 
 
 
@@ -42,4 +43,5 @@ public class Constants {
     public final static int NOT_FOUND_DEVICE = 2;
     public final static int NOT_FOUND_DEVICES = 3;
     public final static int DEVICE_ALREADY_REGISTERED = 4;
+    public final static int DATA_NOT_AVAILABLE= 5;
 }

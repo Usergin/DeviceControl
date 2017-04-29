@@ -112,8 +112,18 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public void deleteAllDevice(List<DeviceEntity> deviceEntityCollection) throws SQLException, Exception {
-        sessionFactory.getCurrentSession().delete(deviceEntityCollection);
+    public boolean deleteAllDevice() throws SQLException, Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            String hql="delete from DeviceEntity";
+            session.createNativeQuery(hql);
+            return true;
+        } catch (NoResultException | NonUniqueResultException nre) {
+            return false;
+        }
     }
 
 
@@ -127,7 +137,6 @@ public class DeviceDaoImpl implements DeviceDao {
         Session session = null;
         try {
             session = sessionFactory.openSession();
-            System.out.print("openSession ");
             session.beginTransaction();
             DeviceEntity deviceEntity = ((DeviceEntity) session
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
@@ -138,14 +147,16 @@ public class DeviceDaoImpl implements DeviceDao {
                 AppEntity installApp = appEntities.get(i);
                 installApp.setAppByDeviceId(deviceEntity);
                 appEntities.set(i, installApp);
-                session.save(installApp);
+                deviceEntity.addApp(installApp);
+                session.save(deviceEntity);
             }
-            deviceEntity.getAppByDeviceId().addAll(appEntities);
-            session.merge(deviceEntity);
+//            deviceEntity.getAppByDeviceId().addAll(appEntities);
+            session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
            return 0;
+
         } catch (Exception e) {
            return -1;
         } finally {

@@ -1,8 +1,7 @@
 package com.shiz.repository.network;
 
 import com.shiz.model.respose.BaseResponse;
-import com.shiz.model.respose.InformationResponse;
-import com.shiz.repository.db.DBService;
+import com.shiz.repository.db.DBServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class DeviceController {
     @Autowired
-    @Qualifier("DBService")
-    private DBService dbService;
+    @Qualifier("DBServiceImpl")
+    private DBServiceImpl dbService;
 
     @RequestMapping(value = "/devices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -129,13 +128,13 @@ public class DeviceController {
         return dbService.setDeviceLocation(request);
     }
 
-    @RequestMapping(value = "/list/telbook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/telbook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceTelephoneBook(@RequestBody String request) {
         return dbService.setDeviceTelephoneBook(request);
     }
 
-    @RequestMapping(value = "/list/app", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/app", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceInstallApp(@RequestBody String request) {
         return dbService.setListInstallApp(request);

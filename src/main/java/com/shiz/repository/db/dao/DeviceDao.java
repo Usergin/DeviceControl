@@ -15,7 +15,7 @@ public interface DeviceDao {
 
     public List getAllDevice() throws SQLException, Exception;
 
-    public void deleteAllDevice(List<DeviceEntity> deviceEntityCollection) throws SQLException, Exception;
+    public boolean deleteAllDevice() throws SQLException, Exception;
 
     public DeviceEntity getDeviceByDeviceId(int deviceId) throws SQLException, Exception;
 

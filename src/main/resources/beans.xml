@@ -20,5 +20,5 @@
     <!--/>-->
 
     <bean name="dbService"
-          class="com.shiz.repository.db.DBService"/>
+          class="com.shiz.repository.db.DBServiceImpl"/>
 </beans>
