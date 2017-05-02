@@ -1,6 +1,7 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.entity.AppEntity;
+import com.shiz.entity.BatteryStatusEntity;
 import com.shiz.entity.DeviceEntity;
 
 import java.sql.SQLException;
@@ -24,4 +25,6 @@ public interface DeviceDao {
     public void deleteDeviceById(int deviceId) throws SQLException, Exception;
 
     public int addAppList(int deviceId, List<AppEntity> appEntities) throws SQLException, Exception;
+
+    public int addBatteryStatus(int deviceId, BatteryStatusEntity batteryStatusEntity) throws SQLException, Exception;
 }

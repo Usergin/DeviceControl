@@ -9,7 +9,6 @@ import java.io.Serializable;
  */
 public class BatteryStatusEntityPK implements Serializable {
     private int id;
-    private int deviceId;
 
     @Column(name = "id", nullable = false)
     @Id
@@ -21,15 +20,6 @@ public class BatteryStatusEntityPK implements Serializable {
         this.id = id;
     }
 
-    @Column(name = "device_id", nullable = false)
-    @Id
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -39,15 +29,12 @@ public class BatteryStatusEntityPK implements Serializable {
         BatteryStatusEntityPK that = (BatteryStatusEntityPK) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
-
         return true;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         return result;
     }
 }

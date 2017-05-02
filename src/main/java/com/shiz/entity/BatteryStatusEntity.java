@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "BatteryStatus", schema = "mydb")
+@Table(name = "BatteryStatus")
 @IdClass(BatteryStatusEntityPK.class)
 public class BatteryStatusEntity {
     private int id;
@@ -16,7 +16,6 @@ public class BatteryStatusEntity {
     private String status;
     private String batteryStatus;
     private String typeCharging;
-    private int deviceId;
     private DeviceEntity batteryByDeviceId;
 
     @Id
@@ -79,16 +78,6 @@ public class BatteryStatusEntity {
         this.typeCharging = typeCharging;
     }
 
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -97,7 +86,6 @@ public class BatteryStatusEntity {
         BatteryStatusEntity that = (BatteryStatusEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (level != null ? !level.equals(that.level) : that.level != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
@@ -116,11 +104,10 @@ public class BatteryStatusEntity {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (batteryStatus != null ? batteryStatus.hashCode() : 0);
         result = 31 * result + (typeCharging != null ? typeCharging.hashCode() : 0);
-        result = 31 * result + deviceId;
         return result;
     }
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getBatteryByDeviceId() {
         return batteryByDeviceId;
     }
@@ -128,5 +115,4 @@ public class BatteryStatusEntity {
     public void setBatteryByDeviceId(DeviceEntity batteryByDeviceId) {
         this.batteryByDeviceId = batteryByDeviceId;
     }
-
 }

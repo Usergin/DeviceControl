@@ -2,9 +2,8 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.AppEntity;
+import com.shiz.entity.BatteryStatusEntity;
 import com.shiz.entity.DeviceEntity;
-import com.shiz.model.data.event.InstallApp;
-import com.shiz.repository.exception.ErrorExceptionResponse;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,10 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Created by oldman on 22.04.17.
@@ -103,7 +99,7 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
                     .getResultList();
         } catch (NoResultException | NonUniqueResultException nre) {
-           return null;
+            return null;
         }
 //        catch (Exception e) {
 //            e.printStackTrace();
@@ -118,7 +114,7 @@ public class DeviceDaoImpl implements DeviceDao {
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            String hql="delete from DeviceEntity";
+            String hql = "delete from DeviceEntity";
             session.createNativeQuery(hql);
             return true;
         } catch (NoResultException | NonUniqueResultException nre) {
@@ -142,23 +138,61 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-
-            for (int i = 0; i < appEntities.size(); i++) {
-                AppEntity installApp = appEntities.get(i);
+            for (AppEntity installApp : appEntities) {
+                List<AppEntity> appList = deviceEntity.getAppByDeviceId();
+                for (AppEntity app : appList)
+                    if (app.getName().equals(installApp.getName())) {
+                        System.out.print("getName  " + app.getName());
+                        app.setInfo(installApp.getInfo());
+                        app.setDateInstalled(installApp.getDateInstalled());
+                        app.setAppByDeviceId(deviceEntity);
+                        appList.remove(app);
+                    }
                 installApp.setAppByDeviceId(deviceEntity);
-                appEntities.set(i, installApp);
                 deviceEntity.addApp(installApp);
-                session.save(deviceEntity);
+                session.save(installApp);
             }
-//            deviceEntity.getAppByDeviceId().addAll(appEntities);
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
-           return 0;
+            System.out.print("NoResultException  " + nre);
+            return 0;
 
         } catch (Exception e) {
-           return -1;
+            System.out.print("Exception  " + e);
+            return -1;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+
+    }
+
+    @Override
+    public int addBatteryStatus(int deviceId, BatteryStatusEntity batteryStatusEntity) throws SQLException, Exception {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            DeviceEntity deviceEntity = ((DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
+                    .setParameter("device_id", deviceId)
+                    .uniqueResult());
+            batteryStatusEntity.setBatteryByDeviceId(deviceEntity);
+            deviceEntity.addBatteryStatusByDeviceId(batteryStatusEntity);
+            session.save(batteryStatusEntity);
+            session.saveOrUpdate(deviceEntity);
+            session.getTransaction().commit();
+            return deviceId;
+        } catch (NoResultException | NonUniqueResultException nre) {
+            System.out.print("NoResultException  " + nre);
+            return 0;
+
+        } catch (Exception e) {
+            System.out.print("Exception  " + e);
+            return -1;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

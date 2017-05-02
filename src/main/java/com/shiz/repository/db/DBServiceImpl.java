@@ -3,6 +3,7 @@ package com.shiz.repository.db;
 import com.google.gson.Gson;
 import com.shiz.Constants;
 import com.shiz.entity.AppEntity;
+import com.shiz.entity.BatteryStatusEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
@@ -233,14 +234,23 @@ public class DBServiceImpl implements DBService {
     public ResponseEntity<BaseResponse> setDeviceBatteryStatus(String request) {
         // имитируем обращение к БД
         BatteryStatusRequest informationRequest = gson.fromJson(request, BatteryStatusRequest.class);
-        if (informationRequest != null) {
-            ChargingEvent call = informationRequest.getData();
-            System.out.print("type  " + call.getBattery_status());
-            InformationResponse informationResponse = new InformationResponse(Constants.STATE_OK);
-            return new ResponseEntity<>(informationResponse, HttpStatus.OK);
+        if (informationRequest != null && informationRequest.getData() != null) {
+            ChargingEvent chargingEvent = informationRequest.getData();
+            BatteryStatusEntity batteryStatusEntity = new BatteryStatusEntity();
+            batteryStatusEntity.setBatteryStatus(chargingEvent.getBattery_status());
+            batteryStatusEntity.setDate(new java.sql.Timestamp(chargingEvent.getDate().getTime()));
+            batteryStatusEntity.setLevel(chargingEvent.getLevel());
+            batteryStatusEntity.setStatus(chargingEvent.getStatus());
+            batteryStatusEntity.setTypeCharging(chargingEvent.getType_charging());
+
+            try {
+                int device = deviceDao.addBatteryStatus(informationRequest.getDevice(), batteryStatusEntity);
+                return getResponseStatus(device);
+            } catch (Exception e) {
+                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+            }
         } else {
-            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
     }
 

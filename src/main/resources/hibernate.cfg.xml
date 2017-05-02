@@ -33,7 +33,7 @@
         <!--<mapping class="com.shiz.entityity.SettingsEntity"/>-->
         <!--<mapping class="com.shiz.entityity.CallEntity"/>-->
         <!--<mapping class="com.shiz.entityity.LocationEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.BatteryStatusEntity"/>-->
+        <mapping class="com.shiz.entity.BatteryStatusEntity"/>
         <!--<mapping class="com.shiz.entityity.DeviceStatusEntity"/>-->
         <!--<mapping class="com.shiz.entityity.InformationEntity"/>-->
         <!--<mapping class="com.shiz.entityity.MessageEntity"/>-->

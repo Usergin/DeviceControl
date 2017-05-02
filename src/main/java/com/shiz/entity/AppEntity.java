@@ -9,10 +9,9 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "App")
-//@IdClass(AppEntityPK.class)
-public class AppEntity  implements Serializable {
+@IdClass(AppEntityPK.class)
+public class AppEntity {
     private int id;
-//    private int deviceId;
     private String name;
     private Timestamp dateInstalled;
     private String info;
@@ -29,15 +28,6 @@ public class AppEntity  implements Serializable {
         this.id = id;
     }
 
-//    @Id
-//    @Column(name = "device_id", nullable = false)
-//    public int getDeviceId() {
-//        return deviceId;
-//    }
-//
-//    public void setDeviceId(int deviceId) {
-//        this.deviceId = deviceId;
-//    }
 
     @Basic
     @Column(name = "name", nullable = false, length = 45)
