@@ -1,9 +1,11 @@
 package com.shiz.repository.db.dao;
 
+import com.shiz.Constants;
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.AppEntity;
 import com.shiz.entity.BatteryStatusEntity;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.SettingsEntity;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -157,11 +159,11 @@ public class DeviceDaoImpl implements DeviceDao {
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
             System.out.print("NoResultException  " + nre);
-            return 0;
+            return Constants.NOT_FOUND_DEVICE;
 
         } catch (Exception e) {
             System.out.print("Exception  " + e);
-            return -1;
+            return Constants.BAD_REQUEST;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -188,17 +190,57 @@ public class DeviceDaoImpl implements DeviceDao {
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
             System.out.print("NoResultException  " + nre);
-            return 0;
-
+            return Constants.NOT_FOUND_DEVICE;
         } catch (Exception e) {
             System.out.print("Exception  " + e);
-            return -1;
+            return Constants.BAD_REQUEST;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
 
+    }
+
+    @Override
+    public int setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            DeviceEntity deviceEntity = ((DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
+                    .setParameter("device_id", deviceId)
+                    .uniqueResult());
+            settingsEntity.setSettingsDeviceByDeviceId(deviceEntity);
+            deviceEntity.setSettingsByDeviceId(settingsEntity);
+            session.save(settingsEntity);
+            session.saveOrUpdate(deviceEntity);
+            session.getTransaction().commit();
+            return deviceId;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
+    @Override
+    public SettingsEntity getSettings(int deviceId) throws SQLException, Exception {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.beginTransaction();
+            DeviceEntity deviceEntity = ((DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
+                    .setParameter("device_id", deviceId)
+                    .uniqueResult());
+            return deviceEntity.getSettingsByDeviceId();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
     }
 
 }

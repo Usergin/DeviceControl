@@ -30,7 +30,7 @@
         <!--<property name="hbm2ddl.auto">create</property>-->
         <mapping class="com.shiz.entity.DeviceEntity"/>
         <mapping class="com.shiz.entity.AppEntity"/>
-        <!--<mapping class="com.shiz.entityity.SettingsEntity"/>-->
+        <mapping class="com.shiz.entity.SettingsEntity"/>
         <!--<mapping class="com.shiz.entityity.CallEntity"/>-->
         <!--<mapping class="com.shiz.entityity.LocationEntity"/>-->
         <mapping class="com.shiz.entity.BatteryStatusEntity"/>

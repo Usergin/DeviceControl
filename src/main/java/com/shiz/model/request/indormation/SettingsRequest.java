@@ -1,18 +1,15 @@
-package com.shiz.model.request;
+package com.shiz.model.request.indormation;
 
 import com.shiz.model.data.Settings;
+import com.shiz.model.request.BaseRequest;
 
 /**
- * Created by oldman on 05.04.17.
+ * Created by oldman on 04.05.17.
  */
-public class PeriodicalRequest extends BaseRequest {
-
-
+public class SettingsRequest extends BaseRequest {
     private Settings settings;
-
-    public PeriodicalRequest(Settings settings, String imei, int device) {
+    public SettingsRequest(Settings settings, String imei, int device) {
         super(imei, device);
-        this.settings = settings;
     }
 
     public Settings getSettings() {

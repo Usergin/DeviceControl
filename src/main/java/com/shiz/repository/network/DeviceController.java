@@ -29,15 +29,11 @@ public class DeviceController {
         return dbService.getDeviceByDeviceId(id);
     }
 
-    /*
-    getter
-     */
-
-//    @RequestMapping(value = "/sync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseBody
-//    public ResponseEntity<PeriodicalResponse> onSyncMessage(@RequestBody String request) {
-//        return dbService.getSettingsDevice(request);
-//    }
+    @RequestMapping(value = "/sync", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> onSyncMessage(@RequestBody String request) {
+        return dbService.getSettingsDevice(request);
+    }
 //
 //    @RequestMapping(value = "device/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody
@@ -108,6 +104,12 @@ public class DeviceController {
     @ResponseBody
     public ResponseEntity<BaseResponse> setNewDevice(@RequestBody String request) {
           return dbService.setNewDevice(request);
+    }
+
+    @RequestMapping(value = "/setting", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> setSettingsDevice(@RequestBody String request) {
+        return dbService.setSettingsDevice(request);
     }
 
     @RequestMapping(value = "/call", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)

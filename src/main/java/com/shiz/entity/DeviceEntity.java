@@ -28,6 +28,8 @@ public class DeviceEntity implements Serializable {
     private List<AppEntity> appByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "batteryByDeviceId", orphanRemoval = true)
     private List<BatteryStatusEntity> batteryStatusByDeviceId = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "settingsDeviceByDeviceId", orphanRemoval = true)
+    private SettingsEntity settingsByDeviceId;
 
     public static class NamedQuery {
         public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
@@ -42,7 +44,7 @@ public class DeviceEntity implements Serializable {
 //    private Collection<NetworkStatusEntity> networkStatusByDeviceId;
 //    private Collection<TelephoneBookEntity> telephoneBookByDeviceId;
 //    private InformationEntity infoByDeviceId;
-//    private SettingsEntity settingsByDeviceId;
+
 
     public int getId() {
         return id;
@@ -121,6 +123,15 @@ public class DeviceEntity implements Serializable {
     public void addBatteryStatusByDeviceId(BatteryStatusEntity batteryStatusByDeviceId) {
         this.batteryStatusByDeviceId.add(batteryStatusByDeviceId);
     }
+
+    public SettingsEntity getSettingsByDeviceId() {
+        return settingsByDeviceId;
+    }
+
+    public void setSettingsByDeviceId(SettingsEntity settingsByDeviceId) {
+        this.settingsByDeviceId = settingsByDeviceId;
+    }
+
     //
 //    @OneToMany(mappedBy = "callByDeviceId")
 //    public Collection<CallEntity> getCallByDeviceId() {
