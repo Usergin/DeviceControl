@@ -11,8 +11,7 @@ import java.sql.Timestamp;
 @IdClass(LocationEntityPK.class)
 public class LocationEntity {
     private int id;
-    private int deviceId;
-    private double longitude;
+     private double longitude;
     private double latitude;
     private double accurancy;
     private String method;
@@ -27,16 +26,6 @@ public class LocationEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -90,7 +79,7 @@ public class LocationEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getLocationByDeviceId() {
         return locationByDeviceId;
     }
@@ -107,7 +96,6 @@ public class LocationEntity {
         LocationEntity that = (LocationEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (Double.compare(that.longitude, longitude) != 0) return false;
         if (Double.compare(that.latitude, latitude) != 0) return false;
         if (Double.compare(that.accurancy, accurancy) != 0) return false;
@@ -122,8 +110,7 @@ public class LocationEntity {
         int result;
         long temp;
         result = id;
-        result = 31 * result + deviceId;
-        temp = Double.doubleToLongBits(longitude);
+       temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

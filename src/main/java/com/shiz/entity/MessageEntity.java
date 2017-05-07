@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @IdClass(MessageEntityPK.class)
 public class MessageEntity {
     private int id;
-    private int deviceId;
     private String number;
     private String data;
     private Timestamp date;
@@ -26,16 +25,6 @@ public class MessageEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -79,7 +68,7 @@ public class MessageEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getMsgByDeviceId() {
         return msgByDeviceId;
     }
@@ -96,7 +85,6 @@ public class MessageEntity {
         MessageEntity that = (MessageEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (typeEventId != that.typeEventId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (data != null ? !data.equals(that.data) : that.data != null) return false;
@@ -108,7 +96,6 @@ public class MessageEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);

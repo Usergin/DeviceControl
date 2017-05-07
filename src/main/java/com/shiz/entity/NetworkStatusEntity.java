@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @IdClass(NetworkStatusEntityPK.class)
 public class NetworkStatusEntity {
     private int id;
-    private int deviceId;
     private String state;
     private String ip;
     private Timestamp date;
@@ -24,16 +23,6 @@ public class NetworkStatusEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -67,7 +56,7 @@ public class NetworkStatusEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getNetworkStatusByDeviceId() {
         return networkStatusByDeviceId;
     }
@@ -84,7 +73,6 @@ public class NetworkStatusEntity {
         NetworkStatusEntity that = (NetworkStatusEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (state != null ? !state.equals(that.state) : that.state != null) return false;
         if (ip != null ? !ip.equals(that.ip) : that.ip != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
@@ -95,7 +83,6 @@ public class NetworkStatusEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (ip != null ? ip.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);

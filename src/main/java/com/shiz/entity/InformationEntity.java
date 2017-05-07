@@ -10,7 +10,6 @@ import javax.persistence.*;
 @IdClass(InformationEntityPK.class)
 public class InformationEntity {
     private int id;
-    private int deviceId;
     private String imei;
     private String imsi;
     private String serialNum;
@@ -30,7 +29,8 @@ public class InformationEntity {
     private String networkType;
     private String network;
     private String operatorName;
-    private DeviceEntity deviceByDeviceId;
+    private boolean isRoot;
+    private DeviceEntity deviceInfoByDeviceId;
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -41,14 +41,14 @@ public class InformationEntity {
         this.id = id;
     }
 
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
+    @Basic
+    @Column(name = "is_root", nullable = false, length = 45)
+    public boolean getIsRoot() {
+        return isRoot;
     }
 
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
+    public void setIsRoot(boolean root) {
+        this.isRoot = root;
     }
 
     @Basic
@@ -249,7 +249,6 @@ public class InformationEntity {
         InformationEntity that = (InformationEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (imei != null ? !imei.equals(that.imei) : that.imei != null) return false;
         if (imsi != null ? !imsi.equals(that.imsi) : that.imsi != null) return false;
         if (serialNum != null ? !serialNum.equals(that.serialNum) : that.serialNum != null) return false;
@@ -276,7 +275,6 @@ public class InformationEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (imei != null ? imei.hashCode() : 0);
         result = 31 * result + (imsi != null ? imsi.hashCode() : 0);
         result = 31 * result + (serialNum != null ? serialNum.hashCode() : 0);
@@ -299,13 +297,13 @@ public class InformationEntity {
         return result;
     }
     @OneToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
-    public DeviceEntity getDeviceByDeviceId() {
-        return deviceByDeviceId;
+    @JoinColumn(name = "device_id")
+    public DeviceEntity getDeviceInfoByDeviceId() {
+        return deviceInfoByDeviceId;
     }
 
-    public void setDeviceByDeviceId(DeviceEntity deviceByDeviceId) {
-        this.deviceByDeviceId = deviceByDeviceId;
+    public void setDeviceInfoByDeviceId(DeviceEntity deviceByDeviceId) {
+        this.deviceInfoByDeviceId = deviceByDeviceId;
     }
 
 }

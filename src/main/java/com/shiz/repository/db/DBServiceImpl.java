@@ -19,12 +19,14 @@ import com.shiz.model.respose.error.ErrorDeviceIdResponse;
 import com.shiz.model.respose.error.ErrorResponse;
 import com.shiz.repository.db.dao.DeviceDao;
 import com.shiz.repository.exception.DeviceException;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,11 +61,11 @@ public class DBServiceImpl implements DBService {
     }
 
     public ResponseEntity<BaseResponse> getDevicesList() {
-        List<DeviceEntity> deviceEntityList = new ArrayList<>();
+        List<DeviceEntity> deviceEntityList;
         List<Device> deviceList = new ArrayList<>();
         try {
             deviceEntityList = deviceDao.getAllDevice();
-            if (deviceEntityList != null && deviceEntityList.size() != 0) {
+//            if (deviceEntityList != null && deviceEntityList.size() != 0) {
                 for (DeviceEntity deviceEntity : deviceEntityList) {
                     Device device = Device.newBuilder()
                             .imei(deviceEntity.getImei())
@@ -73,10 +75,14 @@ public class DBServiceImpl implements DBService {
                 }
                 AllDevicesResponse deviceResponse = new AllDevicesResponse(Constants.STATE_OK, deviceList);
                 return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-            } else {
-                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
-            }
+//            } else {
+//                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
+//            }
+        } catch (NoResultException | NonUniqueResultException nre) {
+            System.out.print("NoResultException  " + nre);
+            return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
+            System.out.print("Exception  " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
     }
@@ -86,7 +92,7 @@ public class DBServiceImpl implements DBService {
         SyncRequest syncRequest = gson.fromJson(request, SyncRequest.class);
         try {
             if (syncRequest != null) {
-                SettingsEntity settingsEntity = deviceDao.getSettings(syncRequest.getDevice());
+                SettingsEntity settingsEntity = deviceDao.getSettingsEntity(syncRequest.getDevice());
                 Settings settings = Settings.newBuilder()
                         .is_service(settingsEntity.getIsService())
                         .location_mode(settingsEntity.getLocationMode())
@@ -345,8 +351,12 @@ public class DBServiceImpl implements DBService {
                 deviceDao.setSettings(settingsRequest.getDevice(), settings);
                 InformationResponse informationResponse = new InformationResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (Exception e) {
+            } catch (NoResultException | NonUniqueResultException nre) {
+                System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+            } catch (Exception e) {
+                System.out.print("Exception  " + e);
+                return getErrorResponseStatus(Constants.BAD_REQUEST);
             }
         } else {
             ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);

@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @IdClass(DeviceStatusEntityPK.class)
 public class DeviceStatusEntity {
     private int id;
-    private int deviceId;
     private Timestamp date;
     private String status;
     private DeviceEntity deviceStatusByDeviceId;
@@ -24,16 +23,6 @@ public class DeviceStatusEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -57,7 +46,7 @@ public class DeviceStatusEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getDeviceStatusByDeviceId() {
         return deviceStatusByDeviceId;
     }
@@ -74,7 +63,6 @@ public class DeviceStatusEntity {
         DeviceStatusEntity that = (DeviceStatusEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
@@ -84,7 +72,6 @@ public class DeviceStatusEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;

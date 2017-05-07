@@ -4,14 +4,12 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 /**
- * Created by oldman on 19.04.17.
+ * Created by oldman on 07.05.17.
  */
 @Entity
 @Table(name = "Call", schema = "mydb")
-@IdClass(CallEntityPK.class)
 public class CallEntity {
     private int id;
-    private int deviceId;
     private String number;
     private Timestamp date;
     private int typeEventId;
@@ -25,16 +23,6 @@ public class CallEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -68,7 +56,7 @@ public class CallEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getCallByDeviceId() {
         return callByDeviceId;
     }
@@ -85,7 +73,6 @@ public class CallEntity {
         CallEntity that = (CallEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (typeEventId != that.typeEventId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
@@ -96,7 +83,6 @@ public class CallEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + typeEventId;

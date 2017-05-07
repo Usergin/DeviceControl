@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "TypeEvent", schema = "mydb", catalog = "")
+@Table(name = "TypeEvent", schema = "mydb")
 public class TypeEventEntity {
     private int idTypeEvent;
     private String event;

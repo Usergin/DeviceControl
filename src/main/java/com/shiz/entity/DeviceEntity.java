@@ -1,7 +1,6 @@
 package com.shiz.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,8 @@ import java.util.List;
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_ALL, query = "from DeviceEntity"),
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where deviceId = :device_id"),
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI, query = "from DeviceEntity where imei like :imei")})
-public class DeviceEntity implements Serializable {
+@IdClass(DeviceEntityPK.class)
+public class DeviceEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,25 +26,31 @@ public class DeviceEntity implements Serializable {
     private int deviceId;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appByDeviceId", orphanRemoval = true)
     private List<AppEntity> appByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "callByDeviceId", orphanRemoval = true)
+    private List<CallEntity> callByDeviceId = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "telBookByDeviceId", orphanRemoval = true)
+    private List<TelephoneBookEntity> telephoneBookByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "msgByDeviceId", orphanRemoval = true)
+    private List<MessageEntity> messageByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "batteryByDeviceId", orphanRemoval = true)
     private List<BatteryStatusEntity> batteryStatusByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "locationByDeviceId", orphanRemoval = true)
+    private List<LocationEntity> locationByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deviceStatusByDeviceId", orphanRemoval = true)
+    private List<DeviceStatusEntity> deviceStatusByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "networkStatusByDeviceId", orphanRemoval = true)
+    private List<NetworkStatusEntity> networkStatusByDeviceId = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "settingsDeviceByDeviceId", orphanRemoval = true)
     private SettingsEntity settingsByDeviceId;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "deviceInfoByDeviceId", orphanRemoval = true)
+    private InformationEntity deviceInfoByDeviceId;
 
     public static class NamedQuery {
         public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
         public static final String DEVICE_FIND_BY_ID = "DeviceEntity.findById";
         public static final String DEVICE_FIND_BY_IMEI = "DeviceEntity.findByImei";
     }
-
-//    private Collection<CallEntity> callByDeviceId;
-//    private Collection<DeviceStatusEntity> deviceStatusByDeviceId;
-//    private Collection<LocationEntity> locationByDeviceId;
-//    private Collection<MessageEntity> messageByDeviceId;
-//    private Collection<NetworkStatusEntity> networkStatusByDeviceId;
-//    private Collection<TelephoneBookEntity> telephoneBookByDeviceId;
-//    private InformationEntity infoByDeviceId;
-
 
     public int getId() {
         return id;
@@ -92,36 +98,107 @@ public class DeviceEntity implements Serializable {
         return result;
     }
 
+    // application
     public List<AppEntity> getAppByDeviceId() {
         return appByDeviceId;
     }
 
-    public void setAppByDeviceId(List<AppEntity> appByDeviceId) {
-        this.appByDeviceId = appByDeviceId;
+    public void setAppByDeviceId(List<AppEntity> appList) {
+        appList.stream().filter(appEntity -> !getAppByDeviceId().contains(appEntity))
+                .forEach(this::addAppByDeviceId);
     }
 
-    public void addApp(AppEntity app) {
-        if (!getAppByDeviceId().contains(app)) {
-            System.out.print(app.getName());
-            this.appByDeviceId.add(app);
-        }
+    public void addAppByDeviceId(AppEntity app) {
+        System.out.print(app.getName());
+        this.appByDeviceId.add(app);
     }
 
-    public void addAppsList(List appByDeviceIdList) {
-        if (appByDeviceIdList != null)
-            this.appByDeviceId.addAll(appByDeviceIdList);
+
+   //   call
+    public List<CallEntity> getCallByDeviceId() {
+        return callByDeviceId;
+    }
+
+    public void setCallByDeviceId(List<CallEntity> callList) {
+        callList.stream().filter(callEntity -> !getCallByDeviceId()
+                .contains(callEntity))
+                .forEachOrdered(this::addCallByDeviceId);
+    }
+
+    public void addCallByDeviceId(CallEntity callEntity) {
+        this.callByDeviceId.add(callEntity);
+    }
+
+    // message
+    public List<MessageEntity> getMessageByDeviceId() {
+        return messageByDeviceId;
+    }
+
+    public void setMessageByDeviceId(List<MessageEntity> messageList) {
+        messageList.stream().filter(messageEntity -> !this.getMessageByDeviceId()
+                .contains(messageEntity))
+                .forEachOrdered(this::addMessageByDeviceId);
+    }
+
+    public void addMessageByDeviceId(MessageEntity messageEntity) {
+        this.messageByDeviceId.add(messageEntity);
+    }
+
+    //tellbook
+    public List<TelephoneBookEntity> getTelephoneBookByDeviceId() {
+        return telephoneBookByDeviceId;
+    }
+
+    public void setTelephoneBookByDeviceId(List<TelephoneBookEntity> telephoneBookList) {
+        telephoneBookList.stream().filter(telephoneBookEntity -> !getTelephoneBookByDeviceId()
+                .contains(telephoneBookEntity))
+                .forEachOrdered(telephoneBookEntity -> this.telephoneBookByDeviceId.add(telephoneBookEntity));
+    }
+
+    public void addTelephoneBookByDeviceId(TelephoneBookEntity telephoneBookEntity) {
+        if (!this.telephoneBookByDeviceId.contains(telephoneBookEntity))
+            this.telephoneBookByDeviceId.add(telephoneBookEntity);
     }
 
     public List<BatteryStatusEntity> getBatteryStatusByDeviceId() {
         return batteryStatusByDeviceId;
     }
 
-    public void setBatteryStatusByDeviceId(List<BatteryStatusEntity> batteryStatusByDeviceId) {
-        this.batteryStatusByDeviceId = batteryStatusByDeviceId;
-    }
-
     public void addBatteryStatusByDeviceId(BatteryStatusEntity batteryStatusByDeviceId) {
         this.batteryStatusByDeviceId.add(batteryStatusByDeviceId);
+    }
+
+    public List<DeviceStatusEntity> getDeviceStatusByDeviceId() {
+        return deviceStatusByDeviceId;
+    }
+
+    public void addDeviceStatusByDeviceId(DeviceStatusEntity deviceStatusEntity) {
+        this.deviceStatusByDeviceId.add(deviceStatusEntity);
+    }
+
+    public List<LocationEntity> getLocationByDeviceId() {
+        return locationByDeviceId;
+    }
+
+    public void setLocationByDeviceId(List<LocationEntity> locationByDeviceId) {
+        this.locationByDeviceId = locationByDeviceId;
+    }
+
+    public void addLocationByDeviceId(LocationEntity locationEntity) {
+        this.locationByDeviceId.add(locationEntity);
+    }
+
+
+    public List<NetworkStatusEntity> getNetworkStatusByDeviceId() {
+        return networkStatusByDeviceId;
+    }
+
+    public void setNetworkStatusByDeviceId(List<NetworkStatusEntity> networkStatusByDeviceId) {
+        this.networkStatusByDeviceId = networkStatusByDeviceId;
+    }
+
+    public void addNetworkStatusByDeviceId(NetworkStatusEntity networkStatusEntity) {
+        this.networkStatusByDeviceId.add(networkStatusEntity);
     }
 
     public SettingsEntity getSettingsByDeviceId() {
@@ -132,86 +209,12 @@ public class DeviceEntity implements Serializable {
         this.settingsByDeviceId = settingsByDeviceId;
     }
 
-    //
-//    @OneToMany(mappedBy = "callByDeviceId")
-//    public Collection<CallEntity> getCallByDeviceId() {
-//        return callByDeviceId;
-//    }
-//
-//    public void setCallByDeviceId(Collection<CallEntity> callByDeviceId) {
-//        this.callByDeviceId = callByDeviceId;
-//    }
-//
-//    @OneToMany(mappedBy = "deviceStatusByDeviceId")
-//    public Collection<DeviceStatusEntity> getDeviceStatusByDeviceId() {
-//        return deviceStatusByDeviceId;
-//    }
-//
-//    public void setDeviceStatusByDeviceId(Collection<DeviceStatusEntity> deviceStatusByDeviceId) {
-//        this.deviceStatusByDeviceId = deviceStatusByDeviceId;
-//    }
-//
-//    @OneToMany(mappedBy = "locationByDeviceId")
-//    public Collection<LocationEntity> getLocationByDeviceId() {
-//        return locationByDeviceId;
-//    }
-//
-//    public void setLocationByDeviceId(Collection<LocationEntity> locationByDeviceId) {
-//        this.locationByDeviceId = locationByDeviceId;
-//    }
-//
-//    @OneToMany(mappedBy = "msgByDeviceId")
-//    public Collection<MessageEntity> getMessageByDeviceId() {
-//        return messageByDeviceId;
-//    }
-//
-//    public void setMessageByDeviceId(Collection<MessageEntity> messageByDeviceId) {
-//        this.messageByDeviceId = messageByDeviceId;
-//    }
-//
-//    @OneToMany(mappedBy = "networkStatusByDeviceId")
-//    public Collection<NetworkStatusEntity> getNetworkStatusByDeviceId() {
-//        return networkStatusByDeviceId;
-//    }
-//
-//    public void setNetworkStatusByDeviceId(Collection<NetworkStatusEntity> networkStatusByDeviceId) {
-//        this.networkStatusByDeviceId = networkStatusByDeviceId;
-//    }
-//
-//    @OneToMany(mappedBy = "telBookByDeviceId")
-//    public Collection<TelephoneBookEntity> getTelephoneBookByDeviceId() {
-//        return telephoneBookByDeviceId;
-//    }
-//
-//    public void setTelephoneBookByDeviceId(Collection<TelephoneBookEntity> telephoneBookByDeviceId) {
-//        this.telephoneBookByDeviceId = telephoneBookByDeviceId;
-//    }
-//
-//    @OneToOne(mappedBy = "deviceByDeviceId")
-//    public InformationEntity getInfoByDeviceId() {
-//        return infoByDeviceId;
-//    }
-//
-//    public void setInfoByDeviceId(InformationEntity infoByDeviceId) {
-//        this.infoByDeviceId = infoByDeviceId;
-//    }
-//
-//    @OneToOne(mappedBy = "deviceByDeviceId")
-//    public SettingsEntity getSettingsByDeviceId() {
-//        return settingsByDeviceId;
-//    }
-//
-//    public void setSettingsByDeviceId(SettingsEntity settingsByDeviceId) {
-//        this.settingsByDeviceId = settingsByDeviceId;
-//    }
-//    private Set<AppEntity> oneToMany;
-//
-//    @OneToMany
-//    public Set<AppEntity> getOneToMany() {
-//        return oneToMany;
-//    }
-//
-//    public void setOneToMany(Set<AppEntity> oneToMany) {
-//        this.oneToMany = oneToMany;
-//    }
+    public InformationEntity getInfoByDeviceId() {
+        return deviceInfoByDeviceId;
+    }
+
+    public void setInfoByDeviceId(InformationEntity infoByDeviceId) {
+        this.deviceInfoByDeviceId = infoByDeviceId;
+    }
+
 }

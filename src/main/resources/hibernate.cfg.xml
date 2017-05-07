@@ -19,6 +19,7 @@
         <property name="show_sql">true</property>
         <!-- Drop and re-create the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">update</property>
         <property name="current_session_context_class">thread</property>
 
         <!--<property name="hibernate.connection.username">root</property>-->
@@ -31,15 +32,15 @@
         <mapping class="com.shiz.entity.DeviceEntity"/>
         <mapping class="com.shiz.entity.AppEntity"/>
         <mapping class="com.shiz.entity.SettingsEntity"/>
-        <!--<mapping class="com.shiz.entityity.CallEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.LocationEntity"/>-->
+        <mapping class="com.shiz.entity.CallEntity"/>
+        <mapping class="com.shiz.entity.LocationEntity"/>
         <mapping class="com.shiz.entity.BatteryStatusEntity"/>
-        <!--<mapping class="com.shiz.entityity.DeviceStatusEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.InformationEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.MessageEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.NetworkStatusEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.TelephoneBookEntity"/>-->
-        <!--<mapping class="com.shiz.entityity.TypeEventEntity"/>-->
+        <mapping class="com.shiz.entity.DeviceStatusEntity"/>
+        <mapping class="com.shiz.entity.InformationEntity"/>
+        <mapping class="com.shiz.entity.MessageEntity"/>
+        <mapping class="com.shiz.entity.NetworkStatusEntity"/>
+        <mapping class="com.shiz.entity.TelephoneBookEntity"/>
+        <mapping class="com.shiz.entity.TypeEventEntity"/>
 
         <!-- DB schema will be updated if needed -->
         <!--<class-cache class="org.hibernate.jpa.test.Item" usage="read-write"/>-->

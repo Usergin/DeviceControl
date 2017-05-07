@@ -10,7 +10,6 @@ import javax.persistence.*;
 @IdClass(TelephoneBookEntityPK.class)
 public class TelephoneBookEntity {
     private int id;
-    private int deviceId;
     private String number;
     private String name;
     private String info;
@@ -23,16 +22,6 @@ public class TelephoneBookEntity {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Id
-    @Column(name = "device_id", nullable = false)
-    public int getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
     }
 
     @Basic
@@ -73,7 +62,6 @@ public class TelephoneBookEntity {
         TelephoneBookEntity that = (TelephoneBookEntity) o;
 
         if (id != that.id) return false;
-        if (deviceId != that.deviceId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (info != null ? !info.equals(that.info) : that.info != null) return false;
@@ -84,14 +72,13 @@ public class TelephoneBookEntity {
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + deviceId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
     }
     @ManyToOne
-    @JoinColumn(name = "device_id", referencedColumnName = "device_id", nullable = false)
+    @JoinColumn(name = "device_id")
     public DeviceEntity getTelBookByDeviceId() {
         return telBookByDeviceId;
     }

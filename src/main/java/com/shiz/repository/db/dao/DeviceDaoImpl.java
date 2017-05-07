@@ -2,10 +2,7 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.Constants;
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.AppEntity;
-import com.shiz.entity.BatteryStatusEntity;
-import com.shiz.entity.DeviceEntity;
-import com.shiz.entity.SettingsEntity;
+import com.shiz.entity.*;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -92,21 +89,17 @@ public class DeviceDaoImpl implements DeviceDao {
 
     @Override
     public List getAllDevice() throws SQLException, Exception {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
         try {
-            session = sessionFactory.openSession();
-            session.beginTransaction();
             return session
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
                     .getResultList();
-        } catch (NoResultException | NonUniqueResultException nre) {
-            return null;
+        } finally {
+            if (session.isOpen()) {
+                session.close();
+            }
         }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//            throw new ErrorExceptionResponse(0, "Error on server: " + e.getMessage());
-//        }
     }
 
     @Override
@@ -131,6 +124,36 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
+    public int addCallList(int deviceId, List<CallEntity> callEntityList) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<CallEntity> getCallEntityList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
+    public int addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<MessageEntity> getMessageEntityList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
+    public int addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<TelephoneBookEntity> getTelephoneBookEntityList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
     public int addAppList(int deviceId, List<AppEntity> appEntities) throws SQLException, Exception {
         Session session = null;
         try {
@@ -151,7 +174,7 @@ public class DeviceDaoImpl implements DeviceDao {
                         appList.remove(app);
                     }
                 installApp.setAppByDeviceId(deviceEntity);
-                deviceEntity.addApp(installApp);
+                deviceEntity.addAppByDeviceId(installApp);
                 session.save(installApp);
             }
             session.saveOrUpdate(deviceEntity);
@@ -170,6 +193,11 @@ public class DeviceDaoImpl implements DeviceDao {
             }
         }
 
+    }
+
+    @Override
+    public List<AppEntity> getAppEntityList(int deviceId) throws SQLException, Exception {
+        return null;
     }
 
     @Override
@@ -203,6 +231,41 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
+    public List<BatteryStatusEntity> getBatteryStatusEntityList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
+    public int addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<LocationEntity> getLocationEntityList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
+    public int addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<DeviceStatusEntity> getDeviceStatusList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
+    public int addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public List<NetworkStatusEntity> getNetworkStatusList(int deviceId) throws SQLException, Exception {
+        return null;
+    }
+
+    @Override
     public int setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception {
         Session session = null;
         try {
@@ -226,7 +289,7 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public SettingsEntity getSettings(int deviceId) throws SQLException, Exception {
+    public SettingsEntity getSettingsEntity(int deviceId) throws SQLException, Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -241,6 +304,16 @@ public class DeviceDaoImpl implements DeviceDao {
                 session.close();
             }
         }
+    }
+
+    @Override
+    public int setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception {
+        return 0;
+    }
+
+    @Override
+    public InformationEntity getDeviceInfoEntity(int deviceId) throws SQLException, Exception {
+        return null;
     }
 
 }

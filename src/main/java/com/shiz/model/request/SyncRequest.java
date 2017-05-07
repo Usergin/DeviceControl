@@ -14,7 +14,7 @@ public class SyncRequest extends BaseRequest {
         super(imei, device);
         }
 
-//    public Settings getSettings() {
+//    public Settings getSettingsEntity() {
 //        return settings;
 //    }
 //
