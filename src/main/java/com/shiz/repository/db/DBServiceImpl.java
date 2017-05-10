@@ -5,6 +5,7 @@ import com.shiz.Constants;
 import com.shiz.entity.*;
 import com.shiz.model.Device;
 import com.shiz.model.data.Contact;
+import com.shiz.model.data.DeviceInfo;
 import com.shiz.model.data.Settings;
 import com.shiz.model.data.event.*;
 import com.shiz.model.request.InitialDeviceRequest;
@@ -52,6 +53,8 @@ public class DBServiceImpl implements DBService {
     private LocationDao locationDao;
     @Autowired
     private MessageDao messageDao;
+    @Autowired
+    private InformationDao informationDao;
 
     private Logger logger = LoggerFactory.getLogger(DBServiceImpl.class);
 
@@ -340,6 +343,42 @@ public class DBServiceImpl implements DBService {
         }
     }
 
+    public ResponseEntity<BaseResponse> setDeviceInfo(String request) {
+        // имитируем обращение к БД
+        DeviceInformationRequest  deviceInfoRequest = gson.fromJson(request, DeviceInformationRequest.class);
+        if (deviceInfoRequest != null) {
+            try {
+                informationDao.setDeviceInformation(deviceInfoRequest.getDevice(), deviceInfoRequest.getDeviceInfo());
+                BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
+                return new ResponseEntity<>(informationResponse, HttpStatus.OK);
+            } catch (NoResultException | NonUniqueResultException nre) {
+                System.out.print("NoResultException  " + nre);
+                return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+            } catch (Exception e) {
+                System.out.print("Exception  " + e);
+                return getErrorResponseStatus(Constants.BAD_REQUEST);
+            }
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<BaseResponse> getDeviceInfo(int deviceId) {
+        try {
+            logger.info("getInstallAppList: ", deviceId);
+            DeviceInfo deviceInfo = informationDao.getDeviceInfo(deviceId);
+            InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, deviceInfo);
+            return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+        } catch (NoResultException | NonUniqueResultException nre) {
+            logger.error("Exception NoResultException:", nre);
+            return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+        } catch (Exception e) {
+            logger.error("Exception getDeviceByDeviceId:", e);
+            return getErrorResponseStatus(Constants.ERROR_ON_SERVER);
+        }
+    }
+
     public ResponseEntity<BaseResponse> setCallList(String request) {
         // имитируем обращение к БД
         CallRequest callRequest = gson.fromJson(request, CallRequest.class);
@@ -379,16 +418,8 @@ public class DBServiceImpl implements DBService {
     public ResponseEntity<BaseResponse> setListInstallApp(String request) {
         InstallAppRequest installAppRequest = gson.fromJson(request, InstallAppRequest.class);
         if (installAppRequest != null && installAppRequest.getData() != null) {
-            List<AppEntity> appEntities = new ArrayList<>();
-            for (InstallApp installApp : installAppRequest.getData()) {
-                AppEntity appEntity = new AppEntity();
-                appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
-                appEntity.setInfo(installApp.getInfo());
-                appEntity.setName(installApp.getName());
-                appEntities.add(appEntity);
-            }
             try {
-                applicationDao.addAppsList(installAppRequest.getDevice(), appEntities);
+                applicationDao.addAppsList(installAppRequest.getDevice(), installAppRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
 
@@ -408,15 +439,7 @@ public class DBServiceImpl implements DBService {
     public ResponseEntity<BaseResponse> getInstallAppList(int deviceId) {
         try {
             logger.info("getInstallAppList: ", deviceId);
-            List<AppEntity> appEntities = applicationDao.getAppEntityList(deviceId);
-            List<InstallApp> installApps = new ArrayList<>();
-            for (AppEntity appEntity : appEntities) {
-                InstallApp installApp = new InstallApp();
-                installApp.setDate(appEntity.getDateInstalled());
-                installApp.setInfo(appEntity.getInfo());
-                installApp.setName(appEntity.getName());
-                installApps.add(installApp);
-            }
+            List<InstallApp> installApps = applicationDao.getAppEntityList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, installApps);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (NoResultException | NonUniqueResultException nre) {

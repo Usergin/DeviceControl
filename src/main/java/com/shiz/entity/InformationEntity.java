@@ -31,6 +31,10 @@ public class InformationEntity {
     private String operatorName;
     private boolean isRoot;
     private DeviceEntity deviceInfoByDeviceId;
+
+    public InformationEntity() {
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     public int getId() {
@@ -296,6 +300,7 @@ public class InformationEntity {
         result = 31 * result + (operatorName != null ? operatorName.hashCode() : 0);
         return result;
     }
+
     @OneToOne
     @JoinColumn(name = "device_id")
     public DeviceEntity getDeviceInfoByDeviceId() {
@@ -306,4 +311,168 @@ public class InformationEntity {
         this.deviceInfoByDeviceId = deviceByDeviceId;
     }
 
+    private InformationEntity(InformationEntity.Builder builder) {
+        setImei(builder.imei);
+        setModel(builder.model);
+        setSerialNum(builder.serial_num);
+        setVersionOs(builder.version_os);
+        setBrand(builder.brand);
+        setImsi(builder.imsi);
+        setManufactured(builder.manufactured);
+        setProduct(builder.product);
+        setSdk(builder.sdk);
+        setScreenSize(builder.screen_size);
+        setIsDualSim(builder.is_dual_sim);
+        setImeiSim1(builder.imei_sim1);
+        setImeiSim2(builder.imei_sim2);
+        setMcc(builder.mcc);
+        setMnc(builder.mnc);
+        setPhoneType(builder.phone_type);
+        setNetworkType(builder.network_type);
+        setNetwork(builder.network);
+        setOperatorName(builder.operator_name);
+        setIsRoot(builder.is_root);
+        setDeviceInfoByDeviceId(builder.deviceInfoByDeviceId);
+    }
+
+    public static InformationEntity.Builder newBuilder() {
+        return new InformationEntity.Builder();
+    }
+
+    public static final class Builder {
+        private String imei;
+        private String model;
+        private String serial_num;
+        private String version_os;
+        private String brand;
+        private String imsi;
+        private String manufactured;
+        private String product;
+        private String sdk;
+        private String screen_size;
+        private String is_dual_sim;
+        private String imei_sim1;
+        private String imei_sim2;
+        private String mcc;
+        private String mnc;
+        private String phone_type;
+        private String network_type;
+        private String network;
+        private String operator_name;
+        private boolean is_root;
+        private DeviceEntity deviceInfoByDeviceId;
+
+        private Builder() {
+        }
+
+        public InformationEntity.Builder deviceInfoByDeviceId(DeviceEntity val) {
+            deviceInfoByDeviceId = val;
+            return this;
+        }
+
+
+        public InformationEntity.Builder isRoot(boolean val) {
+            is_root = val;
+            return this;
+        }
+
+        public InformationEntity.Builder isDualSim(String val) {
+            is_dual_sim = val;
+            return this;
+        }
+
+        public InformationEntity.Builder imeiSim1(String val) {
+            imei_sim1 = val;
+            return this;
+        }
+
+        public InformationEntity.Builder imeiSim2(String val) {
+            imei_sim2 = val;
+            return this;
+        }
+
+        public InformationEntity.Builder mcc(String val) {
+            mcc = val;
+            return this;
+        }
+
+        public InformationEntity.Builder mnc(String val) {
+            mnc = val;
+            return this;
+        }
+
+        public InformationEntity.Builder phoneType(String val) {
+            phone_type = val;
+            return this;
+        }
+
+        public InformationEntity.Builder networkType(String val) {
+            network_type = val;
+            return this;
+        }
+
+        public InformationEntity.Builder operatorName(String val) {
+            operator_name = val;
+            return this;
+        }
+
+        public InformationEntity.Builder imei(String val) {
+            imei = val;
+            return this;
+        }
+
+        public InformationEntity.Builder model(String val) {
+            model = val;
+            return this;
+        }
+
+        public InformationEntity.Builder serialNum(String val) {
+            serial_num = val;
+            return this;
+        }
+
+        public InformationEntity.Builder versionOS(String val) {
+            version_os = val;
+            return this;
+        }
+
+        public InformationEntity.Builder brand(String val) {
+            brand = val;
+            return this;
+        }
+
+        public InformationEntity.Builder imsi(String val) {
+            imsi = val;
+            return this;
+        }
+
+        public InformationEntity.Builder manufactured(String val) {
+            manufactured = val;
+            return this;
+        }
+
+        public InformationEntity.Builder product(String val) {
+            product = val;
+            return this;
+        }
+
+        public InformationEntity.Builder sdk(String val) {
+            sdk = val;
+            return this;
+        }
+
+        public InformationEntity.Builder network(String val) {
+            network = val;
+            return this;
+        }
+
+        public InformationEntity.Builder screenSize(String val) {
+            screen_size = val;
+            return this;
+        }
+
+        public InformationEntity build() {
+            return new InformationEntity(this);
+        }
+    }
 }

@@ -43,6 +43,7 @@ public class BellDaoImpl implements BellDao {
                         call.setTypeEventId(newCall.getType());
                         call.setNumber(newCall.getNumber());
                         call.setDuration(newCall.getDuration());
+                        call.setCallByDeviceId(deviceEntity);
                         deviceEntity.addCallByDeviceId(call);
                         session.save(call);
                     }

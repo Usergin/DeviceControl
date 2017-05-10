@@ -18,7 +18,7 @@ public class AppEntity {
     private DeviceEntity appByDeviceId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;
