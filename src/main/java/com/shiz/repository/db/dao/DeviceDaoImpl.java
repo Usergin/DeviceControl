@@ -60,10 +60,6 @@ public class DeviceDaoImpl implements DeviceDao {
                     .createQuery("from DeviceEntity where deviceId = :device_id")
                     .setParameter("device_id", deviceId).getSingleResult();
             return deviceEntity;
-        } catch (NoResultException nre) {
-            return null;
-        } catch (NonUniqueResultException nure) {
-            return null;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -123,19 +119,10 @@ public class DeviceDaoImpl implements DeviceDao {
 
     }
 
-    @Override
-    public int addCallList(int deviceId, List<CallEntity> callEntityList) throws SQLException, Exception {
-        return 0;
-    }
 
     @Override
-    public List<CallEntity> getCallEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public int addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception {
-        return 0;
+    public void addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override
@@ -144,8 +131,8 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception {
-        return 0;
+    public void addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override
@@ -154,90 +141,8 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int addAppList(int deviceId, List<AppEntity> appEntities) throws SQLException, Exception {
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-            DeviceEntity deviceEntity = ((DeviceEntity) session
-                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
-                    .setParameter("device_id", deviceId)
-                    .uniqueResult());
-            for (AppEntity installApp : appEntities) {
-                List<AppEntity> appList = deviceEntity.getAppByDeviceId();
-                for (AppEntity app : appList)
-                    if (app.getName().equals(installApp.getName())) {
-                        System.out.print("getName  " + app.getName());
-                        app.setInfo(installApp.getInfo());
-                        app.setDateInstalled(installApp.getDateInstalled());
-                        app.setAppByDeviceId(deviceEntity);
-                        appList.remove(app);
-                    }
-                installApp.setAppByDeviceId(deviceEntity);
-                deviceEntity.addAppByDeviceId(installApp);
-                session.save(installApp);
-            }
-            session.saveOrUpdate(deviceEntity);
-            session.getTransaction().commit();
-            return deviceId;
-        } catch (NoResultException | NonUniqueResultException nre) {
-            System.out.print("NoResultException  " + nre);
-            return Constants.NOT_FOUND_DEVICE;
-
-        } catch (Exception e) {
-            System.out.print("Exception  " + e);
-            return Constants.BAD_REQUEST;
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-    }
-
-    @Override
-    public List<AppEntity> getAppEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public int addBatteryStatus(int deviceId, BatteryStatusEntity batteryStatusEntity) throws SQLException, Exception {
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-            DeviceEntity deviceEntity = ((DeviceEntity) session
-                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
-                    .setParameter("device_id", deviceId)
-                    .uniqueResult());
-            batteryStatusEntity.setBatteryByDeviceId(deviceEntity);
-            deviceEntity.addBatteryStatusByDeviceId(batteryStatusEntity);
-            session.save(batteryStatusEntity);
-            session.saveOrUpdate(deviceEntity);
-            session.getTransaction().commit();
-            return deviceId;
-        } catch (NoResultException | NonUniqueResultException nre) {
-            System.out.print("NoResultException  " + nre);
-            return Constants.NOT_FOUND_DEVICE;
-        } catch (Exception e) {
-            System.out.print("Exception  " + e);
-            return Constants.BAD_REQUEST;
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-
-    }
-
-    @Override
-    public List<BatteryStatusEntity> getBatteryStatusEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public int addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception {
-        return 0;
+    public void addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override
@@ -246,8 +151,8 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception {
-        return 0;
+    public void addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override
@@ -256,8 +161,8 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception {
-        return 0;
+    public void addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override
@@ -266,7 +171,7 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception {
+    public void setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -280,7 +185,6 @@ public class DeviceDaoImpl implements DeviceDao {
             session.save(settingsEntity);
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
-            return deviceId;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -307,8 +211,8 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception {
-        return 0;
+    public void setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception {
+//        return 0;
     }
 
     @Override

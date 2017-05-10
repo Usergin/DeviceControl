@@ -10,19 +10,22 @@ import java.util.Date;
  * Created by oldman on 05.04.17.
  */
 
-public class Call extends BaseInfo {
+public class Call extends BaseEvent {
     private String number;
-    private String duration;
+    private int duration;
     private Date date;
+    private int type;
 
     public Call() {
     }
 
-    public Call(String number, String duration, Date date) {
-        this.number = number;
-        this.duration = duration;
-        this.date = date;
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getNumber() {
@@ -33,11 +36,11 @@ public class Call extends BaseInfo {
         this.number = number;
     }
 
-    public String getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

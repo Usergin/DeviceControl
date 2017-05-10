@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class DeviceEvent extends BaseEvent {
+public class DeviceEvent<T extends BaseEvent> {
     private String status;
     private Date date;
 
@@ -14,8 +14,7 @@ public class DeviceEvent extends BaseEvent {
         this.date = date;
     }
 
-    public DeviceEvent(String status) {
-        this.status = status;
+    public DeviceEvent() {
     }
 
     public String getStatus() {

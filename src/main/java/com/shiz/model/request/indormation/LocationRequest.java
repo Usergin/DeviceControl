@@ -1,6 +1,6 @@
 package com.shiz.model.request.indormation;
 
-import com.shiz.model.Location;
+import com.shiz.model.data.event.Location;
 import com.shiz.model.request.BaseRequest;
 
 import java.util.List;
@@ -16,11 +16,11 @@ public class LocationRequest extends BaseRequest {
         this.data = data;
     }
 
-    public  List<Location> getData() {
+    public List<Location> getData() {
         return data;
     }
 
-    public void setData( List<Location> data) {
+    public void setData(List<Location> data) {
         this.data = data;
     }
 }

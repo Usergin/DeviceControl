@@ -7,17 +7,11 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class Location extends BaseInfo {
+public class Location extends BaseEvent {
     private double longitude, latitude;
     private float accuracy;
     private Date date;
-
-    public Location(double longitude, double latitude, float accuracy, Date date) {
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.accuracy = accuracy;
-        this.date = date;
-    }
+    private String method;
 
     public double getLongitude() {
         return longitude;
@@ -51,4 +45,11 @@ public class Location extends BaseInfo {
         this.date = date;
     }
 
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
 }

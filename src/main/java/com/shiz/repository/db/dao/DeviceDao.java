@@ -21,43 +21,31 @@ public interface DeviceDao {
 
     void deleteDeviceById(int deviceId) throws SQLException, Exception;
 
-    int addCallList(int deviceId, List<CallEntity> callEntityList) throws SQLException, Exception;
-
-    List<CallEntity> getCallEntityList(int deviceId) throws SQLException, Exception;
-
-    int addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception;
+    void addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception;
 
     List<MessageEntity> getMessageEntityList(int deviceId) throws SQLException, Exception;
 
-    int addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception;
+    void addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception;
 
     List<TelephoneBookEntity> getTelephoneBookEntityList(int deviceId) throws SQLException, Exception;
 
-    int addAppList(int deviceId, List<AppEntity> appEntities) throws SQLException, Exception;
-
-    List<AppEntity> getAppEntityList(int deviceId) throws SQLException, Exception;
-
-    int addBatteryStatus(int deviceId, BatteryStatusEntity batteryStatusEntity) throws SQLException, Exception;
-
-    List<BatteryStatusEntity> getBatteryStatusEntityList(int deviceId) throws SQLException, Exception;
-
-    int addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception;
+    void addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception;
 
     List<LocationEntity> getLocationEntityList(int deviceId) throws SQLException, Exception;
 
-    int addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception;
+    void addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception;
 
     List<DeviceStatusEntity> getDeviceStatusList(int deviceId) throws SQLException, Exception;
 
-    int addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception;
+    void addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception;
 
     List<NetworkStatusEntity> getNetworkStatusList(int deviceId) throws SQLException, Exception;
 
-    int setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception;
+    void setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception;
 
     SettingsEntity getSettingsEntity(int deviceId) throws SQLException, Exception;
 
-    int setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception;
+    void setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception;
 
     InformationEntity getDeviceInfoEntity(int deviceId) throws SQLException, Exception;
 

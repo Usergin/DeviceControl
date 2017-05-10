@@ -1,7 +1,6 @@
 package com.shiz.model.request.indormation;
 
-import com.shiz.model.data.event.Call;
-import com.shiz.model.data.event.ChargingEvent;
+import com.shiz.model.data.event.BatteryEvent;
 import com.shiz.model.request.BaseRequest;
 
 import java.util.List;
@@ -10,18 +9,18 @@ import java.util.List;
  * Created by oldman on 06.04.17.
  */
 public class BatteryStatusRequest extends BaseRequest {
-    private ChargingEvent data;
+    private List<BatteryEvent> data;
 
-    public BatteryStatusRequest(ChargingEvent data, String imei, int device) {
+    public BatteryStatusRequest(List<BatteryEvent> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }
 
-    public  ChargingEvent getData() {
+    public List<BatteryEvent> getData() {
         return data;
     }
 
-    public void setData(ChargingEvent data) {
+    public void setData(List<BatteryEvent> data) {
         this.data = data;
     }
 }

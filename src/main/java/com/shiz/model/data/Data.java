@@ -14,7 +14,7 @@ public class Data {
     private int type;
     private Date date;
 
-    public Data(int type, Call info, Date date) {
+    public Data(int type, BaseInfo info, Date date) {
         this.info = info;
         this.type = type;
         this.date = date;

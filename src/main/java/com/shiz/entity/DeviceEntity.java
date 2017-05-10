@@ -28,23 +28,29 @@ public class DeviceEntity {
     private List<AppEntity> appByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "callByDeviceId", orphanRemoval = true)
     private List<CallEntity> callByDeviceId = new ArrayList<>();
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "telBookByDeviceId", orphanRemoval = true)
     private List<TelephoneBookEntity> telephoneBookByDeviceId = new ArrayList<>();
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "msgByDeviceId", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "messageByDeviceId", orphanRemoval = true)
     private List<MessageEntity> messageByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "batteryByDeviceId", orphanRemoval = true)
-    private List<BatteryStatusEntity> batteryStatusByDeviceId = new ArrayList<>();
+    private List<BatteryEntity> batteryStatusByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "locationByDeviceId", orphanRemoval = true)
     private List<LocationEntity> locationByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "deviceStatusByDeviceId", orphanRemoval = true)
     private List<DeviceStatusEntity> deviceStatusByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "networkStatusByDeviceId", orphanRemoval = true)
     private List<NetworkStatusEntity> networkStatusByDeviceId = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "serviceEventByDeviceId", orphanRemoval = true)
+    private List<ServiceEventEntity> serviceEventByDeviceId = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "settingsDeviceByDeviceId", orphanRemoval = true)
     private SettingsEntity settingsByDeviceId;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "deviceInfoByDeviceId", orphanRemoval = true)
     private InformationEntity deviceInfoByDeviceId;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "networkByDeviceId", orphanRemoval = true)
+    private NetworkEntity networkInfoByDeviceId;
+
+    public DeviceEntity() {
+    }
 
     public static class NamedQuery {
         public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
@@ -124,7 +130,6 @@ public class DeviceEntity {
                 .contains(callEntity))
                 .forEachOrdered(this::addCallByDeviceId);
     }
-
     public void addCallByDeviceId(CallEntity callEntity) {
         this.callByDeviceId.add(callEntity);
     }
@@ -160,11 +165,11 @@ public class DeviceEntity {
             this.telephoneBookByDeviceId.add(telephoneBookEntity);
     }
 
-    public List<BatteryStatusEntity> getBatteryStatusByDeviceId() {
+    public List<BatteryEntity> getBatteryStatusByDeviceId() {
         return batteryStatusByDeviceId;
     }
 
-    public void addBatteryStatusByDeviceId(BatteryStatusEntity batteryStatusByDeviceId) {
+    public void addBatteryStatusByDeviceId(BatteryEntity batteryStatusByDeviceId) {
         this.batteryStatusByDeviceId.add(batteryStatusByDeviceId);
     }
 
@@ -197,6 +202,18 @@ public class DeviceEntity {
         this.networkStatusByDeviceId = networkStatusByDeviceId;
     }
 
+    public void addServiceEventByDeviceId(ServiceEventEntity serviceEventEntity) {
+        this.serviceEventByDeviceId.add(serviceEventEntity);
+    }
+
+    public List<ServiceEventEntity> getServiceEventByDeviceId() {
+        return serviceEventByDeviceId;
+    }
+
+    public void setServiceEventByDeviceId(List<ServiceEventEntity> serviceEventByDeviceId) {
+        this.serviceEventByDeviceId = serviceEventByDeviceId;
+    }
+
     public void addNetworkStatusByDeviceId(NetworkStatusEntity networkStatusEntity) {
         this.networkStatusByDeviceId.add(networkStatusEntity);
     }
@@ -209,12 +226,20 @@ public class DeviceEntity {
         this.settingsByDeviceId = settingsByDeviceId;
     }
 
-    public InformationEntity getInfoByDeviceId() {
+       public InformationEntity getInfoByDeviceId() {
         return deviceInfoByDeviceId;
     }
 
     public void setInfoByDeviceId(InformationEntity infoByDeviceId) {
         this.deviceInfoByDeviceId = infoByDeviceId;
+    }
+
+    public NetworkEntity getNetworkInfoByDeviceId() {
+        return networkInfoByDeviceId;
+    }
+
+    public void setNetworkInfoByDeviceId(NetworkEntity networkInfoByDeviceId) {
+        this.networkInfoByDeviceId = networkInfoByDeviceId;
     }
 
 }

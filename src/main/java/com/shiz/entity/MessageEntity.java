@@ -15,7 +15,7 @@ public class MessageEntity {
     private String data;
     private Timestamp date;
     private int typeEventId;
-    private DeviceEntity msgByDeviceId;
+    private DeviceEntity messageByDeviceId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -69,12 +69,12 @@ public class MessageEntity {
 
     @ManyToOne
     @JoinColumn(name = "device_id")
-    public DeviceEntity getMsgByDeviceId() {
-        return msgByDeviceId;
+    public DeviceEntity getMessageByDeviceId() {
+        return messageByDeviceId;
     }
 
-    public void setMsgByDeviceId(DeviceEntity msgByDeviceId) {
-        this.msgByDeviceId = msgByDeviceId;
+    public void setMessageByDeviceId(DeviceEntity msgByDeviceId) {
+        this.messageByDeviceId = msgByDeviceId;
     }
 
     @Override

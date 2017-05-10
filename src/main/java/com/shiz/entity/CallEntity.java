@@ -7,12 +7,14 @@ import java.sql.Timestamp;
  * Created by oldman on 07.05.17.
  */
 @Entity
-@Table(name = "Call", schema = "mydb")
+@Table(name = "Bell", schema = "mydb")
+@IdClass(CallEntityPK.class)
 public class CallEntity {
     private int id;
     private String number;
     private Timestamp date;
     private int typeEventId;
+    private int duration;
     private DeviceEntity callByDeviceId;
 
     @Id
@@ -25,7 +27,7 @@ public class CallEntity {
         this.id = id;
     }
 
-    @Basic
+       @Basic
     @Column(name = "number", nullable = false, length = 45)
     public String getNumber() {
         return number;
@@ -33,6 +35,16 @@ public class CallEntity {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    @Basic
+    @Column(name = "duration", nullable = false, length = 45)
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     @Basic

@@ -13,7 +13,7 @@ public class LocationEntity {
     private int id;
      private double longitude;
     private double latitude;
-    private double accurancy;
+    private float accuracy;
     private String method;
     private Timestamp date;
     private DeviceEntity locationByDeviceId;
@@ -49,13 +49,13 @@ public class LocationEntity {
     }
 
     @Basic
-    @Column(name = "accurancy", nullable = false, precision = 0)
-    public double getAccurancy() {
-        return accurancy;
+    @Column(name = "accuracy", nullable = false, precision = 0)
+    public float getAccuracy() {
+        return accuracy;
     }
 
-    public void setAccurancy(double accurancy) {
-        this.accurancy = accurancy;
+    public void setAccuracy(float accurancy) {
+        this.accuracy = accurancy;
     }
 
     @Basic
@@ -98,7 +98,7 @@ public class LocationEntity {
         if (id != that.id) return false;
         if (Double.compare(that.longitude, longitude) != 0) return false;
         if (Double.compare(that.latitude, latitude) != 0) return false;
-        if (Double.compare(that.accurancy, accurancy) != 0) return false;
+        if (Float.compare(that.accuracy, accuracy) != 0) return false;
         if (method != null ? !method.equals(that.method) : that.method != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
@@ -114,7 +114,7 @@ public class LocationEntity {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(accurancy);
+        temp = Float.floatToIntBits(accuracy);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (method != null ? method.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);

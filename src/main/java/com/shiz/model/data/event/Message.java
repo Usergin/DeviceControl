@@ -7,16 +7,11 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class SMS extends BaseInfo {
+public class Message extends BaseEvent {
     private String number;
     private String data;
     private Date date;
-
-    public SMS(String number, String data, Date date) {
-        this.number = number;
-        this.data = data;
-        this.date = date;
-    }
+    private int type;
 
     public String getNumber() {
         return number;
@@ -40,5 +35,13 @@ public class SMS extends BaseInfo {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

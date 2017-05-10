@@ -5,14 +5,17 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class ChargingEvent extends BaseEvent {
+public class BatteryEvent extends BaseEvent {
     private String level;
     private String status;
     private String battery_status;
     private String type_charging;
     private Date date;
 
-    public ChargingEvent(String level, String status, String battery_status, String type_charging, Date date) {
+    public BatteryEvent() {
+    }
+
+    public BatteryEvent(String level, String status, String battery_status, String type_charging, Date date) {
         this.level = level;
         this.status = status;
         this.battery_status = battery_status;
@@ -36,19 +39,19 @@ public class ChargingEvent extends BaseEvent {
         this.status = status;
     }
 
-    public String getBattery_status() {
+    public String getBatteryStatus() {
         return battery_status;
     }
 
-    public void setBattery_status(String battery_status) {
+    public void setBatteryStatus(String battery_status) {
         this.battery_status = battery_status;
     }
 
-    public String getType_charging() {
+    public String getTypeCharging() {
         return type_charging;
     }
 
-    public void setType_charging(String type_charging) {
+    public void setTypeCharging(String type_charging) {
         this.type_charging = type_charging;
     }
 

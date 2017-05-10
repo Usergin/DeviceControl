@@ -1,8 +1,8 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.LocationEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -10,18 +10,19 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * Created by oldman on 22.04.17.
+ * Created by OldMan on 10.05.2017.
  */
 @Component
-public class ApplicationListDaoImpl implements ApplicationDao {
+public class LocationDaoImpl implements LocationDao {
     private SessionFactory sessionFactory;
 
-    public ApplicationListDaoImpl() {
+    public LocationDaoImpl() {
         sessionFactory = HibernateSessionFactory.getSessionFactory();
     }
 
+
     @Override
-    public void addAppsList(int deviceId, List<AppEntity> appEntities) throws Exception {
+    public void addLocation(int deviceId, List<LocationEntity> locationEntities) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -30,20 +31,10 @@ public class ApplicationListDaoImpl implements ApplicationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for (AppEntity installApp : appEntities) {
-                List<AppEntity> appList = deviceEntity.getAppByDeviceId();
-                for (AppEntity app : appList)
-                    if (app.getName().equals(installApp.getName())) {
-                        System.out.print("getName  " + app.getName());
-                        app.setInfo(installApp.getInfo());
-                        app.setDateInstalled(installApp.getDateInstalled());
-                        app.setAppByDeviceId(deviceEntity);
-                        appEntities.remove(app);
-                    } else {
-                        installApp.setAppByDeviceId(deviceEntity);
-                        deviceEntity.addAppByDeviceId(installApp);
-                    }
-                session.save(installApp);
+            for (LocationEntity locationEntity : locationEntities) {
+                locationEntity.setLocationByDeviceId(deviceEntity);
+                deviceEntity.addLocationByDeviceId(locationEntity);
+                session.save(locationEntity);
             }
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
@@ -55,7 +46,7 @@ public class ApplicationListDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public List<AppEntity> getAppEntityList(int deviceId) throws Exception {
+    public List<LocationEntity> getLocationEntityList(int deviceId) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
@@ -65,7 +56,7 @@ public class ApplicationListDaoImpl implements ApplicationDao {
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
 
-            return deviceEntity.getAppByDeviceId();
+            return deviceEntity.getLocationByDeviceId();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

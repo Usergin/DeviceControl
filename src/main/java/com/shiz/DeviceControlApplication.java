@@ -18,6 +18,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.logging.Logger;
+
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
 //@EnableTransactionManagement
@@ -30,7 +32,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //        TransactionAutoConfiguration.class
 })
 public class DeviceControlApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(DeviceControlApplication.class, args);
 

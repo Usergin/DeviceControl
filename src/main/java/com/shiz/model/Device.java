@@ -4,6 +4,7 @@ package com.shiz.model;
 import com.shiz.model.data.Contact;
 import com.shiz.model.data.DeviceInfo;
 import com.shiz.model.data.event.*;
+import com.shiz.model.data.event.Message;
 
 import java.util.List;
 
@@ -17,10 +18,10 @@ public class Device {
     private String serial_num;
     private List<Location> location;
     private List<Call> call_list;
-    private List<SMS> sms_list;
+    private List<Message> sms_list;
     private List<InstallApp> install_apps;
     private List<Contact> contact_list;
-    private List<ChargingEvent> battery;
+    private List<BatteryEvent> battery;
     private List<DeviceEvent> device_status;
     private List<NetworkEvent> network_status;
     private Settings settings;
@@ -74,11 +75,11 @@ public class Device {
         this.call_list = call_list;
     }
 
-    public List<SMS> getSms_list() {
+    public List<Message> getSms_list() {
         return sms_list;
     }
 
-    public void setSms_list(List<SMS> sms_list) {
+    public void setSms_list(List<Message> sms_list) {
         this.sms_list = sms_list;
     }
 
@@ -98,11 +99,11 @@ public class Device {
         this.contact_list = contact_list;
     }
 
-    public List<ChargingEvent> getBattery() {
+    public List<BatteryEvent> getBattery() {
         return battery;
     }
 
-    public void setBattery(List<ChargingEvent> battery) {
+    public void setBattery(List<BatteryEvent> battery) {
         this.battery = battery;
     }
 
@@ -149,10 +150,10 @@ public class Device {
         private String serial_num;
         private List<Location> location;
         private List<Call> call_list;
-        private List<SMS> sms_list;
+        private List<Message> sms_list;
         private List<InstallApp> install_apps;
         private List<Contact> contact_list;
-        private List<ChargingEvent> battery;
+        private List<BatteryEvent> battery;
         private List<DeviceEvent> device_status;
         private List<NetworkEvent> network_status;
         private Settings settings;
@@ -193,7 +194,7 @@ public class Device {
             return this;
         }
 
-        public DeviceBuilder sms_list(List<SMS> sms_list) {
+        public DeviceBuilder sms_list(List<Message> sms_list) {
             this.sms_list = sms_list;
             return this;
         }
@@ -208,7 +209,7 @@ public class Device {
             return this;
         }
 
-        public DeviceBuilder battery(List<ChargingEvent> battery) {
+        public DeviceBuilder battery(List<BatteryEvent> battery) {
             this.battery = battery;
             return this;
         }

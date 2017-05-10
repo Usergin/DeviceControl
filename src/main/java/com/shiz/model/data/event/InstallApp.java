@@ -5,16 +5,16 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class InstallApp {
+public class InstallApp extends BaseEvent {
     private String name;
     private String info;
     private Date date;
 
-    public InstallApp(String name, String info, Date date) {
-        this.name = name;
-        this.info = info;
-        this.date = date;
-    }
+//    public InstallApp(String name, String info, Date date) {
+//        this.name = name;
+//        this.info = info;
+//        this.date = date;
+//    }
 
     public String getName() {
         return name;
@@ -39,4 +39,6 @@ public class InstallApp {
     public void setDate(Date date) {
         this.date = date;
     }
+
+
 }

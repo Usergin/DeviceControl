@@ -5,9 +5,9 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by oldman on 19.04.17.
+ * Created by OldMan on 08.05.2017.
  */
-public class BatteryStatusEntityPK implements Serializable {
+public class CallEntityPK implements Serializable {
     private int id;
 
     @Column(name = "id", nullable = false)
@@ -20,13 +20,12 @@ public class BatteryStatusEntityPK implements Serializable {
         this.id = id;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BatteryStatusEntityPK that = (BatteryStatusEntityPK) o;
+        CallEntityPK that = (CallEntityPK) o;
 
         if (id != that.id) return false;
         return true;

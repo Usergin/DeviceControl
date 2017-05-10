@@ -7,9 +7,9 @@ import java.sql.Timestamp;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "BatteryStatus")
-@IdClass(BatteryStatusEntityPK.class)
-public class BatteryStatusEntity {
+@Table(name = "Battery")
+@IdClass(BatteryEntityPK.class)
+public class BatteryEntity {
     private int id;
     private String level;
     private Timestamp date;
@@ -83,7 +83,7 @@ public class BatteryStatusEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BatteryStatusEntity that = (BatteryStatusEntity) o;
+        BatteryEntity that = (BatteryEntity) o;
 
         if (id != that.id) return false;
         if (level != null ? !level.equals(that.level) : that.level != null) return false;

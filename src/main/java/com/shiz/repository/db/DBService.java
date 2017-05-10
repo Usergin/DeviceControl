@@ -15,8 +15,8 @@ public interface DBService {
     ResponseEntity<BaseResponse> removeAllDevices();
 
     //information
-    ResponseEntity<BaseResponse> setCallData(String request);
-    ResponseEntity<BaseResponse> setSmsData(String request);
+    ResponseEntity<BaseResponse> setCallList(String request);
+    ResponseEntity<BaseResponse> setMessageList(String request);
     ResponseEntity<BaseResponse> setDeviceLocation(String request);
     ResponseEntity<BaseResponse> setDeviceTelephoneBook(String request);
     ResponseEntity<BaseResponse> setListInstallApp(String request);
