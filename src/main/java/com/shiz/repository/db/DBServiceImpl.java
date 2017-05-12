@@ -403,7 +403,7 @@ public class DBServiceImpl implements DBService {
     public ResponseEntity<BaseResponse> getCallList(int deviceId) {
         try {
             logger.info("getInstallAppList: ", deviceId);
-            List<Call> callList = bellDao.getCallEntityList(deviceId);
+            List<Call> callList = bellDao.getCallList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, callList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (NoResultException | NonUniqueResultException nre) {

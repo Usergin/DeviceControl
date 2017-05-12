@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "Bell", schema = "mydb")
-@IdClass(CallEntityPK.class)
+//@IdClass(CallEntityPK.class)
 public class CallEntity {
     private int id;
     private String number;
@@ -18,6 +18,7 @@ public class CallEntity {
     private DeviceEntity callByDeviceId;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -27,7 +28,7 @@ public class CallEntity {
         this.id = id;
     }
 
-       @Basic
+    @Basic
     @Column(name = "number", nullable = false, length = 45)
     public String getNumber() {
         return number;

@@ -32,23 +32,28 @@ public class BellDaoImpl implements BellDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
+            List<CallEntity> callList = deviceEntity.getCallByDeviceId();
+
             for (Call newCall : newCallList) {
-                List<CallEntity> callList = deviceEntity.getCallByDeviceId();
-                for (CallEntity callEntity : callList)
-                    if (newCall.getDate().equals(callEntity.getDate())) {
-                        newCallList.remove(newCall);
-                    } else {
-                        CallEntity call = new CallEntity();
-                        call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
-                        call.setTypeEventId(newCall.getType());
-                        call.setNumber(newCall.getNumber());
-                        call.setDuration(newCall.getDuration());
-                        call.setCallByDeviceId(deviceEntity);
-                        deviceEntity.addCallByDeviceId(call);
-                        session.save(call);
-                    }
+
+                CallEntity call = new CallEntity();
+                call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
+                call.setTypeEventId(newCall.getType());
+                call.setNumber(newCall.getNumber());
+                call.setDuration(newCall.getDuration());
+                call.setCallByDeviceId(deviceEntity);
+                deviceEntity.addCallByDeviceId(call);
+                if (callList.size() != 0) {
+                    for (CallEntity callEntity : callList)
+                        if (call.getDate().equals(callEntity.getDate())) {
+                            session.merge(call);
+                        } else
+                            session.save(call);
+                }else
+                    session.save(call);
+               session.saveOrUpdate(deviceEntity);
+
             }
-            session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
@@ -58,7 +63,7 @@ public class BellDaoImpl implements BellDao {
     }
 
     @Override
-    public List<Call> getCallEntityList(int deviceId) throws Exception {
+    public List<Call> getCallList(int deviceId) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
