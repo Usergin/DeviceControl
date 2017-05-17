@@ -2784,4 +2784,4 @@ org.hibernate.LazyInitializationException: failed to lazily initialize a collect
 2017-05-09 21:01:43.167  INFO 11640 --- [http-nio-8080-exec-9] com.shiz.repository.db.DBServiceImpl     : getInstallAppList: 
 2017-05-09 21:01:43.355  INFO 11640 --- [http-nio-8080-exec-10] com.shiz.repository.db.DBServiceImpl     : getInstallAppList: 
 2017-05-09 21:01:43.534  INFO 11640 --- [http-nio-8080-exec-1] com.shiz.repository.db.DBServiceImpl     : getInstallAppList: 
-2017-05-09 21:01:43.709  INFO 11640 --- [http-nio-8080-exec-2] com.shiz.repository.db.DBServiceImpl     : getInstallAppList: 
+2017-05-09 21:01:43.709  INFO 11640 --- [http-nio-8080-exec-2] com.shiz.repository.db.DBServiceImpl     : getInstallAppList:
