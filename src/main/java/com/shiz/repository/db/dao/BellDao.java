@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface BellDao {
     void addCallList(int deviceId, List<Call> appEntities) throws Exception;
-    List<Call> getCallEntityList(int deviceId) throws Exception;
+    List<Call> getCallList(int deviceId) throws Exception;
 }

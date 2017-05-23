@@ -3,10 +3,12 @@ package com.shiz.repository.db.dao;
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.model.data.event.InstallApp;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public class ApplicationListDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public void addAppsList(int deviceId, List<AppEntity> appEntities) throws Exception {
+    public void addAppsList(int deviceId, List<InstallApp> installApps) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -30,20 +32,26 @@ public class ApplicationListDaoImpl implements ApplicationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for (AppEntity installApp : appEntities) {
-                List<AppEntity> appList = deviceEntity.getAppByDeviceId();
-                for (AppEntity app : appList)
-                    if (app.getName().equals(installApp.getName())) {
-                        System.out.print("getName  " + app.getName());
-                        app.setInfo(installApp.getInfo());
-                        app.setDateInstalled(installApp.getDateInstalled());
-                        app.setAppByDeviceId(deviceEntity);
-                        appEntities.remove(app);
-                    } else {
-                        installApp.setAppByDeviceId(deviceEntity);
-                        deviceEntity.addAppByDeviceId(installApp);
-                    }
-                session.save(installApp);
+            List<AppEntity> appList = deviceEntity.getAppByDeviceId();
+
+            for (InstallApp installApp : installApps) {
+//                for (AppEntity app : appList)
+//                    if (app.getName().equals(installApp.getName())) {
+//                        System.out.print("getName  " + app.getName());
+//                        app.setInfo(installApp.getInfo());
+//                        app.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+//                        app.setAppByDeviceId(deviceEntity);
+//                        session.saveOrUpdate(app);
+//                        installApps.remove(app);
+//                        continue;
+//                    }
+                AppEntity appEntity = new AppEntity();
+                appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                appEntity.setInfo(installApp.getInfo());
+                appEntity.setName(installApp.getName());
+                appEntity.setAppByDeviceId(deviceEntity);
+                deviceEntity.addAppByDeviceId(appEntity);
+                session.save(appEntity);
             }
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
@@ -55,7 +63,7 @@ public class ApplicationListDaoImpl implements ApplicationDao {
     }
 
     @Override
-    public List<AppEntity> getAppEntityList(int deviceId) throws Exception {
+    public List<InstallApp> getAppEntityList(int deviceId) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
@@ -64,8 +72,16 @@ public class ApplicationListDaoImpl implements ApplicationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
-
-            return deviceEntity.getAppByDeviceId();
+            List<AppEntity> appEntities = deviceEntity.getAppByDeviceId();
+            List<InstallApp> installApps = new ArrayList<>();
+            for (AppEntity appEntity : appEntities) {
+                InstallApp installApp = new InstallApp();
+                installApp.setDate(appEntity.getDateInstalled());
+                installApp.setInfo(appEntity.getInfo());
+                installApp.setName(appEntity.getName());
+                installApps.add(installApp);
+            }
+            return installApps;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

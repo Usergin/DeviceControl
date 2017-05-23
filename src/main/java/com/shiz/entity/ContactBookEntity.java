@@ -6,9 +6,9 @@ import javax.persistence.*;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "TelephoneBook", schema = "mydb")
-@IdClass(TelephoneBookEntityPK.class)
-public class TelephoneBookEntity {
+@Table(name = "contact", schema = "mydb")
+@IdClass(ContactEntityPK.class)
+public class ContactEntity {
     private int id;
     private String number;
     private String name;
@@ -59,7 +59,7 @@ public class TelephoneBookEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TelephoneBookEntity that = (TelephoneBookEntity) o;
+        ContactEntity that = (ContactEntity) o;
 
         if (id != that.id) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;

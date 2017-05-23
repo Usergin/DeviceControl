@@ -5,9 +5,9 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
- * Created by OldMan on 08.05.2017.
+ * Created by oldman on 19.04.17.
  */
-public class NetworkEntityPK implements Serializable {
+public class ContactEntityPK implements Serializable {
     private int id;
 
     @Column(name = "id", nullable = false)
@@ -25,7 +25,7 @@ public class NetworkEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        NetworkEntityPK that = (NetworkEntityPK) o;
+        ContactEntityPK that = (ContactEntityPK) o;
 
         if (id != that.id) return false;
         return true;

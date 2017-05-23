@@ -97,6 +97,13 @@ public class DeviceController {
         System.out.println("getDeviceBatteryStatus deviceId " + id);
         return dbService.getDeviceBatteryStatus(Integer.valueOf(id));
     }
+
+    @RequestMapping(value = "device/{id}/info", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> getDeviceInfo(@PathVariable int id) {
+        System.out.println("getDeviceBatteryStatus deviceId " + id);
+        return dbService.getDeviceInfo(id);
+    }
     /*
     setter
      */
@@ -128,6 +135,12 @@ public class DeviceController {
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceLocation(@RequestBody String request) {
         return dbService.setDeviceLocation(request);
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> setDeviceInfo(@RequestBody String request) {
+        return dbService.setDeviceInfo(request);
     }
 
     @RequestMapping(value = "/telbook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
