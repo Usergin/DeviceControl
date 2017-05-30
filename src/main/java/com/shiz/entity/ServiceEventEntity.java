@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by OldMan on 08.05.2017.
  */
 @Entity
-@Table(name = "ServiceEvent", schema = "mydb", catalog = "")
+@Table(name = "service_event", schema = "mydb")
 @IdClass(ServiceEventEntityPK.class)
 public class ServiceEventEntity {
     private int id;
@@ -17,6 +17,7 @@ public class ServiceEventEntity {
     private Timestamp date;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by oldman on 19.04.17.
  */
-public class ContactEntityPK implements Serializable {
+public class ContactBookEntityPK implements Serializable {
     private int id;
 
     @Column(name = "id", nullable = false)
@@ -25,7 +25,7 @@ public class ContactEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ContactEntityPK that = (ContactEntityPK) o;
+        ContactBookEntityPK that = (ContactBookEntityPK) o;
 
         if (id != that.id) return false;
         return true;

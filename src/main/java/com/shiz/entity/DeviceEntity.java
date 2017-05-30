@@ -8,7 +8,7 @@ import java.util.List;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "Device")
+@Table(name = "device")
 @NamedQueries({
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_ALL, query = "from DeviceEntity"),
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where deviceId = :device_id"),
@@ -17,7 +17,7 @@ import java.util.List;
 public class DeviceEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Basic
     @Column(name = "imei", nullable = false, length = 45)
@@ -28,8 +28,10 @@ public class DeviceEntity {
     private List<AppEntity> appByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "callByDeviceId", orphanRemoval = true)
     private List<CallEntity> callByDeviceId = new ArrayList<>();
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "telBookByDeviceId", orphanRemoval = true)
-    private List<TelephoneBookEntity> telephoneBookByDeviceId = new ArrayList<>();
+//    cascade = {CascadeType.DETACH,
+//            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactBookByDeviceId",  orphanRemoval = true)
+    private List<ContactBookEntity> contactBookByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "messageByDeviceId", orphanRemoval = true)
     private List<MessageEntity> messageByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "batteryByDeviceId", orphanRemoval = true)
@@ -46,8 +48,6 @@ public class DeviceEntity {
     private SettingsEntity settingsByDeviceId;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "deviceInfoByDeviceId", orphanRemoval = true)
     private InformationEntity deviceInfoByDeviceId;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "networkByDeviceId", orphanRemoval = true)
-    private NetworkEntity networkInfoByDeviceId;
 
     public DeviceEntity() {
     }
@@ -120,7 +120,7 @@ public class DeviceEntity {
     }
 
 
-   //   call
+    //   call
     public List<CallEntity> getCallByDeviceId() {
         return callByDeviceId;
     }
@@ -130,8 +130,17 @@ public class DeviceEntity {
                 .contains(callEntity))
                 .forEachOrdered(this::addCallByDeviceId);
     }
+
     public void addCallByDeviceId(CallEntity callEntity) {
         this.callByDeviceId.add(callEntity);
+    }
+
+    public void removeCall(CallEntity callEntity) {
+        this.callByDeviceId.remove(callEntity);
+    }
+
+    public boolean containCallByDeviceId(CallEntity callEntity) {
+        return this.callByDeviceId.contains(callEntity);
     }
 
     // message
@@ -150,19 +159,18 @@ public class DeviceEntity {
     }
 
     //tellbook
-    public List<TelephoneBookEntity> getTelephoneBookByDeviceId() {
-        return telephoneBookByDeviceId;
+    public List<ContactBookEntity> getContactBookByDeviceId() {
+        return contactBookByDeviceId;
     }
 
-    public void setTelephoneBookByDeviceId(List<TelephoneBookEntity> telephoneBookList) {
-        telephoneBookList.stream().filter(telephoneBookEntity -> !getTelephoneBookByDeviceId()
+    public void setContactBookByDeviceId(List<ContactBookEntity> contactBook) {
+        contactBook.stream().filter(telephoneBookEntity -> !getContactBookByDeviceId()
                 .contains(telephoneBookEntity))
-                .forEachOrdered(telephoneBookEntity -> this.telephoneBookByDeviceId.add(telephoneBookEntity));
+                .forEachOrdered(telephoneBookEntity -> this.contactBookByDeviceId.add(telephoneBookEntity));
     }
 
-    public void addTelephoneBookByDeviceId(TelephoneBookEntity telephoneBookEntity) {
-        if (!this.telephoneBookByDeviceId.contains(telephoneBookEntity))
-            this.telephoneBookByDeviceId.add(telephoneBookEntity);
+    public void addContactByDeviceId(ContactBookEntity contactBookEntity) {
+            this.contactBookByDeviceId.add(contactBookEntity);
     }
 
     public List<BatteryEntity> getBatteryStatusByDeviceId() {
@@ -226,20 +234,11 @@ public class DeviceEntity {
         this.settingsByDeviceId = settingsByDeviceId;
     }
 
-       public InformationEntity getInfoByDeviceId() {
+    public InformationEntity getInfoByDeviceId() {
         return deviceInfoByDeviceId;
     }
 
     public void setInfoByDeviceId(InformationEntity infoByDeviceId) {
         this.deviceInfoByDeviceId = infoByDeviceId;
     }
-
-    public NetworkEntity getNetworkInfoByDeviceId() {
-        return networkInfoByDeviceId;
-    }
-
-    public void setNetworkInfoByDeviceId(NetworkEntity networkInfoByDeviceId) {
-        this.networkInfoByDeviceId = networkInfoByDeviceId;
-    }
-
 }

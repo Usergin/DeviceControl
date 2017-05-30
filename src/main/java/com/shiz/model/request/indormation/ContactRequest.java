@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * Created by oldman on 06.04.17.
  */
-public class TelephoneBookRequest extends BaseRequest {
+public class ContactRequest extends BaseRequest {
     private List<Contact> data;
 
-    public TelephoneBookRequest(List<Contact> data, String imei, int device) {
+    public ContactRequest(List<Contact> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

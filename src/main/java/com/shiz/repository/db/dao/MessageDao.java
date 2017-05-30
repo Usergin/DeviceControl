@@ -1,6 +1,7 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.entity.MessageEntity;
+import com.shiz.model.data.event.Message;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by OldMan on 10.05.2017.
  */
 public interface MessageDao {
-    void addMessageList(int deviceId, List<MessageEntity> messageEntities) throws Exception;
-    List<MessageEntity> getMessageEntityList(int deviceId) throws Exception;
+    void addMessageList(int deviceId, List<Message> messageEntities) throws Exception;
+    List<Message> getMessageEntityList(int deviceId) throws Exception;
 
 }

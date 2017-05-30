@@ -31,30 +31,28 @@ public class InformationDaoImpl implements InformationDao {
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
 
-            InformationEntity informationEntity = InformationEntity.newBuilder()
-                    .brand(deviceInfo.getBrand())
-                    .imei(deviceInfo.getImei())
-                    .imsi(deviceInfo.getImsi())
-                    .manufactured(deviceInfo.getManufactured())
-                    .model(deviceInfo.getModel())
-                    .network(deviceInfo.getNetwork())
-                    .serialNum(deviceInfo.getSerialNum())
-                    .versionOS(deviceInfo.getVersionOS())
-                    .product(deviceInfo.getProduct())
-                    .sdk(deviceInfo.getSdk())
-                    .screenSize(deviceInfo.getScreenSize())
-                    .imeiSim1(deviceInfo.getImeiSim1())
-                    .imeiSim2(deviceInfo.getImeiSim2())
-                    .isDualSim(deviceInfo.getIsDualSim())
-                    .isRoot(deviceInfo.isRoot())
-                    .mcc(deviceInfo.getMcc())
-                    .mnc(deviceInfo.getMnc())
-                    .networkType(deviceInfo.getNetworkType())
-                    .operatorName(deviceInfo.getOperatorName())
-                    .phoneType(deviceInfo.getPhoneType())
-                    .deviceInfoByDeviceId(deviceEntity)
-                    .build();
-
+            InformationEntity informationEntity = deviceEntity.getInfoByDeviceId();
+            informationEntity.setBrand(deviceInfo.getBrand());
+            informationEntity.setImei(deviceInfo.getImei());
+            informationEntity.setImsi(deviceInfo.getImsi());
+            informationEntity.setManufactured(deviceInfo.getManufactured());
+            informationEntity.setModel(deviceInfo.getModel());
+            informationEntity.setNetwork(deviceInfo.getNetwork());
+            informationEntity.setSerialNum(deviceInfo.getSerialNum());
+            informationEntity.setVersionOs(deviceInfo.getVersionOS());
+            informationEntity.setProduct(deviceInfo.getProduct());
+            informationEntity.setSdk(deviceInfo.getSdk());
+            informationEntity.setScreenSize(deviceInfo.getScreenSize());
+            informationEntity.setImeiSim1(deviceInfo.getImeiSim1());
+            informationEntity.setImeiSim2(deviceInfo.getImeiSim2());
+            informationEntity.setIsDualSim(deviceInfo.getIsDualSim());
+            informationEntity.setIsRoot(deviceInfo.isRoot());
+            informationEntity.setMcc(deviceInfo.getMcc());
+            informationEntity.setMnc(deviceInfo.getMnc());
+            informationEntity.setNetworkType(deviceInfo.getNetworkType());
+            informationEntity.setOperatorName(deviceInfo.getOperatorName());
+            informationEntity.setPhoneType(deviceInfo.getPhoneType());
+            informationEntity.setDeviceInfoByDeviceId(deviceEntity);
             deviceEntity.setInfoByDeviceId(informationEntity);
             session.saveOrUpdate(informationEntity);
             session.saveOrUpdate(deviceEntity);

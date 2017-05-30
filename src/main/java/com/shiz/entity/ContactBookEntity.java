@@ -6,15 +6,22 @@ import javax.persistence.*;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "contact", schema = "mydb")
-@IdClass(ContactEntityPK.class)
-public class ContactEntity {
+@Table(name = "contact_book", schema = "mydb")
+@IdClass(ContactBookEntityPK.class)
+public class ContactBookEntity {
     private int id;
+    private int dev_db_id;
     private String number;
+    private String workNumber;
+    private String homeNumber;
+    private String mainNumber;
+    private String eMail;
     private String name;
     private String info;
-    private DeviceEntity telBookByDeviceId;
+    private DeviceEntity contactBookByDeviceId;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -25,7 +32,17 @@ public class ContactEntity {
     }
 
     @Basic
-    @Column(name = "number", nullable = true, length = 45)
+    @Column(name = "dev_db_id", nullable = false, length = 45)
+    public int getDevDbId() {
+        return dev_db_id;
+    }
+
+    public void setDevDbId(int dev_db_id) {
+        this.dev_db_id = dev_db_id;
+    }
+
+    @Basic
+    @Column(name = "number", length = 45)
     public String getNumber() {
         return number;
     }
@@ -35,7 +52,47 @@ public class ContactEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 45)
+    @Column(name = "work_number", length = 45)
+    public String getWorkNumber() {
+        return workNumber;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
+
+    @Basic
+    @Column(name = "home_number", length = 45)
+    public String getHomeNumber() {
+        return homeNumber;
+    }
+
+    public void setHomeNumber(String homeNumber) {
+        this.homeNumber = homeNumber;
+    }
+
+    @Basic
+    @Column(name = "main_number", length = 45)
+    public String getMainNumber() {
+        return mainNumber;
+    }
+
+    public void setMainNumber(String mainNumber) {
+        this.mainNumber = mainNumber;
+    }
+
+    @Basic
+    @Column(name = "e_mail", length = 45)
+    public String getEMail() {
+        return eMail;
+    }
+
+    public void setEMail(String eMail) {
+        this.eMail = eMail;
+    }
+
+    @Basic
+    @Column(name = "name", length = 45)
     public String getName() {
         return name;
     }
@@ -45,7 +102,7 @@ public class ContactEntity {
     }
 
     @Basic
-    @Column(name = "info", nullable = true, length = -1)
+    @Column(name = "info")
     public String getInfo() {
         return info;
     }
@@ -59,14 +116,13 @@ public class ContactEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ContactEntity that = (ContactEntity) o;
+        ContactBookEntity that = (ContactBookEntity) o;
 
         if (id != that.id) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (info != null ? !info.equals(that.info) : that.info != null) return false;
 
-        return true;
+        return info != null ? info.equals(that.info) : that.info == null;
     }
 
     @Override
@@ -77,14 +133,15 @@ public class ContactEntity {
         result = 31 * result + (info != null ? info.hashCode() : 0);
         return result;
     }
+
     @ManyToOne
     @JoinColumn(name = "device_id")
-    public DeviceEntity getTelBookByDeviceId() {
-        return telBookByDeviceId;
+    public DeviceEntity getContactBookByDeviceId() {
+        return contactBookByDeviceId;
     }
 
-    public void setTelBookByDeviceId(DeviceEntity telBookByDeviceId) {
-        this.telBookByDeviceId = telBookByDeviceId;
+    public void setContactBookByDeviceId(DeviceEntity telBookByDeviceId) {
+        this.contactBookByDeviceId = telBookByDeviceId;
     }
 
 }

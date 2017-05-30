@@ -7,18 +7,18 @@ import com.shiz.model.request.BaseRequest;
  * Created by oldman on 10.05.17.
  */
 public class DeviceInformationRequest extends BaseRequest {
-    private DeviceInfo deviceInfo;
+    private DeviceInfo data;
 
     public DeviceInformationRequest(DeviceInfo deviceInfo, String imei, int device) {
         super(imei, device);
-        this.deviceInfo = deviceInfo;
+        this.data = deviceInfo;
     }
 
-    public DeviceInfo getDeviceInfo() {
-        return deviceInfo;
+    public DeviceInfo getData() {
+        return data;
     }
 
-    public void setDeviceInfo(DeviceInfo deviceInfo) {
-        this.deviceInfo = deviceInfo;
+    public void setData(DeviceInfo data) {
+        this.data = data;
     }
 }

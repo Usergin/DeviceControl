@@ -1,8 +1,8 @@
 package com.shiz.repository.db.dao;
 
-import com.shiz.Constants;
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.*;
+import com.shiz.entity.DeviceEntity;
+import com.shiz.model.Device;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,16 +51,21 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public DeviceEntity getDeviceByDeviceId(int deviceId) throws SQLException, Exception {
+    public Device getDeviceByDeviceId(int deviceId) throws SQLException, Exception {
         DeviceEntity deviceEntity = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
             deviceEntity = (DeviceEntity) session
-                    .createQuery("from DeviceEntity where deviceId = :device_id")
+//                    .createQuery("from DeviceEntity where deviceId = :device_id")
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId).getSingleResult();
-            return deviceEntity;
+            Device device = Device.newBuilder()
+                    .imei(deviceEntity.getImei())
+                    .id(deviceEntity.getDeviceId())
+                    .build();
+            return device;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -68,122 +74,58 @@ public class DeviceDaoImpl implements DeviceDao {
     }
 
     @Override
-    public int getDeviceIdByImei(String imei) throws SQLException, Exception {
+    public Device getDeviceIdByImei(String imei) throws SQLException, Exception {
         Session session = sessionFactory.getCurrentSession();
         try {
             DeviceEntity deviceEntity = (DeviceEntity) session
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI)
                     .setParameter("imei", imei)
                     .getSingleResult();
-            return deviceEntity.getDeviceId();
-        } catch (NoResultException nre) {
-            return -1;
-        } catch (NonUniqueResultException nure) {
-            return -1;
-        }
-    }
-
-    @Override
-    public List getAllDevice() throws SQLException, Exception {
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        try {
-            return session
-                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
-                    .getResultList();
+            Device device = Device.newBuilder()
+                    .imei(deviceEntity.getImei())
+                    .id(deviceEntity.getDeviceId())
+                    .build();
+            return device;
         } finally {
-            if (session.isOpen()) {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
         }
     }
 
     @Override
-    public boolean deleteAllDevice() throws SQLException, Exception {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
+    public List<Device> getAllDevice() throws SQLException, Exception {
+        Session session = null;
         try {
-            session = sessionFactory.openSession();
+            session = sessionFactory.getCurrentSession();
             session.beginTransaction();
-            String hql = "delete from DeviceEntity";
-            session.createNativeQuery(hql);
-            return true;
-        } catch (NoResultException | NonUniqueResultException nre) {
-            return false;
+            List<DeviceEntity> deviceEntityList = session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_ALL)
+                    .getResultList();
+            List<Device> deviceList = new ArrayList<>();
+            if (deviceEntityList != null && deviceEntityList.size() != 0)
+                for (DeviceEntity deviceEntity : deviceEntityList) {
+                    Device device = Device.newBuilder()
+                            .imei(deviceEntity.getImei())
+                            .id(deviceEntity.getDeviceId())
+                            .build();
+                    deviceList.add(device);
+                }
+                return deviceList;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 
-
     @Override
-    public void deleteDeviceById(int deviceId) throws SQLException, Exception {
-
-    }
-
-
-    @Override
-    public void addMessageList(int deviceId, List<MessageEntity> messageEntityList) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public List<MessageEntity> getMessageEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public void addTelephoneBookList(int deviceId, List<TelephoneBookEntity> telephoneBookEntityList) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public List<TelephoneBookEntity> getTelephoneBookEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public void addLocation(int deviceId, LocationEntity locationEntity) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public List<LocationEntity> getLocationEntityList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public void addDeviceStatus(int deviceId, DeviceStatusEntity deviceStatusEntity) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public List<DeviceStatusEntity> getDeviceStatusList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public void addDeviceStatus(int deviceId, NetworkStatusEntity networkStatusEntity) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public List<NetworkStatusEntity> getNetworkStatusList(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
-    @Override
-    public void setSettings(int deviceId, SettingsEntity settingsEntity) throws SQLException, Exception {
+    public void deleteAllDevice() throws SQLException, Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
             session.beginTransaction();
-            DeviceEntity deviceEntity = ((DeviceEntity) session
-                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
-                    .setParameter("device_id", deviceId)
-                    .uniqueResult());
-            settingsEntity.setSettingsDeviceByDeviceId(deviceEntity);
-            deviceEntity.setSettingsByDeviceId(settingsEntity);
-            session.save(settingsEntity);
-            session.saveOrUpdate(deviceEntity);
+            session.createQuery("delete from DeviceEntity").executeUpdate();
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
@@ -192,8 +134,9 @@ public class DeviceDaoImpl implements DeviceDao {
         }
     }
 
+
     @Override
-    public SettingsEntity getSettingsEntity(int deviceId) throws SQLException, Exception {
+    public void deleteDeviceById(int deviceId) throws SQLException, Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -202,22 +145,12 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            return deviceEntity.getSettingsByDeviceId();
+            session.remove(deviceEntity);
+            session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
     }
-
-    @Override
-    public void setDeviceInfo(int deviceId, InformationEntity settingsEntity) throws SQLException, Exception {
-//        return 0;
-    }
-
-    @Override
-    public InformationEntity getDeviceInfoEntity(int deviceId) throws SQLException, Exception {
-        return null;
-    }
-
 }

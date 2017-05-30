@@ -2,6 +2,7 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.entity.BatteryEntity;
 import com.shiz.entity.LocationEntity;
+import com.shiz.model.data.event.Location;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Created by OldMan on 10.05.2017.
  */
 public interface LocationDao {
-    void addLocation(int deviceId, List<LocationEntity> batteryStatusEntity) throws Exception;
-    List<LocationEntity> getLocationEntityList(int deviceId) throws Exception;
+    void addLocationList(int deviceId, List<Location> locationList) throws Exception;
+    List<Location> getLocationList(int deviceId) throws Exception;
 
 }

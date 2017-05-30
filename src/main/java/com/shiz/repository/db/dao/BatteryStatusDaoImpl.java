@@ -3,10 +3,12 @@ package com.shiz.repository.db.dao;
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.BatteryEntity;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.model.data.event.BatteryEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
 
 
     @Override
-    public void addBatteryStatus(int deviceId, List<BatteryEntity> batteryEntities) throws Exception {
+    public void addBatteryStatus(int deviceId, List<BatteryEvent> batteryEvents) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -31,10 +33,16 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for (BatteryEntity batteryEntity : batteryEntities) {
-                batteryEntity.setBatteryByDeviceId(deviceEntity);
-                deviceEntity.addBatteryStatusByDeviceId(batteryEntity);
-                session.save(batteryEntity);
+            for (BatteryEvent batteryEvent : batteryEvents) {
+                BatteryEntity batteryStatusEntity = new BatteryEntity();
+                batteryStatusEntity.setBatteryStatus(batteryEvent.getBatteryStatus());
+                batteryStatusEntity.setDate(new java.sql.Timestamp(batteryEvent.getDate().getTime()));
+                batteryStatusEntity.setLevel(batteryEvent.getLevel());
+                batteryStatusEntity.setStatus(batteryEvent.getStatus());
+                batteryStatusEntity.setTypeCharging(batteryEvent.getTypeCharging());
+                batteryStatusEntity.setBatteryByDeviceId(deviceEntity);
+                deviceEntity.addBatteryStatusByDeviceId(batteryStatusEntity);
+                session.save(batteryStatusEntity);
             }
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
@@ -46,7 +54,7 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
     }
 
     @Override
-    public List<BatteryEntity> getBatteryEntityList(int deviceId) throws Exception {
+    public List<BatteryEvent> getBatteryEventList(int deviceId) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
@@ -55,8 +63,18 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
-
-            return deviceEntity.getBatteryStatusByDeviceId();
+            List<BatteryEntity> batteryEntityList = deviceEntity.getBatteryStatusByDeviceId();
+            List<BatteryEvent> batteryEvents = new ArrayList<>();
+            for (BatteryEntity batteryEntity : batteryEntityList) {
+                BatteryEvent batteryEvent = new BatteryEvent();
+                batteryEvent.setStatus(batteryEntity.getStatus());
+                batteryEvent.setDate(batteryEntity.getDate());
+                batteryEvent.setBatteryStatus(batteryEntity.getBatteryStatus());
+                batteryEvent.setLevel(batteryEntity.getLevel());
+                batteryEvent.setTypeCharging(batteryEntity.getTypeCharging());
+                batteryEvents.add(batteryEvent);
+            }
+            return batteryEvents;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

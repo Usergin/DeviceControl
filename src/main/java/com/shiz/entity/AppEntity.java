@@ -8,7 +8,7 @@ import java.sql.Timestamp;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "App")
+@Table(name = "app")
 @IdClass(AppEntityPK.class)
 public class AppEntity {
     private int id;
@@ -18,7 +18,7 @@ public class AppEntity {
     private DeviceEntity appByDeviceId;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true, nullable = false)
     public int getId() {
         return id;

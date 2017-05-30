@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by OldMan on 23.05.2017.
  */
-public interface ContactListDao {
+public interface ContactDao {
     void addContactList(int deviceId, List<Contact> contactList) throws Exception;
     List<Contact> getContactList(int deviceId) throws Exception;
 }

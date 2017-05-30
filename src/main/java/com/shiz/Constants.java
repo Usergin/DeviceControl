@@ -20,7 +20,8 @@ public class Constants {
     public final static int STATE_ERROR = 0;
     public final static int STATE_OK = 1;
     public final static int STATE_NEW_SETTINGS = 2;
-    public final static int STATE_REMOVED = 3;
+    public final static int STATE_NEW_ONE_TIME_SETTINGS = 3;
+    public final static int STATE_REMOVED = 4;
 
 
 

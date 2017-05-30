@@ -3,6 +3,7 @@ package com.shiz.model;
 
 import com.shiz.model.data.Contact;
 import com.shiz.model.data.DeviceInfo;
+import com.shiz.model.data.Settings;
 import com.shiz.model.data.event.*;
 import com.shiz.model.data.event.Message;
 

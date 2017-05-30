@@ -10,12 +10,6 @@ public class NetworkEvent extends BaseEvent{
     private String ip;
     private Date date;
 
-    public NetworkEvent(String state, String ip, Date date) {
-        this.state = state;
-        this.ip = ip;
-        this.date = date;
-    }
-
     public String getState() {
         return state;
     }

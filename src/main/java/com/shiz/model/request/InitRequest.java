@@ -4,11 +4,11 @@ package com.shiz.model.request;
 /**
  * Created by oldman on 05.04.17.
  */
-public class InitialDeviceRequest {
+public class InitRequest {
     private String imei;
     private String model;
 
-    public InitialDeviceRequest(String imei, String model) {
+    public InitRequest(String imei, String model) {
         this.imei = imei;
         this.model = model;
     }

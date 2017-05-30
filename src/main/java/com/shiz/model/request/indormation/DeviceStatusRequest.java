@@ -10,18 +10,18 @@ import java.util.List;
  * Created by oldman on 06.04.17.
  */
 public class DeviceStatusRequest extends BaseRequest {
-    private DeviceEvent data;
+    private List<DeviceEvent> data;
 
-    public DeviceStatusRequest(DeviceEvent data, String imei, int device) {
+    public DeviceStatusRequest( List<DeviceEvent> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }
 
-    public  DeviceEvent getData() {
+    public   List<DeviceEvent> getData() {
         return data;
     }
 
-    public void setData( DeviceEvent data) {
+    public void setData(  List<DeviceEvent> data) {
         this.data = data;
     }
 }

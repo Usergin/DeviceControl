@@ -4,8 +4,10 @@ import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.CallEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.model.data.event.Call;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -32,27 +34,22 @@ public class BellDaoImpl implements BellDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            List<CallEntity> callList = deviceEntity.getCallByDeviceId();
-
-            for (Call newCall : newCallList) {
-
-                CallEntity call = new CallEntity();
-                call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
-                call.setTypeEventId(newCall.getType());
-                call.setNumber(newCall.getNumber());
-                call.setDuration(newCall.getDuration());
-                call.setCallByDeviceId(deviceEntity);
-                deviceEntity.addCallByDeviceId(call);
-                if (callList.size() != 0) {
-                    for (CallEntity callEntity : callList)
-                        if (call.getDate().equals(callEntity.getDate())) {
-                            session.merge(call);
-                        } else
-                            session.save(call);
-                }else
+           for (Call newCall : newCallList) {
+               Criteria userCriteria = session.createCriteria(CallEntity.class);
+               userCriteria.add(Restrictions.eq("date", newCall.getDate()));
+                if (userCriteria.uniqueResult() == null) {
+                    CallEntity call = new CallEntity();
+                    call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
+                    call.setTypeEventId(newCall.getType());
+                    call.setNumber(newCall.getNumber());
+                    call.setDuration(newCall.getDuration());
+                    call.setCallByDeviceId(deviceEntity);
+                    deviceEntity.addCallByDeviceId(call);
                     session.save(call);
+                }
+               session.flush();
+               session.clear();
                session.saveOrUpdate(deviceEntity);
-
             }
             session.getTransaction().commit();
         } finally {

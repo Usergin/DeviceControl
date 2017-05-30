@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "NetworkStatus", schema = "mydb", catalog = "")
+@Table(name = "network_status", schema = "mydb")
 @IdClass(NetworkStatusEntityPK.class)
 public class NetworkStatusEntity {
     private int id;
@@ -15,7 +15,9 @@ public class NetworkStatusEntity {
     private String ip;
     private Timestamp date;
     private DeviceEntity networkStatusByDeviceId;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

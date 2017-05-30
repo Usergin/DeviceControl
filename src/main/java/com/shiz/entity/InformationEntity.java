@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "Information", schema = "mydb")
+@Table(name = "information", schema = "mydb")
 @IdClass(InformationEntityPK.class)
 public class InformationEntity {
     private int id;
@@ -36,6 +36,7 @@ public class InformationEntity {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

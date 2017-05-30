@@ -3,10 +3,12 @@ package com.shiz.repository.db.dao;
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.entity.LocationEntity;
+import com.shiz.model.data.event.Location;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +24,7 @@ public class LocationDaoImpl implements LocationDao {
 
 
     @Override
-    public void addLocation(int deviceId, List<LocationEntity> locationEntities) throws Exception {
+    public void addLocationList(int deviceId, List<Location> locationList) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.openSession();
@@ -31,12 +33,20 @@ public class LocationDaoImpl implements LocationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for (LocationEntity locationEntity : locationEntities) {
+            for (Location location : locationList) {
+                LocationEntity locationEntity = new LocationEntity();
+                locationEntity.setAccuracy(location.getAccuracy());
+                locationEntity.setDate(new java.sql.Timestamp(location.getDate().getTime()));
+                locationEntity.setLatitude(location.getLatitude());
+                locationEntity.setLongitude(location.getLongitude());
+                locationEntity.setMethod(location.getMethod());
                 locationEntity.setLocationByDeviceId(deviceEntity);
                 deviceEntity.addLocationByDeviceId(locationEntity);
                 session.save(locationEntity);
+                session.flush();
+                session.clear();
+                session.saveOrUpdate(deviceEntity);
             }
-            session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
@@ -46,7 +56,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public List<LocationEntity> getLocationEntityList(int deviceId) throws Exception {
+    public List<Location> getLocationList(int deviceId) throws Exception {
         Session session = null;
         try {
             session = sessionFactory.getCurrentSession();
@@ -55,8 +65,18 @@ public class LocationDaoImpl implements LocationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
-
-            return deviceEntity.getLocationByDeviceId();
+            List<LocationEntity> locationEntities = deviceEntity.getLocationByDeviceId();
+            List<Location> locationList = new ArrayList<>();
+            for (LocationEntity locationEntity : locationEntities) {
+                Location location = new Location();
+                location.setAccuracy(locationEntity.getAccuracy());
+                location.setDate(locationEntity.getDate());
+                location.setLatitude(locationEntity.getLatitude());
+                location.setLongitude(locationEntity.getLongitude());
+                location.setMethod(locationEntity.getMethod());
+                locationList.add(location);
+            }
+            return locationList;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();

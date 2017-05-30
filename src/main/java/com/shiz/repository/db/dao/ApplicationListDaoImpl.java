@@ -4,8 +4,10 @@ import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.AppEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.model.data.event.InstallApp;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
  * Created by oldman on 22.04.17.
  */
 @Component
-public class ApplicationListDaoImpl implements ApplicationDao {
+public class ApplicationListDaoImpl implements ApplicationListDao {
     private SessionFactory sessionFactory;
 
     public ApplicationListDaoImpl() {
@@ -32,28 +34,28 @@ public class ApplicationListDaoImpl implements ApplicationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            List<AppEntity> appList = deviceEntity.getAppByDeviceId();
-
             for (InstallApp installApp : installApps) {
-//                for (AppEntity app : appList)
-//                    if (app.getName().equals(installApp.getName())) {
-//                        System.out.print("getName  " + app.getName());
-//                        app.setInfo(installApp.getInfo());
-//                        app.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
-//                        app.setAppByDeviceId(deviceEntity);
-//                        session.saveOrUpdate(app);
-//                        installApps.remove(app);
-//                        continue;
-//                    }
-                AppEntity appEntity = new AppEntity();
-                appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
-                appEntity.setInfo(installApp.getInfo());
-                appEntity.setName(installApp.getName());
-                appEntity.setAppByDeviceId(deviceEntity);
-                deviceEntity.addAppByDeviceId(appEntity);
-                session.save(appEntity);
+                Criteria userCriteria = session.createCriteria(AppEntity.class);
+                userCriteria.add(Restrictions.like("name", installApp.getName()));
+                AppEntity app = (AppEntity) userCriteria.uniqueResult();
+                if (app == null) {
+                    AppEntity appEntity = new AppEntity();
+                    appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                    appEntity.setInfo(installApp.getInfo());
+                    appEntity.setName(installApp.getName());
+                    appEntity.setAppByDeviceId(deviceEntity);
+                    deviceEntity.addAppByDeviceId(appEntity);
+                    session.save(appEntity);
+                } else {
+                    app.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                    app.setInfo(installApp.getInfo());
+                    app.setName(installApp.getName());
+                    session.saveOrUpdate(app);
+                }
+                session.flush();
+                session.clear();
+                session.saveOrUpdate(deviceEntity);
             }
-            session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {

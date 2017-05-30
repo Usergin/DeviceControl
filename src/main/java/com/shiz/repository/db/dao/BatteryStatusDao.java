@@ -1,6 +1,7 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.entity.BatteryEntity;
+import com.shiz.model.data.event.BatteryEvent;
 
 import java.util.List;
 
@@ -8,6 +9,6 @@ import java.util.List;
  * Created by OldMan on 09.05.2017.
  */
 public interface BatteryStatusDao {
-    void addBatteryStatus(int deviceId,   List<BatteryEntity> batteryStatusEntity) throws Exception;
-    List<BatteryEntity> getBatteryEntityList(int deviceId) throws Exception;
+    void addBatteryStatus(int deviceId,   List<BatteryEvent> batteryStatusEntity) throws Exception;
+    List<BatteryEvent> getBatteryEventList(int deviceId) throws Exception;
 }

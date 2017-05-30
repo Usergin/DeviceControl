@@ -1,35 +1,46 @@
 package com.shiz.entity;
 
+
+
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
+
 
 /**
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "Settings", schema = "mydb")
+@Table(name = "settings", schema = "mydb")
 @IdClass(SettingsEntityPK.class)
 public class SettingsEntity {
     private int id;
-    private boolean isLocation;
+    private boolean location;
     private int locationMode;
-    private boolean isSms;
-    private boolean isCall;
+    private boolean sms;
+    private boolean call;
+    private boolean hideIcon;
+    private boolean service;
+    private int password;
+    //one time settings
     private boolean listSms;
     private boolean listCall;
     private boolean listApp;
-    private boolean listPhoneBook;
-    private boolean isHideIcon;
-    private boolean isService;
-    private boolean isAirplaneMode;
-    private boolean isWifi;
-    private boolean isScreen;
-    private int password;
+    private boolean contactBook;
+    private boolean airplaneMode;
+    private boolean wifi;
+    private boolean screen;
+    private boolean reboot;
+    private boolean shutDown;
+    private String rmApps;
+
     private DeviceEntity deviceByDeviceId;
 
     public SettingsEntity() {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -40,37 +51,67 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "is_airplane_mode", nullable = false)
+    @Column(name = "reboot",nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isReboot() {
+        return reboot;
+    }
+
+    public void setReboot(boolean reboot) {
+        this.reboot = reboot;
+    }
+
+    @Basic
+    @Column(name = "shut_down", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isShutDown() {
+        return shutDown;
+    }
+
+    public void setShutDown(boolean shutDown) {
+        this.shutDown = shutDown;
+    }
+
+    @Basic
+    @Column(name = "rm_apps", nullable = false)
+    public String getRmApps() {
+        return rmApps;
+    }
+
+    public void setRmApps(String rmApps) {
+        this.rmApps = rmApps;
+    }
+
+    @Basic
+    @Column(name = "airplane_mode", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean isAirplaneMode() {
-        return isAirplaneMode;
+        return airplaneMode;
     }
 
     public void setAirplaneMode(boolean airplaneMode) {
-        isAirplaneMode = airplaneMode;
+        this.airplaneMode = airplaneMode;
     }
 
     @Basic
-    @Column(name = "is_wifi", nullable = false)
+    @Column(name = "wifi", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean isWifi() {
-        return isWifi;
+        return wifi;
     }
 
     public void setWifi(boolean wifi) {
-        isWifi = wifi;
+        this.wifi = wifi;
     }
 
     @Basic
-    @Column(name = "is_screen", nullable = false)
+    @Column(name = "screen", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean isScreen() {
-        return isScreen;
+        return screen;
     }
 
     public void setScreen(boolean screen) {
-        isScreen = screen;
+        this.screen = screen;
     }
 
     @Basic
-    @Column(name = "password", nullable = false)
+    @Column(name = "passwd", nullable = false)
     public int getPassword() {
         return password;
     }
@@ -80,13 +121,13 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "is_location", nullable = false)
-    public boolean getIsLocation() {
-        return isLocation;
+    @Column(name = "location", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isLocation() {
+        return location;
     }
 
-    public void setIsLocation(boolean isLocation) {
-        this.isLocation = isLocation;
+    public void setLocation(boolean isLocation) {
+        this.location = isLocation;
     }
 
     @Basic
@@ -100,37 +141,37 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "is_service", nullable = false)
-    public boolean getIsService() {
-        return isService;
+    @Column(name = "service", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isService() {
+        return service;
     }
 
-    public void setIsService(boolean isService) {
-        this.isService = isService;
-    }
-
-    @Basic
-    @Column(name = "is_sms", nullable = false)
-    public boolean getIsSms() {
-        return isSms;
-    }
-
-    public void setIsSms(boolean isSms) {
-        this.isSms = isSms;
+    public void setService(boolean isService) {
+        this.service = isService;
     }
 
     @Basic
-    @Column(name = "is_call", nullable = false)
-    public boolean getIsCall() {
-        return isCall;
+    @Column(name = "sms", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isSms() {
+        return sms;
     }
 
-    public void setIsCall(boolean isCall) {
-        this.isCall = isCall;
+    public void setSms(boolean isSms) {
+        this.sms = isSms;
     }
 
     @Basic
-    @Column(name = "list_sms", nullable = false)
+    @Column(name = "bell", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isCall() {
+        return call;
+    }
+
+    public void setCall(boolean isCall) {
+        this.call = isCall;
+    }
+
+    @Basic
+    @Column(name = "list_sms", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListSms() {
         return listSms;
     }
@@ -140,7 +181,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_call", nullable = false)
+    @Column(name = "list_call", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListCall() {
         return listCall;
     }
@@ -150,7 +191,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_app", nullable = false)
+    @Column(name = "list_app", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListApp() {
         return listApp;
     }
@@ -160,23 +201,23 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_phone_book", nullable = false)
-    public boolean getListPhoneBook() {
-        return listPhoneBook;
+    @Column(name = "contact_book", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getContactBook() {
+        return contactBook;
     }
 
-    public void setListPhoneBook(boolean listPhoneBook) {
-        this.listPhoneBook = listPhoneBook;
+    public void setContactBook(boolean listPhoneBook) {
+        this.contactBook = listPhoneBook;
     }
 
     @Basic
-    @Column(name = "is_hide_icon", nullable = false)
-    public boolean getIsHideIcon() {
-        return isHideIcon;
+    @Column(name = "hide_icon", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isHideIcon() {
+        return hideIcon;
     }
 
-    public void setIsHideIcon(boolean isHideIcon) {
-        this.isHideIcon = isHideIcon;
+    public void setHideIcon(boolean isHideIcon) {
+        this.hideIcon = isHideIcon;
     }
 
     @Override
@@ -187,18 +228,20 @@ public class SettingsEntity {
         SettingsEntity that = (SettingsEntity) o;
 
         if (id != that.id) return false;
-        if (isLocation != that.isLocation) return false;
-        if (isSms != that.isSms) return false;
-        if (isCall != that.isCall) return false;
+        if (location != that.location) return false;
+        if (sms != that.sms) return false;
+        if (call != that.call) return false;
         if (listSms != that.listSms) return false;
         if (listCall != that.listCall) return false;
         if (listApp != that.listApp) return false;
-        if (listPhoneBook != that.listPhoneBook) return false;
-        if (isHideIcon != that.isHideIcon) return false;
-        if (isAirplaneMode != that.isAirplaneMode) return false;
-        if (isWifi != that.isWifi) return false;
-        if (isScreen != that.isScreen) return false;
-        if (isService != that.isService) return false;
+        if (contactBook != that.contactBook) return false;
+        if (hideIcon != that.hideIcon) return false;
+        if (airplaneMode != that.airplaneMode) return false;
+        if (wifi != that.wifi) return false;
+        if (screen != that.screen) return false;
+        if (service != that.service) return false;
+        if (deviceByDeviceId != that.deviceByDeviceId) return false;
+
         return true;
     }
 
@@ -215,121 +258,5 @@ public class SettingsEntity {
 
     public void setSettingsDeviceByDeviceId(DeviceEntity deviceByDeviceId) {
         this.deviceByDeviceId = deviceByDeviceId;
-    }
-
-    public static SettingsEntity.Builder newBuilder() {
-        return new SettingsEntity.Builder();
-    }
-
-    private SettingsEntity(SettingsEntity.Builder builder) {
-        setIsLocation(builder.is_location);
-        setIsSms(builder.is_sms);
-        setIsCall(builder.is_call);
-        setListSms(builder.list_sms);
-        setListCall(builder.list_call);
-        setListApp(builder.list_app);
-        setListPhoneBook(builder.list_phone_book);
-        setIsHideIcon(builder.hide_icon);
-        setLocationMode(builder.location_mode);
-        setIsService(builder.is_service);
-        setPassword(builder.password);
-        setScreen(builder.is_screen);
-        setWifi(builder.is_wifi);
-        setAirplaneMode(builder.is_airplane_mode);
-
-    }
-
-    public static final class Builder {
-        private boolean is_location;
-        private boolean is_sms;
-        private boolean is_call;
-        private boolean list_sms;
-        private boolean list_call;
-        private boolean list_app;
-        private boolean list_phone_book;
-        private boolean hide_icon;
-        private int location_mode;
-        private boolean is_service;
-        private boolean is_airplane_mode;
-        private boolean is_wifi;
-        private boolean is_screen;
-        private int password;
-
-        private Builder() {
-        }
-
-        public SettingsEntity.Builder is_airplane_mode(boolean val) {
-            is_airplane_mode = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_wifi(boolean val) {
-            is_wifi = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_screen(boolean val) {
-            is_screen = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder password(int val) {
-            password = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_location(boolean val) {
-            is_location = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_service(boolean val) {
-            is_service = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder location_mode(int val) {
-            location_mode = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_sms(boolean val) {
-            is_sms = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder is_call(boolean val) {
-            is_call = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder list_sms(boolean val) {
-            list_sms = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder list_call(boolean val) {
-            list_call = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder list_app(boolean val) {
-            list_app = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder list_phone_book(boolean val) {
-            list_phone_book = val;
-            return this;
-        }
-
-        public SettingsEntity.Builder hide_icon(boolean val) {
-            hide_icon = val;
-            return this;
-        }
-
-        public SettingsEntity build() {
-            return new SettingsEntity(this);
-        }
     }
 }

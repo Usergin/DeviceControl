@@ -7,16 +7,18 @@ import com.shiz.model.request.BaseRequest;
  * Created by oldman on 04.05.17.
  */
 public class SettingsRequest extends BaseRequest {
-    private Settings settings;
+    private Settings data;
+
     public SettingsRequest(Settings settings, String imei, int device) {
         super(imei, device);
+        this.data = settings;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public Settings getData() {
+        return data;
     }
 
-    public void setSettings(Settings settings) {
-        this.settings = settings;
+    public void setData(Settings data) {
+        this.data = data;
     }
 }

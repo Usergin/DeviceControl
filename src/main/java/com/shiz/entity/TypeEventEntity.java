@@ -6,12 +6,13 @@ import javax.persistence.*;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "TypeEvent", schema = "mydb")
+@Table(name = "type_event", schema = "mydb")
 public class TypeEventEntity {
     private int idTypeEvent;
     private String event;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idTypeEvent", nullable = false)
     public int getIdTypeEvent() {
         return idTypeEvent;
