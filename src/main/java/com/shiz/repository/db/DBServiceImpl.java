@@ -17,9 +17,7 @@ import com.shiz.model.respose.*;
 import com.shiz.model.respose.error.ErrorDeviceIdResponse;
 import com.shiz.model.respose.error.ErrorResponse;
 import com.shiz.repository.db.dao.*;
-import org.hibernate.HibernateException;
 import org.hibernate.NonUniqueResultException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
@@ -132,7 +129,7 @@ public class DBServiceImpl implements DBService {
             Device device = deviceDao.getDeviceIdByImei(imei);
             DeviceResponse deviceResponse = new DeviceResponse(Constants.STATE_OK, device);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -148,7 +145,7 @@ public class DBServiceImpl implements DBService {
             deviceList = deviceDao.getAllDevice();
             AllDevicesResponse deviceResponse = new AllDevicesResponse(Constants.STATE_OK, deviceList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -164,7 +161,7 @@ public class DBServiceImpl implements DBService {
             deviceDao.deleteDeviceById(deviceId);
             BaseResponse baseResponse = new BaseResponse(Constants.STATE_OK);
             return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -180,7 +177,7 @@ public class DBServiceImpl implements DBService {
             deviceDao.deleteAllDevice();
             BaseResponse baseResponse = new BaseResponse(Constants.STATE_OK);
             return new ResponseEntity<>(baseResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -226,7 +223,7 @@ public class DBServiceImpl implements DBService {
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
 
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 logger.error("Exception NoResultException:", nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -246,7 +243,7 @@ public class DBServiceImpl implements DBService {
             List<InstallApp> installApps = applicationDao.getAppEntityList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, installApps);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -263,7 +260,7 @@ public class DBServiceImpl implements DBService {
                 batteryStatusDao.addBatteryStatus(informationRequest.getDevice(), informationRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -283,7 +280,7 @@ public class DBServiceImpl implements DBService {
             List<BatteryEvent> batteryEntities = batteryStatusDao.getBatteryEventList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, batteryEntities);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -301,7 +298,7 @@ public class DBServiceImpl implements DBService {
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
 
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 logger.error("Exception NoResultException:", nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -320,7 +317,7 @@ public class DBServiceImpl implements DBService {
             List<Call> callList = bellDao.getCallList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, callList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -336,7 +333,7 @@ public class DBServiceImpl implements DBService {
             List<Contact> contactList = contactDao.getContactList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, contactList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException |NullPointerException |  NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -353,7 +350,7 @@ public class DBServiceImpl implements DBService {
                 contactDao.addContactList(contactRequest.getDevice(), contactRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -374,7 +371,7 @@ public class DBServiceImpl implements DBService {
                 deviceStatusDao.addDeviceStatus(informationRequest.getDevice(), informationRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -394,7 +391,7 @@ public class DBServiceImpl implements DBService {
             List<DeviceEvent> deviceStatusList = deviceStatusDao.getDeviceStatusList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, deviceStatusList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -411,7 +408,7 @@ public class DBServiceImpl implements DBService {
                 informationDao.setDeviceInformation(deviceInfoRequest.getDevice(), deviceInfoRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException |NullPointerException |  NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -431,7 +428,7 @@ public class DBServiceImpl implements DBService {
             DeviceInfo deviceInfo = informationDao.getDeviceInfo(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, deviceInfo);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -448,7 +445,7 @@ public class DBServiceImpl implements DBService {
                 locationDao.addLocationList(locationRequest.getDevice(), locationRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -467,7 +464,7 @@ public class DBServiceImpl implements DBService {
             List<Location> locationEntityList = locationDao.getLocationList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, locationEntityList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -484,7 +481,7 @@ public class DBServiceImpl implements DBService {
                 messageDao.addMessageList(smsRequest.getDevice(), smsRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -503,7 +500,7 @@ public class DBServiceImpl implements DBService {
             List<Message> messageEntityList = messageDao.getMessageEntityList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, messageEntityList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -520,7 +517,7 @@ public class DBServiceImpl implements DBService {
                 networkStatusDao.addNetworkEventList(informationRequest.getDevice(), informationRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException |NullPointerException| NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -540,7 +537,7 @@ public class DBServiceImpl implements DBService {
             List<NetworkEvent> networkEventList = networkStatusDao.getNetworkEventList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, networkEventList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException|NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -557,7 +554,7 @@ public class DBServiceImpl implements DBService {
                 serviceEventDao.addServiceEventList(serviceEventRequest.getDevice(), serviceEventRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException |NullPointerException|  NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -576,7 +573,7 @@ public class DBServiceImpl implements DBService {
             List<ServiceEvent> serviceEventList = serviceEventDao.getServiceEventList(deviceId);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, serviceEventList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NullPointerException| NonUniqueResultException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -593,7 +590,7 @@ public class DBServiceImpl implements DBService {
                 settingsDao.setSettings(settingsRequest.getDevice(), settingsRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
-            } catch (NoResultException | NonUniqueResultException nre) {
+            } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
                 System.out.print("NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
@@ -619,6 +616,9 @@ public class DBServiceImpl implements DBService {
                 logger.error("Exception getDevicesList: not found");
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
             }
+        } catch (NullPointerException e) {
+            logger.error("history already exist");
+            return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
         } catch (Exception e) {
             logger.error("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
@@ -631,6 +631,9 @@ public class DBServiceImpl implements DBService {
             Settings settings = settingsDao.getSettingsByControlPoint(deviceId);
             PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
             return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
+        } catch (NullPointerException e) {
+            logger.error("history already exist");
+            return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
         } catch (Exception e) {
             logger.error("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
@@ -676,8 +679,7 @@ public class DBServiceImpl implements DBService {
         } catch (NullPointerException e) {
             logger.error("history already exist");
             return getErrorResponseStatus(Constants.NOT_CORRECT_INPUT_AUTH_DATA);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
