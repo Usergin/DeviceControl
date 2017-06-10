@@ -1,10 +1,8 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.BatteryEntity;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.entity.ServiceEventEntity;
-import com.shiz.model.data.event.BatteryEvent;
 import com.shiz.model.data.event.ServiceEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

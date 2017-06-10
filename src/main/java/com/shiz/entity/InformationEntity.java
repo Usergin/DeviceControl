@@ -35,6 +35,34 @@ public class InformationEntity {
     public InformationEntity() {
     }
 
+    private InformationEntity(InformationEntity.Builder builder) {
+        setImei(builder.imei);
+        setModel(builder.model);
+        setSerialNum(builder.serial_num);
+        setVersionOs(builder.version_os);
+        setBrand(builder.brand);
+        setImsi(builder.imsi);
+        setManufactured(builder.manufactured);
+        setProduct(builder.product);
+        setSdk(builder.sdk);
+        setScreenSize(builder.screen_size);
+        setIsDualSim(builder.is_dual_sim);
+        setImeiSim1(builder.imei_sim1);
+        setImeiSim2(builder.imei_sim2);
+        setMcc(builder.mcc);
+        setMnc(builder.mnc);
+        setPhoneType(builder.phone_type);
+        setNetworkType(builder.network_type);
+        setNetwork(builder.network);
+        setOperatorName(builder.operator_name);
+        setIsRoot(builder.is_root);
+        setDeviceInfoByDeviceId(builder.deviceInfoByDeviceId);
+    }
+
+    public static InformationEntity.Builder newBuilder() {
+        return new InformationEntity.Builder();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -310,34 +338,6 @@ public class InformationEntity {
 
     public void setDeviceInfoByDeviceId(DeviceEntity deviceByDeviceId) {
         this.deviceInfoByDeviceId = deviceByDeviceId;
-    }
-
-    private InformationEntity(InformationEntity.Builder builder) {
-        setImei(builder.imei);
-        setModel(builder.model);
-        setSerialNum(builder.serial_num);
-        setVersionOs(builder.version_os);
-        setBrand(builder.brand);
-        setImsi(builder.imsi);
-        setManufactured(builder.manufactured);
-        setProduct(builder.product);
-        setSdk(builder.sdk);
-        setScreenSize(builder.screen_size);
-        setIsDualSim(builder.is_dual_sim);
-        setImeiSim1(builder.imei_sim1);
-        setImeiSim2(builder.imei_sim2);
-        setMcc(builder.mcc);
-        setMnc(builder.mnc);
-        setPhoneType(builder.phone_type);
-        setNetworkType(builder.network_type);
-        setNetwork(builder.network);
-        setOperatorName(builder.operator_name);
-        setIsRoot(builder.is_root);
-        setDeviceInfoByDeviceId(builder.deviceInfoByDeviceId);
-    }
-
-    public static InformationEntity.Builder newBuilder() {
-        return new InformationEntity.Builder();
     }
 
     public static final class Builder {

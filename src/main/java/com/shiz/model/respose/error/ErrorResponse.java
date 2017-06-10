@@ -6,7 +6,7 @@ import com.shiz.model.respose.BaseResponse;
  * Created by oldman on 05.04.17.
  */
 public class ErrorResponse extends BaseResponse {
-     private int  error;
+    private int error;
 
     public ErrorResponse(int code, int error) {
         super(code);

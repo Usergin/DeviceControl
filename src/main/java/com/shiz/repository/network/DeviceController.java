@@ -53,6 +53,7 @@ public class DeviceController {
     public ResponseEntity<BaseResponse> getSettings(@PathVariable int id) {
         return dbService.getSettingsByControlPoint(id);
     }
+
     @RequestMapping(value = "device/{id}/apps", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> getInstallAppList(@PathVariable int id) {
@@ -130,7 +131,12 @@ public class DeviceController {
         return dbService.getBatteryStatusList(id);
     }
 
-
+    @RequestMapping(value = "/user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> getUser(@RequestBody String request) {
+        System.out.println("getUser");
+        return dbService.getUser(request);
+    }
     /*
     setter
      */
@@ -151,11 +157,13 @@ public class DeviceController {
     public ResponseEntity<BaseResponse> setDeviceBattery(@RequestBody String request) {
         return dbService.setBatteryStatus(request);
     }
+
     @RequestMapping(value = "/call", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setCallListDevice(@RequestBody String request) {
         return dbService.setCallList(request);
     }
+
     @RequestMapping(value = "/contact", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceTelephoneBook(@RequestBody String request) {
@@ -204,16 +212,10 @@ public class DeviceController {
         return dbService.setSettings(request);
     }
 
-
-
-
-
-
-
-
-
-
-
-
+    @RequestMapping(value = "/new_user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> addUser(@RequestBody String request) {
+        return dbService.addUser(request);
+    }
 
 }

@@ -1,8 +1,5 @@
 package com.shiz.model.data.event;
 
-import com.shiz.model.data.BaseInfo;
-import org.hibernate.annotations.Table;
-
 import java.sql.Timestamp;
 import java.util.Date;
 

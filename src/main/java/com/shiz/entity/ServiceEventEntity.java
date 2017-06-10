@@ -36,6 +36,7 @@ public class ServiceEventEntity {
     public void setServiceEventByDeviceId(DeviceEntity serviceEventByDeviceId) {
         this.serviceEventByDeviceId = serviceEventByDeviceId;
     }
+
     @Basic
     @Column(name = "area", nullable = false, length = 45)
     public String getArea() {

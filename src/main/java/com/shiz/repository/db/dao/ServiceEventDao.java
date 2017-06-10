@@ -1,6 +1,5 @@
 package com.shiz.repository.db.dao;
 
-import com.shiz.model.data.event.NetworkEvent;
 import com.shiz.model.data.event.ServiceEvent;
 
 import java.util.List;
@@ -10,5 +9,6 @@ import java.util.List;
  */
 public interface ServiceEventDao {
     void addServiceEventList(int deviceId, List<ServiceEvent> serviceEventList) throws Exception;
+
     List<ServiceEvent> getServiceEventList(int deviceId) throws Exception;
 }

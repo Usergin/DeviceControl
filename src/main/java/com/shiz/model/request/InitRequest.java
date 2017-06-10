@@ -6,11 +6,14 @@ package com.shiz.model.request;
  */
 public class InitRequest {
     private String imei;
+    private String version_os;
     private String model;
 
-    public InitRequest(String imei, String model) {
+
+    public InitRequest(String imei, String model, String version_os) {
         this.imei = imei;
         this.model = model;
+        this.version_os = version_os;
     }
 
     public String getImei() {
@@ -27,5 +30,13 @@ public class InitRequest {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getVersion_os() {
+        return version_os;
+    }
+
+    public void setVersion_os(String version_os) {
+        this.version_os = version_os;
     }
 }

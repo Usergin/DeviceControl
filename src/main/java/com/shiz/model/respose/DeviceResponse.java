@@ -5,7 +5,7 @@ import com.shiz.model.Device;
 /**
  * Created by oldman on 24.04.17.
  */
-public class DeviceResponse extends BaseResponse{
+public class DeviceResponse extends BaseResponse {
     Device device;
 
     public DeviceResponse(int code, Device device) {

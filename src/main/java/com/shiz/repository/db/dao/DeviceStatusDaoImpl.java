@@ -33,7 +33,7 @@ public class DeviceStatusDaoImpl implements DeviceStatusDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for(DeviceEvent deviceEvent : deviceEventList) {
+            for (DeviceEvent deviceEvent : deviceEventList) {
                 DeviceStatusEntity deviceStatusEntity = new DeviceStatusEntity();
                 deviceStatusEntity.setDate(new java.sql.Timestamp(deviceEvent.getDate().getTime()));
                 deviceStatusEntity.setStatus(deviceEvent.getStatus());

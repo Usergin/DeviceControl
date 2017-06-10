@@ -1,6 +1,5 @@
 package com.shiz.model.request.indormation;
 
-import com.shiz.model.data.event.NetworkEvent;
 import com.shiz.model.data.event.ServiceEvent;
 import com.shiz.model.request.BaseRequest;
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class NetworkStatusRequest extends BaseRequest {
     private List<NetworkEvent> data;
 
-    public NetworkStatusRequest( List<NetworkEvent> data, String imei, int device) {
+    public NetworkStatusRequest(List<NetworkEvent> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }

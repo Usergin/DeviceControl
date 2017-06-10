@@ -49,16 +49,16 @@ public class DeviceInfo extends BaseInfo {
         setIsRoot(builder.is_root);
     }
 
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
     public boolean isRoot() {
         return is_root;
     }
 
     public void setIsRoot(boolean is_root) {
         this.is_root = is_root;
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
     }
 
     public String getImei() {

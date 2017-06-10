@@ -1,7 +1,5 @@
 package com.shiz.repository.db.dao;
 
-import com.shiz.entity.AppEntity;
-import com.shiz.entity.CallEntity;
 import com.shiz.model.data.event.Call;
 
 import java.util.List;
@@ -11,5 +9,6 @@ import java.util.List;
  */
 public interface BellDao {
     void addCallList(int deviceId, List<Call> appEntities) throws Exception;
+
     List<Call> getCallList(int deviceId) throws Exception;
 }

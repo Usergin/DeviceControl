@@ -3,7 +3,7 @@ package com.shiz.model.data;
 /**
  * Created by oldman on 05.04.17.
  */
-public class    Settings {
+public class Settings {
     private boolean location;
     private int location_mode;
     private boolean sms;
@@ -110,16 +110,16 @@ public class    Settings {
         return location;
     }
 
+    public void setLocation(boolean is_location) {
+        this.location = is_location;
+    }
+
     public boolean isHideIcon() {
         return hide_icon;
     }
 
     public void setHideIcon(boolean is_hide_icon) {
         this.hide_icon = is_hide_icon;
-    }
-
-    public void setLocation(boolean is_location) {
-        this.location = is_location;
     }
 
     public boolean isSms() {

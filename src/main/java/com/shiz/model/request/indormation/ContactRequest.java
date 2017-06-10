@@ -16,11 +16,11 @@ public class ContactRequest extends BaseRequest {
         this.data = data;
     }
 
-    public  List<Contact> getData() {
+    public List<Contact> getData() {
         return data;
     }
 
-    public void setData( List<Contact> data) {
+    public void setData(List<Contact> data) {
         this.data = data;
     }
 }

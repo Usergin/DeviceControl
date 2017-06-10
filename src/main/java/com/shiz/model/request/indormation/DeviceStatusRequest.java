@@ -1,6 +1,5 @@
 package com.shiz.model.request.indormation;
 
-import com.shiz.model.data.event.Call;
 import com.shiz.model.data.event.DeviceEvent;
 import com.shiz.model.request.BaseRequest;
 
@@ -12,16 +11,16 @@ import java.util.List;
 public class DeviceStatusRequest extends BaseRequest {
     private List<DeviceEvent> data;
 
-    public DeviceStatusRequest( List<DeviceEvent> data, String imei, int device) {
+    public DeviceStatusRequest(List<DeviceEvent> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }
 
-    public   List<DeviceEvent> getData() {
+    public List<DeviceEvent> getData() {
         return data;
     }
 
-    public void setData(  List<DeviceEvent> data) {
+    public void setData(List<DeviceEvent> data) {
         this.data = data;
     }
 }

@@ -22,6 +22,7 @@ public class DeviceEntityPK implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -36,6 +37,6 @@ public class DeviceEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-       return result;
+        return result;
     }
 }

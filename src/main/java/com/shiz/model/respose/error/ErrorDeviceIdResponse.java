@@ -12,7 +12,7 @@ public class ErrorDeviceIdResponse extends ErrorResponse {
         this.device = device;
     }
 
-   public int getDevice() {
+    public int getDevice() {
         return device;
     }
 

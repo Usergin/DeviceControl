@@ -3,7 +3,9 @@ package com.shiz.repository.db;
 import com.google.gson.Gson;
 import com.shiz.Constants;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.model.Authentication;
 import com.shiz.model.Device;
+import com.shiz.model.User;
 import com.shiz.model.data.Contact;
 import com.shiz.model.data.DeviceInfo;
 import com.shiz.model.data.Settings;
@@ -15,7 +17,9 @@ import com.shiz.model.respose.*;
 import com.shiz.model.respose.error.ErrorDeviceIdResponse;
 import com.shiz.model.respose.error.ErrorResponse;
 import com.shiz.repository.db.dao.*;
+import org.hibernate.HibernateException;
 import org.hibernate.NonUniqueResultException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +28,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,11 +53,16 @@ public class DBServiceImpl implements DBService {
     private final NetworkStatusDao networkStatusDao;
     private final ServiceEventDao serviceEventDao;
     private final SettingsDao settingsDao;
+    private final UserDao userDao;
 
     private Logger logger = LoggerFactory.getLogger(DBServiceImpl.class);
 
     @Autowired
-    public DBServiceImpl(ApplicationListDao applicationDao, @Qualifier("gson") Gson gson, DeviceDao deviceDao, BellDao bellDao, ServiceEventDao serviceEventDao, SettingsDao settingsDao, ContactDao contactDao, BatteryStatusDao batteryStatusDao, DeviceStatusDao deviceStatusDao, LocationDao locationDao, MessageDao messageDao, InformationDao informationDao, NetworkStatusDao networkStatusDao) {
+    public DBServiceImpl(ApplicationListDao applicationDao, @Qualifier("gson") Gson gson, DeviceDao deviceDao,
+                         BellDao bellDao, ServiceEventDao serviceEventDao, SettingsDao settingsDao,
+                         ContactDao contactDao, BatteryStatusDao batteryStatusDao, DeviceStatusDao deviceStatusDao,
+                         LocationDao locationDao, MessageDao messageDao, InformationDao informationDao,
+                         NetworkStatusDao networkStatusDao, UserDao userDao) {
         this.applicationDao = applicationDao;
         this.gson = gson;
         this.deviceDao = deviceDao;
@@ -65,6 +76,7 @@ public class DBServiceImpl implements DBService {
         this.messageDao = messageDao;
         this.informationDao = informationDao;
         this.networkStatusDao = networkStatusDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -74,8 +86,10 @@ public class DBServiceImpl implements DBService {
             try {
                 int uuid = Math.abs(UUID.randomUUID().hashCode());
                 DeviceEntity deviceEntity = new DeviceEntity();
-                deviceEntity.setImei(initialDeviceRequest.getImei());
                 deviceEntity.setDeviceId(uuid);
+                deviceEntity.setImei(initialDeviceRequest.getImei());
+                deviceEntity.setModel(initialDeviceRequest.getModel());
+                deviceEntity.setVersionOs(initialDeviceRequest.getVersion_os());
                 int deviceId = deviceDao.addDevice(deviceEntity);
                 settingsDao.setDefaultSettings(deviceId);
                 System.out.print(deviceId + " " + uuid);
@@ -102,7 +116,7 @@ public class DBServiceImpl implements DBService {
             Device device = deviceDao.getDeviceByDeviceId(deviceId);
             DeviceResponse deviceResponse = new DeviceResponse(Constants.STATE_OK, device);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
-        } catch (NoResultException | NonUniqueResultException nre) {
+        } catch (NoResultException | NonUniqueResultException | NullPointerException nre) {
             logger.error("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
@@ -179,6 +193,21 @@ public class DBServiceImpl implements DBService {
         if (error == Constants.ERROR_ON_SERVER) {
             ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.ERROR_ON_SERVER);
             return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        } else if (error == Constants.NOT_FOUND_DEVICE) {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.NOT_FOUND_DEVICE);
+            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        } else if (error == Constants.DEVICE_ALREADY_REGISTERED) {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.DEVICE_ALREADY_REGISTERED);
+            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        } else if (error == Constants.DATA_NOT_AVAILABLE) {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.DATA_NOT_AVAILABLE);
+            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        } else if (error == Constants.LOGIN_NOT_AVAILABLE) {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.LOGIN_NOT_AVAILABLE);
+            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+        } else if (error == Constants.NOT_CORRECT_INPUT_AUTH_DATA) {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.NOT_CORRECT_INPUT_AUTH_DATA);
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
         } else if (error == Constants.BAD_REQUEST) {
             ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -577,6 +606,7 @@ public class DBServiceImpl implements DBService {
         }
     }
 
+
     @Override
     public ResponseEntity<BaseResponse> getSettingsByDevice(String request) {
         SyncRequest syncRequest = gson.fromJson(request, SyncRequest.class);
@@ -602,6 +632,52 @@ public class DBServiceImpl implements DBService {
             PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
             return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
         } catch (Exception e) {
+            logger.error("Exception getSettingsDevice: " + e);
+            return getErrorResponseStatus(Constants.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse> addUser(String request) {
+        User user = gson.fromJson(request, User.class);
+        if (user != null) {
+            try {
+                userDao.addUser(user);
+                BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
+                return new ResponseEntity<>(informationResponse, HttpStatus.OK);
+            } catch (NonUniqueResultException nre) {
+                System.out.print("NoResultException  " + nre);
+                return getErrorResponseStatus(Constants.LOGIN_NOT_AVAILABLE);
+            } catch (PersistenceException e) {
+                System.out.println("history already exist");
+                return getErrorResponseStatus(Constants.LOGIN_NOT_AVAILABLE);
+            } catch (Exception e) {
+                System.out.print("Exception  " + e);
+                return getErrorResponseStatus(Constants.BAD_REQUEST);
+            }
+        } else {
+            ErrorResponse errorResponse = new ErrorResponse(Constants.STATE_ERROR, Constants.BAD_REQUEST);
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse> getUser(String request) {
+        Authentication authentication = gson.fromJson(request, Authentication.class);
+        try {
+            if (authentication != null) {
+                User user = userDao.getUser(authentication);
+                InformationResponse periodicalResponse = new InformationResponse(Constants.STATE_OK, user);
+                return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
+            } else {
+                logger.error("Exception NOT_CORRECT_INPUT_AUTH_DATA");
+                return getErrorResponseStatus(Constants.BAD_REQUEST);
+            }
+        } catch (NullPointerException e) {
+            logger.error("history already exist");
+            return getErrorResponseStatus(Constants.NOT_CORRECT_INPUT_AUTH_DATA);
+        }
+        catch (Exception e) {
             logger.error("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }

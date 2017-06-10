@@ -1,7 +1,6 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.model.data.Contact;
-import com.shiz.model.data.event.NetworkEvent;
 
 import java.util.List;
 
@@ -10,5 +9,6 @@ import java.util.List;
  */
 public interface ContactDao {
     void addContactList(int deviceId, List<Contact> contactList) throws Exception;
+
     List<Contact> getContactList(int deviceId) throws Exception;
 }

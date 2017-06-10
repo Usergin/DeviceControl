@@ -3,7 +3,7 @@ package com.shiz.model.request;
 /**
  * Created by oldman on 05.04.17.
  */
-public class DeleteDeviceRequest extends BaseRequest{
+public class DeleteDeviceRequest extends BaseRequest {
     private String imei;
     private String device;
     private String mode;

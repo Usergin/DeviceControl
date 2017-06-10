@@ -107,6 +107,7 @@ public class BatteryEntity {
         result = 31 * result + (typeCharging != null ? typeCharging.hashCode() : 0);
         return result;
     }
+
     @ManyToOne
     @JoinColumn(name = "device_id")
     public DeviceEntity getBatteryByDeviceId() {

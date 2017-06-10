@@ -14,9 +14,6 @@ public class NetworkInfo {
     private String network;
     private String operator_name;
 
-    public static NetworkInfo.Builder newBuilder() {
-        return new NetworkInfo.Builder();
-    }
     private NetworkInfo(Builder builder) {
         setIsDualSim(builder.is_dual_sim);
         setImeiSim1(builder.imei_sim1);
@@ -28,6 +25,11 @@ public class NetworkInfo {
         setNetwork(builder.network);
         setOperatorName(builder.operator_name);
     }
+
+    public static NetworkInfo.Builder newBuilder() {
+        return new NetworkInfo.Builder();
+    }
+
     public String getIsDualSim() {
         return is_dual_sim;
     }
@@ -112,7 +114,8 @@ public class NetworkInfo {
         private String network;
         private String operator_name;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public NetworkInfo.Builder isDualSim(String val) {
             is_dual_sim = val;

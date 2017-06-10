@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by OldMan on 19.05.2017.
  */
-public class ServiceEvent <T extends BaseEvent> {
+public class ServiceEvent<T extends BaseEvent> {
     private String area;
     private String event;
     private Date date;

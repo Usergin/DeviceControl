@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by oldman on 05.04.17.
  */
-public class NetworkEvent extends BaseEvent{
+public class NetworkEvent extends BaseEvent {
     private String state;
     private String ip;
     private Date date;

@@ -1,7 +1,5 @@
 package com.shiz.model.respose;
 
-import com.shiz.model.data.event.BaseEvent;
-
 /**
  * Created by oldman on 05.04.17.
  */

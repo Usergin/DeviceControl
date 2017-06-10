@@ -16,11 +16,11 @@ public class SmsRequest extends BaseRequest {
         this.data = data;
     }
 
-    public  List<Message> getData() {
+    public List<Message> getData() {
         return data;
     }
 
-    public void setData( List<Message> data) {
+    public void setData(List<Message> data) {
         this.data = data;
     }
 }

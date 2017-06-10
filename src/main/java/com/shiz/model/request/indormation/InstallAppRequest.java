@@ -1,10 +1,8 @@
 package com.shiz.model.request.indormation;
 
-import com.shiz.model.data.event.Call;
 import com.shiz.model.data.event.InstallApp;
 import com.shiz.model.request.BaseRequest;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,16 +11,16 @@ import java.util.List;
 public class InstallAppRequest extends BaseRequest {
     private List<InstallApp> data;
 
-    public InstallAppRequest( List<InstallApp> data, String imei, int device) {
+    public InstallAppRequest(List<InstallApp> data, String imei, int device) {
         super(imei, device);
         this.data = data;
     }
 
-    public  List<InstallApp> getData() {
+    public List<InstallApp> getData() {
         return data;
     }
 
-    public void setData( List<InstallApp> data) {
+    public void setData(List<InstallApp> data) {
         this.data = data;
     }
 }

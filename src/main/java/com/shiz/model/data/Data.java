@@ -1,9 +1,5 @@
 package com.shiz.model.data;
 
-import com.shiz.model.data.event.Call;
-import com.shiz.model.request.BaseRequest;
-
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -36,7 +32,11 @@ public class Data {
         this.type = type;
     }
 
-    public Date getDate() {return date;}
+    public Date getDate() {
+        return date;
+    }
 
-    public void setDate(Date date) {this.date = date;}
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

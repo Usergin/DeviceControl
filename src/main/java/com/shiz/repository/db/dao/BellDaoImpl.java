@@ -34,9 +34,9 @@ public class BellDaoImpl implements BellDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-           for (Call newCall : newCallList) {
-               Criteria userCriteria = session.createCriteria(CallEntity.class);
-               userCriteria.add(Restrictions.eq("date", newCall.getDate()));
+            for (Call newCall : newCallList) {
+                Criteria userCriteria = session.createCriteria(CallEntity.class);
+                userCriteria.add(Restrictions.eq("date", newCall.getDate()));
                 if (userCriteria.uniqueResult() == null) {
                     CallEntity call = new CallEntity();
                     call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
@@ -47,9 +47,9 @@ public class BellDaoImpl implements BellDao {
                     deviceEntity.addCallByDeviceId(call);
                     session.save(call);
                 }
-               session.flush();
-               session.clear();
-               session.saveOrUpdate(deviceEntity);
+                session.flush();
+                session.clear();
+                session.saveOrUpdate(deviceEntity);
             }
             session.getTransaction().commit();
         } finally {

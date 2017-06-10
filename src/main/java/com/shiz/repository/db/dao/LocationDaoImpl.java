@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,7 +34,8 @@ public class LocationDaoImpl implements LocationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-            for (Location location : locationList) {
+            for (Iterator<Location> iterator = locationList.iterator(); iterator.hasNext(); ) {
+                Location location = iterator.next();
                 LocationEntity locationEntity = new LocationEntity();
                 locationEntity.setAccuracy(location.getAccuracy());
                 locationEntity.setDate(new java.sql.Timestamp(location.getDate().getTime()));
@@ -42,6 +44,10 @@ public class LocationDaoImpl implements LocationDao {
                 locationEntity.setMethod(location.getMethod());
                 locationEntity.setLocationByDeviceId(deviceEntity);
                 deviceEntity.addLocationByDeviceId(locationEntity);
+                if (!iterator.hasNext()) {
+                    deviceEntity.setLatitude(location.getLatitude());
+                    deviceEntity.setLongitude(location.getLongitude());
+                }
                 session.save(locationEntity);
                 session.flush();
                 session.clear();

@@ -34,6 +34,6 @@ public class NetworkStatusEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = id;
-         return result;
+        return result;
     }
 }

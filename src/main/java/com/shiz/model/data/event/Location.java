@@ -1,7 +1,5 @@
 package com.shiz.model.data.event;
 
-import com.shiz.model.data.BaseInfo;
-
 import java.util.Date;
 
 /**

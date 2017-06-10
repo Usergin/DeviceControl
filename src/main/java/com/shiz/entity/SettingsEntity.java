@@ -1,9 +1,6 @@
 package com.shiz.entity;
 
 
-
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 
 
@@ -51,7 +48,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "reboot",nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "reboot", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean isReboot() {
         return reboot;
     }

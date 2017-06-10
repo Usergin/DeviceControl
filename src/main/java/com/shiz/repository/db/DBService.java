@@ -43,6 +43,7 @@ public interface DBService {
 
     ResponseEntity<BaseResponse> setSettings(String request);
 
+    ResponseEntity<BaseResponse> addUser(String request);
     //getters
     ResponseEntity<BaseResponse> getInstallAppList(int deviceId);
 
@@ -67,4 +68,7 @@ public interface DBService {
     ResponseEntity<BaseResponse> getSettingsByDevice(String request);
 
     ResponseEntity<BaseResponse> getSettingsByControlPoint(int deviceId);
+
+    ResponseEntity<BaseResponse> getUser(String request);
+
 }

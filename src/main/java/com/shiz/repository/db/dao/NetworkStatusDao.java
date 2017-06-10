@@ -1,6 +1,5 @@
 package com.shiz.repository.db.dao;
 
-import com.shiz.model.data.event.Location;
 import com.shiz.model.data.event.NetworkEvent;
 
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.List;
  */
 public interface NetworkStatusDao {
     void addNetworkEventList(int deviceId, List<NetworkEvent> locationList) throws Exception;
+
     List<NetworkEvent> getNetworkEventList(int deviceId) throws Exception;
 }
 

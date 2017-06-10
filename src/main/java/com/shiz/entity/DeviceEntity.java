@@ -8,7 +8,7 @@ import java.util.List;
  * Created by oldman on 19.04.17.
  */
 @Entity
-@Table(name = "device")
+@Table(name = "device", schema = "mydb")
 @NamedQueries({
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_ALL, query = "from DeviceEntity"),
         @NamedQuery(name = DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID, query = "from DeviceEntity where deviceId = :device_id"),
@@ -24,13 +24,26 @@ public class DeviceEntity {
     private String imei;
     @Column(name = "device_id")
     private int deviceId;
+    @Basic
+    @Column(name = "model", nullable = true, length = 45)
+    private String model;
+    @Basic
+    @Column(name = "longitude", nullable = true, precision = 0)
+    private Double longitude;
+    @Basic
+    @Column(name = "latitude", nullable = true, precision = 0)
+    private Double latitude;
+    @Basic
+    @Column(name = "version_os", nullable = true, length = 45)
+    private String versionOs;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "appByDeviceId", orphanRemoval = true)
     private List<AppEntity> appByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "callByDeviceId", orphanRemoval = true)
     private List<CallEntity> callByDeviceId = new ArrayList<>();
-//    cascade = {CascadeType.DETACH,
+    //    cascade = {CascadeType.DETACH,
 //            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE},
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactBookByDeviceId",  orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactBookByDeviceId", orphanRemoval = true)
     private List<ContactBookEntity> contactBookByDeviceId = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "messageByDeviceId", orphanRemoval = true)
     private List<MessageEntity> messageByDeviceId = new ArrayList<>();
@@ -49,13 +62,8 @@ public class DeviceEntity {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "deviceInfoByDeviceId", orphanRemoval = true)
     private InformationEntity deviceInfoByDeviceId;
 
-    public DeviceEntity() {
-    }
 
-    public static class NamedQuery {
-        public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
-        public static final String DEVICE_FIND_BY_ID = "DeviceEntity.findById";
-        public static final String DEVICE_FIND_BY_IMEI = "DeviceEntity.findByImei";
+    public DeviceEntity() {
     }
 
     public int getId() {
@@ -119,7 +127,6 @@ public class DeviceEntity {
         this.appByDeviceId.add(app);
     }
 
-
     //   call
     public List<CallEntity> getCallByDeviceId() {
         return callByDeviceId;
@@ -170,7 +177,7 @@ public class DeviceEntity {
     }
 
     public void addContactByDeviceId(ContactBookEntity contactBookEntity) {
-            this.contactBookByDeviceId.add(contactBookEntity);
+        this.contactBookByDeviceId.add(contactBookEntity);
     }
 
     public List<BatteryEntity> getBatteryStatusByDeviceId() {
@@ -200,7 +207,6 @@ public class DeviceEntity {
     public void addLocationByDeviceId(LocationEntity locationEntity) {
         this.locationByDeviceId.add(locationEntity);
     }
-
 
     public List<NetworkStatusEntity> getNetworkStatusByDeviceId() {
         return networkStatusByDeviceId;
@@ -240,5 +246,43 @@ public class DeviceEntity {
 
     public void setInfoByDeviceId(InformationEntity infoByDeviceId) {
         this.deviceInfoByDeviceId = infoByDeviceId;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+     public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+     public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+     public String getVersionOs() {
+        return versionOs;
+    }
+
+    public void setVersionOs(String versionOs) {
+        this.versionOs = versionOs;
+    }
+
+    public static class NamedQuery {
+        public static final String DEVICE_FIND_ALL = "DeviceEntity.findAll";
+        public static final String DEVICE_FIND_BY_ID = "DeviceEntity.findById";
+        public static final String DEVICE_FIND_BY_IMEI = "DeviceEntity.findByImei";
     }
 }

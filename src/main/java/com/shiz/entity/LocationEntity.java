@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @IdClass(LocationEntityPK.class)
 public class LocationEntity {
     private int id;
-     private double longitude;
+    private double longitude;
     private double latitude;
     private float accuracy;
     private String method;
@@ -111,7 +111,7 @@ public class LocationEntity {
         int result;
         long temp;
         result = id;
-       temp = Double.doubleToLongBits(longitude);
+        temp = Double.doubleToLongBits(longitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(latitude);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

@@ -61,11 +61,14 @@ public class DeviceDaoImpl implements DeviceDao {
 //                    .createQuery("from DeviceEntity where deviceId = :device_id")
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId).getSingleResult();
-            Device device = Device.newBuilder()
+            return Device.newBuilder()
                     .imei(deviceEntity.getImei())
                     .id(deviceEntity.getDeviceId())
+                    .model(deviceEntity.getModel())
+                    .latitude(deviceEntity.getLatitude())
+                    .longitude(deviceEntity.getLongitude())
+                    .version_os(deviceEntity.getVersionOs())
                     .build();
-            return device;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -81,11 +84,14 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_IMEI)
                     .setParameter("imei", imei)
                     .getSingleResult();
-            Device device = Device.newBuilder()
+            return   Device.newBuilder()
                     .imei(deviceEntity.getImei())
                     .id(deviceEntity.getDeviceId())
+                    .model(deviceEntity.getModel())
+                    .latitude(deviceEntity.getLatitude())
+                    .longitude(deviceEntity.getLongitude())
+                    .version_os(deviceEntity.getVersionOs())
                     .build();
-            return device;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -108,10 +114,14 @@ public class DeviceDaoImpl implements DeviceDao {
                     Device device = Device.newBuilder()
                             .imei(deviceEntity.getImei())
                             .id(deviceEntity.getDeviceId())
+                            .model(deviceEntity.getModel())
+                            .latitude(deviceEntity.getLatitude())
+                            .longitude(deviceEntity.getLongitude())
+                            .version_os(deviceEntity.getVersionOs())
                             .build();
                     deviceList.add(device);
                 }
-                return deviceList;
+            return deviceList;
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
