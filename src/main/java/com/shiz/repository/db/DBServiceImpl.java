@@ -677,10 +677,10 @@ public class DBServiceImpl implements DBService {
                 return getErrorResponseStatus(Constants.BAD_REQUEST);
             }
         } catch (NullPointerException e) {
-            logger.error("history already exist");
+            logger.error("NullPointerException" + e);
             return getErrorResponseStatus(Constants.NOT_CORRECT_INPUT_AUTH_DATA);
         } catch (Exception e) {
-            logger.error("Exception getSettingsDevice: " + e);
+            logger.error("Exception getUser: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
     }

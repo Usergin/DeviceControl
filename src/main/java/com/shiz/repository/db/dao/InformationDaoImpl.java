@@ -75,7 +75,7 @@ public class InformationDaoImpl implements InformationDao {
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
             InformationEntity informationEntity = deviceEntity.getInfoByDeviceId();
-            DeviceInfo deviceInfo = DeviceInfo.newBuilder()
+            return DeviceInfo.newBuilder()
                     .brand(informationEntity.getBrand())
                     .imei(informationEntity.getImei())
                     .imsi(informationEntity.getImsi())
@@ -97,10 +97,7 @@ public class InformationDaoImpl implements InformationDao {
                     .operatorName(informationEntity.getOperatorName())
                     .phoneType(informationEntity.getPhoneType())
                     .build();
-            return deviceInfo;
-        } finally
-
-        {
+        } finally{
             if (session != null && session.isOpen()) {
                 session.close();
             }

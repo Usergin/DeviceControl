@@ -2,24 +2,28 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.UserEntity;
+import com.shiz.entity.UserEntity_;
 import com.shiz.model.Authentication;
 import com.shiz.model.User;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.security.MessageDigest;
 import java.util.Base64;
-
-import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64;
 
 /**
  * Created by OldMan on 09.06.2017.
  */
 @Component
 public class UserDaoImpl implements UserDao {
+//    @PersistenceContext
+//    private EntityManager em;
+
     private SessionFactory sessionFactory;
 
     public UserDaoImpl() {
@@ -38,7 +42,7 @@ public class UserDaoImpl implements UserDao {
             userEntity.setPassword(getHashedValue(user.getPassword()));
             userEntity.setRank(user.getRank());
             userEntity.setUsername(user.getUsername());
-            session.save(userEntity);
+            session.persist(userEntity);
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
@@ -53,11 +57,14 @@ public class UserDaoImpl implements UserDao {
         try {
             session = sessionFactory.getCurrentSession();
             session.beginTransaction();
-            Criteria userCriteria = session.createCriteria(UserEntity.class)
-                    .add(Restrictions.eq("login", authentication.getLogin()))
-                    .add(Restrictions.eq("password",authentication.getPassword()));
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<UserEntity> criteria = cb.createQuery(UserEntity.class);
+            Root<UserEntity> userRoot = criteria.from(UserEntity.class);
+            Predicate p = cb.and(cb.equal(userRoot.get(UserEntity_.login), authentication.getLogin())
+                    ,(cb.equal(userRoot.get(UserEntity_.password), authentication.getPassword())));
+            criteria.where(p);
 
-            UserEntity userEntity = (UserEntity) userCriteria.uniqueResult();
+            UserEntity userEntity = session.createQuery(criteria).getSingleResult();
             User user = new User();
             user.setLogin(userEntity.getLogin());
             user.setDepartment(userEntity.getDepartmen());
@@ -70,6 +77,7 @@ public class UserDaoImpl implements UserDao {
             }
         }
     }
+
     private String getHashedValue(String inputData) {
         String sResp = null;
         try {

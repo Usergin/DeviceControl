@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jms.JndiConnectionFactoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
@@ -23,6 +24,5 @@ import org.springframework.context.annotation.PropertySource;
 public class DeviceControlApplication {
     public static void main(String[] args) {
         SpringApplication.run(DeviceControlApplication.class, args);
-
     }
 }

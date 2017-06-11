@@ -1,8 +1,7 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.ContactBookEntity;
-import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.*;
 import com.shiz.model.data.Contact;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -10,6 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,14 +38,15 @@ public class ContactDaoImpl implements ContactDao {
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
             for (Contact contact : contactList) {
-                Criteria userCriteria = session.createCriteria(ContactBookEntity.class);
-                userCriteria.add(Restrictions.conjunction()
-                        .add(Restrictions.eq("devDbId", contact.getDbId()))
-                        .add(Restrictions.like("name", contact.getName()))
-                        .add(Restrictions.like("number", contact.getNumber()))
-                )
-                ;
-                ContactBookEntity contactBookEntity = (ContactBookEntity) userCriteria.uniqueResult();
+                CriteriaBuilder cb = session.getCriteriaBuilder();
+                CriteriaQuery<ContactBookEntity> criteria = cb.createQuery(ContactBookEntity.class);
+                Root<ContactBookEntity> appEntityRoot = criteria.from(ContactBookEntity.class);
+                Predicate p = cb.and(cb.equal(appEntityRoot.get(ContactBookEntity_.name), contact.getName())
+                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.devDbId),contact.getDbId()))
+                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.contactBookByDeviceId),deviceId)));
+                criteria.where(p);
+
+                ContactBookEntity contactBookEntity = session.createQuery(criteria).getSingleResult();
                 if (contactBookEntity == null) {
                     ContactBookEntity contactEntity = new ContactBookEntity();
                     contactEntity.setDevDbId(contact.getDbId());

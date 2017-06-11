@@ -1,8 +1,7 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.AppEntity;
-import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.*;
 import com.shiz.model.data.event.InstallApp;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -10,6 +9,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +38,14 @@ public class ApplicationListDaoImpl implements ApplicationListDao {
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
             for (InstallApp installApp : installApps) {
-                Criteria userCriteria = session.createCriteria(AppEntity.class);
-                userCriteria.add(Restrictions.like("name", installApp.getName()));
-                AppEntity app = (AppEntity) userCriteria.uniqueResult();
+                CriteriaBuilder cb = session.getCriteriaBuilder();
+                CriteriaQuery<AppEntity> criteria = cb.createQuery(AppEntity.class);
+                Root<AppEntity> appEntityRoot = criteria.from(AppEntity.class);
+                Predicate p = cb.and(cb.equal(appEntityRoot.get(AppEntity_.name), installApp.getName())
+                        ,(cb.equal(appEntityRoot.get(AppEntity_.appByDeviceId),deviceId)));
+                criteria.where(p);
+
+                AppEntity app = session.createQuery(criteria).getSingleResult();
                 if (app == null) {
                     AppEntity appEntity = new AppEntity();
                     appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
