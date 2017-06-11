@@ -22,3 +22,9 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+!/LOG_PATH_IS_UNDEFINED/app.log
+/LOG_PATH_IS_UNDEFINED/app.log
+classes/
+device-control.properties
+device-control.xml
+module_device-control.xml
