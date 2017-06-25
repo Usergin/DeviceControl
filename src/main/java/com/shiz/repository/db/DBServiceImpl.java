@@ -405,6 +405,7 @@ public class DBServiceImpl implements DBService {
         DeviceInformationRequest deviceInfoRequest = gson.fromJson(request, DeviceInformationRequest.class);
         if (deviceInfoRequest != null) {
             try {
+                logger.info("setDeviceInfo" + deviceInfoRequest.getDevice());
                 informationDao.setDeviceInformation(deviceInfoRequest.getDevice(), deviceInfoRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
@@ -666,6 +667,7 @@ public class DBServiceImpl implements DBService {
 
     @Override
     public ResponseEntity<BaseResponse> getUser(String request) {
+        logger.info("getUser: " + request);
         Authentication authentication = gson.fromJson(request, Authentication.class);
         try {
             if (authentication != null) {

@@ -4,18 +4,18 @@ package com.shiz.model.respose;
  * Created by oldman on 05.04.17.
  */
 public class InformationResponse extends BaseResponse {
-    private Object info;
+    private Object data;
 
     public InformationResponse(int code, Object object) {
         super(code);
-        this.info = object;
+        this.data = object;
     }
 
-    public Object getInfo() {
-        return info;
+    public Object getData() {
+        return data;
     }
 
-    public void setInfo(Object info) {
-        this.info = info;
+    public void setData(Object data) {
+        this.data = data;
     }
 }

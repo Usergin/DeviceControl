@@ -4,8 +4,11 @@ import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.DeviceEntity;
 import com.shiz.entity.InformationEntity;
 import com.shiz.model.data.DeviceInfo;
+import com.shiz.repository.db.DBServiceImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class InformationDaoImpl implements InformationDao {
     private SessionFactory sessionFactory;
+    private Logger logger = LoggerFactory.getLogger(DBServiceImpl.class);
 
     public InformationDaoImpl() {
         sessionFactory = HibernateSessionFactory.getSessionFactory();
@@ -30,8 +34,7 @@ public class InformationDaoImpl implements InformationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
-
-            InformationEntity informationEntity = deviceEntity.getInfoByDeviceId();
+            InformationEntity informationEntity = new InformationEntity();
             informationEntity.setBrand(deviceInfo.getBrand());
             informationEntity.setImei(deviceInfo.getImei());
             informationEntity.setImsi(deviceInfo.getImsi());
