@@ -14,11 +14,11 @@ public class Contact extends BaseInfo {
     private String e_mail;
     private String info;
 
-    public int getDbId() {
+    public int getDb_id() {
         return db_id;
     }
 
-    public void setDbId(int db_id) {
+    public void setDb_id(int db_id) {
         this.db_id = db_id;
     }
 
@@ -46,35 +46,36 @@ public class Contact extends BaseInfo {
         this.info = info;
     }
 
-    public String getWorkNumber() {
+    public String getWork_number() {
         return work_number;
     }
 
-    public void setWorkNumber(String work_number) {
+    public void setWork_number(String work_number) {
         this.work_number = work_number;
     }
 
-    public String getHomeNumber() {
+    public String getHome_number() {
         return home_number;
     }
 
-    public void setHomeNumber(String home_number) {
+    public void setHome_number(String home_number) {
         this.home_number = home_number;
     }
 
-    public String getMainNumber() {
+    public String getMain_number() {
         return main_number;
     }
 
-    public void setMainNumber(String main_number) {
+    public void setMain_number(String main_number) {
         this.main_number = main_number;
     }
 
-    public String getEMail() {
+    public String getE_mail() {
         return e_mail;
     }
 
-    public void setEMail(String eMail) {
+    public void setE_mail(String eMail) {
         this.e_mail = eMail;
     }
+
 }

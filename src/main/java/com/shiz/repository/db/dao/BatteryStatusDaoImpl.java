@@ -35,11 +35,11 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
                     .uniqueResult());
             for (BatteryEvent batteryEvent : batteryEvents) {
                 BatteryEntity batteryStatusEntity = new BatteryEntity();
-                batteryStatusEntity.setBatteryStatus(batteryEvent.getBatteryStatus());
+                batteryStatusEntity.setBatteryStatus(batteryEvent.getBattery_status());
                 batteryStatusEntity.setDate(new java.sql.Timestamp(batteryEvent.getDate().getTime()));
                 batteryStatusEntity.setLevel(batteryEvent.getLevel());
                 batteryStatusEntity.setStatus(batteryEvent.getStatus());
-                batteryStatusEntity.setTypeCharging(batteryEvent.getTypeCharging());
+                batteryStatusEntity.setTypeCharging(batteryEvent.getType_charging());
                 batteryStatusEntity.setBatteryByDeviceId(deviceEntity);
                 deviceEntity.addBatteryStatusByDeviceId(batteryStatusEntity);
                 session.save(batteryStatusEntity);
@@ -69,9 +69,9 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
                 BatteryEvent batteryEvent = new BatteryEvent();
                 batteryEvent.setStatus(batteryEntity.getStatus());
                 batteryEvent.setDate(batteryEntity.getDate());
-                batteryEvent.setBatteryStatus(batteryEntity.getBatteryStatus());
+                batteryEvent.setBattery_status(batteryEntity.getBatteryStatus());
                 batteryEvent.setLevel(batteryEntity.getLevel());
-                batteryEvent.setTypeCharging(batteryEntity.getTypeCharging());
+                batteryEvent.setType_charging(batteryEntity.getTypeCharging());
                 batteryEvents.add(batteryEvent);
             }
             return batteryEvents;

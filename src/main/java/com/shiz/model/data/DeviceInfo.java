@@ -1,5 +1,8 @@
 package com.shiz.model.data;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by oldman on 05.04.17.
  */
@@ -23,30 +26,30 @@ public class DeviceInfo extends BaseInfo {
     private String network_type;
     private String network;
     private String operator_name;
-    private boolean is_root;
+    private boolean root;
 
 
     private DeviceInfo(Builder builder) {
         setImei(builder.imei);
         setModel(builder.model);
-        setSerialNum(builder.serial_num);
-        setVersionOS(builder.version_os);
+        setSerial_num(builder.serial_num);
+        setVersion_os(builder.version_os);
         setBrand(builder.brand);
         setImsi(builder.imsi);
         setManufactured(builder.manufactured);
         setProduct(builder.product);
         setSdk(builder.sdk);
-        setScreenSize(builder.screen_size);
-        setIsDualSim(builder.is_dual_sim);
-        setImeiSim1(builder.imei_sim1);
-        setImeiSim2(builder.imei_sim2);
+        setScreen_size(builder.screen_size);
+        setIs_dual_sim(builder.is_dual_sim);
+        setImei_sim1(builder.imei_sim1);
+        setImei_sim2(builder.imei_sim2);
         setMcc(builder.mcc);
         setMnc(builder.mnc);
-        setPhoneType(builder.phone_type);
-        setNetworkType(builder.network_type);
+        setPhone_type(builder.phone_type);
+        setNetwork_type(builder.network_type);
         setNetwork(builder.network);
-        setOperatorName(builder.operator_name);
-        setIsRoot(builder.is_root);
+        setOperator_name(builder.operator_name);
+        setRoot(builder.is_root);
     }
 
     public static Builder newBuilder() {
@@ -54,11 +57,11 @@ public class DeviceInfo extends BaseInfo {
     }
 
     public boolean isRoot() {
-        return is_root;
+        return root;
     }
 
-    public void setIsRoot(boolean is_root) {
-        this.is_root = is_root;
+    public void setRoot(boolean is_root) {
+        this.root = is_root;
     }
 
     public String getImei() {
@@ -77,19 +80,19 @@ public class DeviceInfo extends BaseInfo {
         this.model = model;
     }
 
-    public String getSerialNum() {
+    public String getSerial_num() {
         return serial_num;
     }
 
-    public void setSerialNum(String serial_num) {
+    public void setSerial_num(String serial_num) {
         this.serial_num = serial_num;
     }
 
-    public String getVersionOS() {
+    public String getVersion_os() {
         return version_os;
     }
 
-    public void setVersionOS(String version_os) {
+    public void setVersion_os(String version_os) {
         this.version_os = version_os;
     }
 
@@ -134,11 +137,11 @@ public class DeviceInfo extends BaseInfo {
     }
 
 
-    public String getScreenSize() {
+    public String getScreen_size() {
         return screen_size;
     }
 
-    public void setScreenSize(String screen_size) {
+    public void setScreen_size(String screen_size) {
         this.screen_size = screen_size;
     }
 
@@ -151,27 +154,27 @@ public class DeviceInfo extends BaseInfo {
     }
 
 
-    public String getIsDualSim() {
+    public String getIs_dual_sim() {
         return is_dual_sim;
     }
 
-    public void setIsDualSim(String is_dual_sim) {
+    public void setIs_dual_sim(String is_dual_sim) {
         this.is_dual_sim = is_dual_sim;
     }
 
-    public String getImeiSim1() {
+    public String getImei_sim1() {
         return imei_sim1;
     }
 
-    public void setImeiSim1(String imei_sim1) {
+    public void setImei_sim1(String imei_sim1) {
         this.imei_sim1 = imei_sim1;
     }
 
-    public String getImeiSim2() {
+    public String getImei_sim2() {
         return imei_sim2;
     }
 
-    public void setImeiSim2(String imei_sim2) {
+    public void setImei_sim2(String imei_sim2) {
         this.imei_sim2 = imei_sim2;
     }
 
@@ -191,27 +194,27 @@ public class DeviceInfo extends BaseInfo {
         this.mnc = mnc;
     }
 
-    public String getPhoneType() {
+    public String getPhone_type() {
         return phone_type;
     }
 
-    public void setPhoneType(String phone_type) {
+    public void setPhone_type(String phone_type) {
         this.phone_type = phone_type;
     }
 
-    public String getNetworkType() {
+    public String getNetwork_type() {
         return network_type;
     }
 
-    public void setNetworkType(String network_type) {
+    public void setNetwork_type(String network_type) {
         this.network_type = network_type;
     }
 
-    public String getOperatorName() {
+    public String getOperator_name() {
         return operator_name;
     }
 
-    public void setOperatorName(String operator_name) {
+    public void setOperator_name(String operator_name) {
         this.operator_name = operator_name;
     }
 

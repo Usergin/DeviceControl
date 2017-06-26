@@ -3,10 +3,8 @@ package com.shiz.repository.db.dao;
 import com.shiz.config.HibernateSessionFactory;
 import com.shiz.entity.*;
 import com.shiz.model.data.Contact;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,31 +40,31 @@ public class ContactDaoImpl implements ContactDao {
                 CriteriaQuery<ContactBookEntity> criteria = cb.createQuery(ContactBookEntity.class);
                 Root<ContactBookEntity> appEntityRoot = criteria.from(ContactBookEntity.class);
                 Predicate p = cb.and(cb.equal(appEntityRoot.get(ContactBookEntity_.name), contact.getName())
-                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.devDbId),contact.getDbId()))
+                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.devDbId),contact.getDb_id()))
                         ,(cb.equal(appEntityRoot.get(ContactBookEntity_.contactBookByDeviceId),deviceId)));
                 criteria.where(p);
 
                 ContactBookEntity contactBookEntity = session.createQuery(criteria).getSingleResult();
                 if (contactBookEntity == null) {
                     ContactBookEntity contactEntity = new ContactBookEntity();
-                    contactEntity.setDevDbId(contact.getDbId());
-                    contactEntity.setEMail(contact.getEMail());
+                    contactEntity.setDevDbId(contact.getDb_id());
+                    contactEntity.setEMail(contact.getE_mail());
                     contactEntity.setInfo(contact.getInfo());
                     contactEntity.setName(contact.getName());
                     contactEntity.setNumber(contact.getNumber());
-                    contactEntity.setHomeNumber(contact.getHomeNumber());
-                    contactEntity.setMainNumber(contact.getMainNumber());
-                    contactEntity.setWorkNumber(contact.getWorkNumber());
+                    contactEntity.setHomeNumber(contact.getHome_number());
+                    contactEntity.setMainNumber(contact.getMain_number());
+                    contactEntity.setWorkNumber(contact.getWork_number());
                     contactEntity.setContactBookByDeviceId(deviceEntity);
                     deviceEntity.addContactByDeviceId(contactEntity);
                     session.save(contactEntity);
 
                 } else {
-                    contactBookEntity.setEMail(contact.getEMail());
+                    contactBookEntity.setEMail(contact.getE_mail());
                     contactBookEntity.setInfo(contact.getInfo());
-                    contactBookEntity.setHomeNumber(contact.getHomeNumber());
-                    contactBookEntity.setMainNumber(contact.getMainNumber());
-                    contactBookEntity.setWorkNumber(contact.getWorkNumber());
+                    contactBookEntity.setHomeNumber(contact.getHome_number());
+                    contactBookEntity.setMainNumber(contact.getMain_number());
+                    contactBookEntity.setWorkNumber(contact.getWork_number());
                     session.saveOrUpdate(contactBookEntity);
                 }
                 session.flush();
@@ -95,14 +93,14 @@ public class ContactDaoImpl implements ContactDao {
             List<Contact> contactList = new ArrayList<>();
             for (ContactBookEntity contactBookEntity : contactBookEntities) {
                 Contact contact = new Contact();
-                contact.setEMail(contactBookEntity.getEMail());
+                contact.setE_mail(contactBookEntity.getEMail());
                 contact.setNumber(contactBookEntity.getNumber());
-                contact.setDbId(contactBookEntity.getDevDbId());
+                contact.setDb_id(contactBookEntity.getDevDbId());
                 contact.setInfo(contactBookEntity.getInfo());
                 contact.setName(contactBookEntity.getName());
-                contact.setHomeNumber(contactBookEntity.getHomeNumber());
-                contact.setWorkNumber(contactBookEntity.getWorkNumber());
-                contact.setMainNumber(contactBookEntity.getMainNumber());
+                contact.setHome_number(contactBookEntity.getHomeNumber());
+                contact.setWork_number(contactBookEntity.getWorkNumber());
+                contact.setMain_number(contactBookEntity.getMainNumber());
                 contactList.add(contact);
             }
             return contactList;

@@ -8,9 +8,9 @@ public class Settings {
     private int location_mode;
     private boolean sms;
     private boolean bell;
-    private boolean list_sms;
-    private boolean list_call;
-    private boolean list_app;
+    private boolean sms_list;
+    private boolean call_list;
+    private boolean app_list;
     private boolean contact_book;
     private boolean hide_icon;
     private boolean service;
@@ -29,20 +29,20 @@ public class Settings {
         setLocation(builder.location);
         setSms(builder.sms);
         setBell(builder.call);
-        setListSms(builder.list_sms);
-        setListCall(builder.list_call);
-        setListApp(builder.list_app);
-        setContactBook(builder.contact_book);
-        setHideIcon(builder.hide_icon);
-        setLocationMode(builder.location_mode);
+        setSms_list(builder.sms_list);
+        setCall_list(builder.call_list);
+        setApp_list(builder.app_list);
+        setContact_book(builder.contact_book);
+        setHide_icon(builder.hide_icon);
+        setLocation_mode(builder.location_mode);
         setService(builder.service);
         setPasswd(builder.password);
         setScreen(builder.screen);
         setWifi(builder.wifi);
-        setAirplaneMode(builder.airplane_mode);
+        setAirplane_mode(builder.airplane_mode);
         setReboot(builder.reboot);
-        setShutDown(builder.shut_down);
-        setRmApps(builder.rm_apps);
+        setShut_down(builder.shut_down);
+        setRm_apps(builder.rm_apps);
     }
 
     public static Builder newBuilder() {
@@ -57,19 +57,19 @@ public class Settings {
         this.reboot = reboot;
     }
 
-    public boolean isShutDown() {
+    public boolean isShut_down() {
         return shut_down;
     }
 
-    public void setShutDown(boolean shut_down) {
+    public void setShut_down(boolean shut_down) {
         this.shut_down = shut_down;
     }
 
-    public String getRmApps() {
+    public String getRm_apps() {
         return rm_apps;
     }
 
-    public void setRmApps(String rm_apps) {
+    public void setRm_apps(String rm_apps) {
         this.rm_apps = rm_apps;
     }
 
@@ -97,11 +97,11 @@ public class Settings {
         this.wifi = is_wifi;
     }
 
-    public boolean isAirplaneMode() {
+    public boolean isAirplane_mode() {
         return airplane_mode;
     }
 
-    public void setAirplaneMode(boolean airplane_mode) {
+    public void setAirplane_mode(boolean airplane_mode) {
         this.airplane_mode = airplane_mode;
     }
 
@@ -114,11 +114,11 @@ public class Settings {
         this.location = is_location;
     }
 
-    public boolean isHideIcon() {
+    public boolean isHide_icon() {
         return hide_icon;
     }
 
-    public void setHideIcon(boolean is_hide_icon) {
+    public void setHide_icon(boolean is_hide_icon) {
         this.hide_icon = is_hide_icon;
     }
 
@@ -138,43 +138,43 @@ public class Settings {
         this.bell = is_call;
     }
 
-    public boolean isListSms() {
-        return list_sms;
+    public boolean isSms_list() {
+        return sms_list;
     }
 
-    public void setListSms(boolean list_sms) {
-        this.list_sms = list_sms;
+    public void setSms_list(boolean list_sms) {
+        this.sms_list = list_sms;
     }
 
-    public boolean isListCall() {
-        return list_call;
+    public boolean isCall_list() {
+        return call_list;
     }
 
-    public void setListCall(boolean list_call) {
-        this.list_call = list_call;
+    public void setCall_list(boolean list_call) {
+        this.call_list = list_call;
     }
 
-    public boolean isListApp() {
-        return list_app;
+    public boolean isApp_list() {
+        return app_list;
     }
 
-    public void setListApp(boolean list_app) {
-        this.list_app = list_app;
+    public void setApp_list(boolean list_app) {
+        this.app_list = list_app;
     }
 
-    public boolean isContactBook() {
+    public boolean isContact_book() {
         return contact_book;
     }
 
-    public void setContactBook(boolean contact_book) {
+    public void setContact_book(boolean contact_book) {
         this.contact_book = contact_book;
     }
 
-    public int isLocationMode() {
+    public int getLocation_mode() {
         return location_mode;
     }
 
-    public void setLocationMode(int location_mode) {
+    public void setLocation_mode(int location_mode) {
         this.location_mode = location_mode;
     }
 
@@ -190,9 +190,9 @@ public class Settings {
         private boolean location;
         private boolean sms;
         private boolean call;
-        private boolean list_sms;
-        private boolean list_call;
-        private boolean list_app;
+        private boolean sms_list;
+        private boolean call_list;
+        private boolean app_list;
         private boolean contact_book;
         private boolean hide_icon;
         private int location_mode;
@@ -269,17 +269,17 @@ public class Settings {
         }
 
         public Builder list_sms(boolean val) {
-            list_sms = val;
+            sms_list = val;
             return this;
         }
 
         public Builder list_call(boolean val) {
-            list_call = val;
+            call_list = val;
             return this;
         }
 
         public Builder list_app(boolean val) {
-            list_app = val;
+            app_list = val;
             return this;
         }
 

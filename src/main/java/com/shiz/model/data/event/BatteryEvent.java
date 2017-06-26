@@ -39,19 +39,19 @@ public class BatteryEvent extends BaseEvent {
         this.status = status;
     }
 
-    public String getBatteryStatus() {
+    public String getBattery_status() {
         return battery_status;
     }
 
-    public void setBatteryStatus(String battery_status) {
+    public void setBattery_status(String battery_status) {
         this.battery_status = battery_status;
     }
 
-    public String getTypeCharging() {
+    public String getType_charging() {
         return type_charging;
     }
 
-    public void setTypeCharging(String type_charging) {
+    public void setType_charging(String type_charging) {
         this.type_charging = type_charging;
     }
 
