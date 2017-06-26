@@ -61,13 +61,6 @@ public class DeviceController {
         return dbService.getInstallAppList(id);
     }
 
-    @RequestMapping(value = "device/{id}/battery_status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<BaseResponse> getBatteryStatusList(@PathVariable int id) {
-        System.out.println("getBatteryStatusList " + id);
-        return dbService.getBatteryStatusList(id);
-    }
-
     @RequestMapping(value = "device/{id}/calls", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> getCallList(@PathVariable int id) {
@@ -117,7 +110,7 @@ public class DeviceController {
         return dbService.getNetworkStatusList(id);
     }
 
-    @RequestMapping(value = "device/{id}/service", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "device/{id}/services", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> getServiceEvent(@PathVariable int id) {
         System.out.println("getServiceEventList " + id);
@@ -152,7 +145,7 @@ public class DeviceController {
         return dbService.setInstallAppList(request);
     }
 
-    @RequestMapping(value = "/service/battery", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/battery", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceBattery(@RequestBody String request) {
         return dbService.setBatteryStatus(request);
@@ -170,7 +163,7 @@ public class DeviceController {
         return dbService.setContactList(request);
     }
 
-    @RequestMapping(value = "/service/status", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/status", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setDeviceStatus(@RequestBody String request) {
         return dbService.setDeviceStatus(request);
@@ -194,13 +187,13 @@ public class DeviceController {
         return dbService.setMessageList(request);
     }
 
-    @RequestMapping(value = "/service/network", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/network", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setNetworkStatusList(@RequestBody String request) {
         return dbService.setNetworkStatusList(request);
     }
 
-    @RequestMapping(value = "/service/event", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/event", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setServiceEventList(@RequestBody String request) {
         return dbService.setServiceEventList(request);

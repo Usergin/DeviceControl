@@ -1,14 +1,24 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
+import com.shiz.entity.ContactBookEntity;
+import com.shiz.entity.ContactBookEntity_;
 import com.shiz.entity.DeviceEntity;
+import com.shiz.entity.DeviceEntity_;
 import com.shiz.model.Device;
+import com.shiz.repository.db.DBServiceImpl;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +28,7 @@ import java.util.List;
  */
 @Component
 public class DeviceDaoImpl implements DeviceDao {
+    private Logger logger = LoggerFactory.getLogger(DeviceDaoImpl.class);
 
     private SessionFactory sessionFactory;
 
@@ -61,6 +72,16 @@ public class DeviceDaoImpl implements DeviceDao {
 //                    .createQuery("from DeviceEntity where deviceId = :device_id")
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId).getSingleResult();
+            logger.info("getDeviceByDeviceId: ", deviceEntity.getDeviceId());
+//            CriteriaBuilder cb = session.getCriteriaBuilder();
+//            CriteriaQuery<DeviceEntity> criteria = cb.createQuery(DeviceEntity.class);
+//            Root<DeviceEntity> deviceEntityRoot = criteria.from(DeviceEntity.class);
+//            Predicate p = cb.equal(deviceEntityRoot.get(DeviceEntity_.deviceId), deviceId);
+//            criteria.where(p);
+//
+//            deviceEntity = session.createQuery(criteria).getSingleResult();
+            logger.info("getDeviceByDeviceId: ", deviceEntity.getId());
+
             return Device.newBuilder()
                     .imei(deviceEntity.getImei())
                     .id(deviceEntity.getDeviceId())
