@@ -575,10 +575,10 @@ public class DBServiceImpl implements DBService {
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, serviceEventList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (NoResultException | NullPointerException| NonUniqueResultException nre) {
-            logger.error("Exception NoResultException:", nre);
+            logger.info("Exception NoResultException:", nre);
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
         } catch (Exception e) {
-            logger.error("Exception getDeviceByDeviceId:", e);
+            logger.info("Exception getDeviceByDeviceId:", e);
             return getErrorResponseStatus(Constants.ERROR_ON_SERVER);
         }
     }
@@ -586,16 +586,17 @@ public class DBServiceImpl implements DBService {
     @Override
     public ResponseEntity<BaseResponse> setSettings(String request) {
         SettingsRequest settingsRequest = gson.fromJson(request, SettingsRequest.class);
+        logger.info("setSettings " + request);
         if (settingsRequest != null && settingsRequest.getData() != null) {
             try {
                 settingsDao.setSettings(settingsRequest.getDevice(), settingsRequest.getData());
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
             } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
-                System.out.print("NoResultException  " + nre);
+                logger.info("setSettings NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
             } catch (Exception e) {
-                System.out.print("Exception  " + e);
+                logger.info("setSettings Exception  " + e);
                 return getErrorResponseStatus(Constants.BAD_REQUEST);
             }
         } else {
@@ -614,14 +615,14 @@ public class DBServiceImpl implements DBService {
                 PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
                 return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
             } else {
-                logger.error("Exception getDevicesList: not found");
+                logger.info("Exception getSettingsByDevice: not found");
                 return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
             }
         } catch (NullPointerException e) {
-            logger.error("history already exist");
+            logger.info("getSettingsByDevice history already exist");
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
         } catch (Exception e) {
-            logger.error("Exception getSettingsDevice: " + e);
+            logger.info("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
     }
@@ -633,10 +634,10 @@ public class DBServiceImpl implements DBService {
             PeriodicalResponse periodicalResponse = new PeriodicalResponse(Constants.STATE_OK, settings);
             return new ResponseEntity<>(periodicalResponse, HttpStatus.OK);
         } catch (NullPointerException e) {
-            logger.error("history already exist");
+            logger.info("history already exist");
             return getErrorResponseStatus(Constants.NOT_FOUND_DEVICES);
         } catch (Exception e) {
-            logger.error("Exception getSettingsDevice: " + e);
+            logger.info("Exception getSettingsDevice: " + e);
             return getErrorResponseStatus(Constants.BAD_REQUEST);
         }
     }
@@ -650,13 +651,13 @@ public class DBServiceImpl implements DBService {
                 BaseResponse informationResponse = new BaseResponse(Constants.STATE_OK);
                 return new ResponseEntity<>(informationResponse, HttpStatus.OK);
             } catch (NonUniqueResultException nre) {
-                System.out.print("NoResultException  " + nre);
+                logger.info("addUser NoResultException  " + nre);
                 return getErrorResponseStatus(Constants.LOGIN_NOT_AVAILABLE);
             } catch (PersistenceException e) {
-                System.out.println("history already exist");
+                logger.info("history already exist");
                 return getErrorResponseStatus(Constants.LOGIN_NOT_AVAILABLE);
             } catch (Exception e) {
-                System.out.print("Exception  " + e);
+                logger.info("Exception  " + e);
                 return getErrorResponseStatus(Constants.BAD_REQUEST);
             }
         } else {

@@ -199,7 +199,7 @@ public class DeviceController {
         return dbService.setServiceEventList(request);
     }
 
-    @RequestMapping(value = "/setting", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/settings", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<BaseResponse> setSettingsDevice(@RequestBody String request) {
         return dbService.setSettings(request);

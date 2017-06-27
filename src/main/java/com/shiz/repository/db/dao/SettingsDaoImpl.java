@@ -29,6 +29,7 @@ public class SettingsDaoImpl implements SettingsDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .uniqueResult());
+
             SettingsEntity settingsEntity = new SettingsEntity();
             settingsEntity.setCall(settings.isBell());
             settingsEntity.setSms(settings.isSms());
