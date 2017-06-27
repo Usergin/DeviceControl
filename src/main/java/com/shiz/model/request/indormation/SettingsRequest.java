@@ -9,9 +9,9 @@ import com.shiz.model.request.BaseRequest;
 public class SettingsRequest extends BaseRequest {
     private Settings data;
 
-    public SettingsRequest(Settings settings, String imei, int device) {
+    public SettingsRequest(Settings data, String imei, int device) {
         super(imei, device);
-        this.data = settings;
+        this.data = data;
     }
 
     public Settings getData() {

@@ -6,18 +6,18 @@ import com.shiz.model.data.Settings;
  * Created by oldman on 05.04.17.
  */
 public class PeriodicalResponse extends BaseResponse {
-    private Settings settings;
+    private Settings data;
 
-    public PeriodicalResponse(int code, Settings settings) {
+    public PeriodicalResponse(int code, Settings data) {
         super(code);
-        this.settings = settings;
+        this.data = data;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public Settings getData() {
+        return data;
     }
 
-    public void setSettings(Settings settings) {
-        this.settings = settings;
+    public void setData(Settings data) {
+        this.data = data;
     }
 }
