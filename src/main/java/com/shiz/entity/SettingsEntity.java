@@ -24,11 +24,12 @@ public class SettingsEntity {
     private boolean listCall;
     private boolean listApp;
     private boolean contactBook;
-    private boolean airplaneMode;
-    private boolean wifi;
-    private boolean screen;
+    private int airplaneMode;
+    private int wifi;
+    private int screen;
     private boolean reboot;
     private boolean shutDown;
+    private long syncTime;
     private String rmApps;
 
     private DeviceEntity deviceByDeviceId;
@@ -79,31 +80,31 @@ public class SettingsEntity {
 
     @Basic
     @Column(name = "airplane_mode", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean isAirplaneMode() {
+    public int getAirplaneMode() {
         return airplaneMode;
     }
 
-    public void setAirplaneMode(boolean airplaneMode) {
+    public void setAirplaneMode(int airplaneMode) {
         this.airplaneMode = airplaneMode;
     }
 
     @Basic
     @Column(name = "wifi", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean isWifi() {
+    public int getWifi() {
         return wifi;
     }
 
-    public void setWifi(boolean wifi) {
+    public void setWifi(int wifi) {
         this.wifi = wifi;
     }
 
     @Basic
     @Column(name = "screen", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean isScreen() {
+    public int getScreen() {
         return screen;
     }
 
-    public void setScreen(boolean screen) {
+    public void setScreen(int screen) {
         this.screen = screen;
     }
 
@@ -168,7 +169,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_sms", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "sms_list", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListSms() {
         return listSms;
     }
@@ -178,7 +179,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_call", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "call_list", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListCall() {
         return listCall;
     }
@@ -188,7 +189,7 @@ public class SettingsEntity {
     }
 
     @Basic
-    @Column(name = "list_app", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "app_list", nullable = false, columnDefinition = "TINYINT(1)")
     public boolean getListApp() {
         return listApp;
     }
@@ -217,6 +218,13 @@ public class SettingsEntity {
         this.hideIcon = isHideIcon;
     }
 
+    @Basic
+    @Column(name = "sync_time", nullable = false, columnDefinition = "SMALLINT(4)")
+    public long getSyncTime() {return syncTime;}
+
+    public void setSyncTime(long syncTime) {this.syncTime = syncTime;}
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -237,6 +245,7 @@ public class SettingsEntity {
         if (wifi != that.wifi) return false;
         if (screen != that.screen) return false;
         if (service != that.service) return false;
+        if (syncTime != that.syncTime) return false;
         if (deviceByDeviceId != that.deviceByDeviceId) return false;
 
         return true;

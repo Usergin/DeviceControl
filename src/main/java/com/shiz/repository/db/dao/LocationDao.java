@@ -2,6 +2,7 @@ package com.shiz.repository.db.dao;
 
 import com.shiz.model.data.event.Location;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,4 +13,5 @@ public interface LocationDao {
 
     List<Location> getLocationList(int deviceId) throws Exception;
 
+    List<Location> getLocationListByDate(int deviceId, String date) throws Exception;
 }

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -463,6 +464,22 @@ public class DBServiceImpl implements DBService {
         try {
             logger.info("getLocationList: ", deviceId);
             List<Location> locationEntityList = locationDao.getLocationList(deviceId);
+            InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, locationEntityList);
+            return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
+        } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {
+            logger.error("Exception NoResultException:", nre);
+            return getErrorResponseStatus(Constants.NOT_FOUND_DEVICE);
+        } catch (Exception e) {
+            logger.error("Exception getDeviceByDeviceId:", e);
+            return getErrorResponseStatus(Constants.ERROR_ON_SERVER);
+        }
+    }
+
+    @Override
+    public ResponseEntity<BaseResponse> getLocationListByDate(int deviceId, String date) {
+        try {
+            logger.info("getLocationList: ", deviceId);
+            List<Location> locationEntityList = locationDao.getLocationListByDate(deviceId, date);
             InformationResponse deviceResponse = new InformationResponse(Constants.STATE_OK, locationEntityList);
             return new ResponseEntity<>(deviceResponse, HttpStatus.OK);
         } catch (NoResultException | NullPointerException | NonUniqueResultException nre) {

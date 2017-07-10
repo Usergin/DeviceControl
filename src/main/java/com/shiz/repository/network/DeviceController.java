@@ -8,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * Created by oldman on 04.04.17.
  */
@@ -87,6 +89,13 @@ public class DeviceController {
     public ResponseEntity<BaseResponse> getDeviceInfo(@PathVariable int id) {
         System.out.println("getData " + id);
         return dbService.getDeviceInfo(id);
+    }
+
+    @RequestMapping(value = "device/{id}/locations/{date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<BaseResponse> getDeviceLocationByDate(@PathVariable int id, @PathVariable String date) {
+        System.out.println("getLocationList " + id + " " + date);
+        return dbService.getLocationListByDate(id, date);
     }
 
     @RequestMapping(value = "device/{id}/locations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

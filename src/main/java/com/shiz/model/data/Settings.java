@@ -14,13 +14,14 @@ public class Settings {
     private boolean contact_book;
     private boolean hide_icon;
     private boolean service;
-    private boolean airplane_mode;
-    private boolean wifi;
-    private boolean screen;
+    private int airplane_mode;
+    private int wifi;
+    private int screen;
     private boolean reboot;
     private boolean shut_down;
     private String rm_apps;
     private int passwd;
+    private long sync_time;
 
     public Settings() {
     }
@@ -43,6 +44,7 @@ public class Settings {
         setReboot(builder.reboot);
         setShut_down(builder.shut_down);
         setRm_apps(builder.rm_apps);
+        setSync_time(builder.sync_time);
     }
 
     public static Builder newBuilder() {
@@ -81,27 +83,27 @@ public class Settings {
         this.passwd = passwd;
     }
 
-    public boolean isScreen() {
+    public int getScreen() {
         return screen;
     }
 
-    public void setScreen(boolean is_screen) {
+    public void setScreen(int is_screen) {
         this.screen = is_screen;
     }
 
-    public boolean isWifi() {
+    public int getWifi() {
         return wifi;
     }
 
-    public void setWifi(boolean is_wifi) {
+    public void setWifi(int is_wifi) {
         this.wifi = is_wifi;
     }
 
-    public boolean isAirplane_mode() {
+    public int getAirplane_mode() {
         return airplane_mode;
     }
 
-    public void setAirplane_mode(boolean airplane_mode) {
+    public void setAirplane_mode(int airplane_mode) {
         this.airplane_mode = airplane_mode;
     }
 
@@ -186,6 +188,15 @@ public class Settings {
         this.service = is_service;
     }
 
+
+    public long getSync_time() {
+        return sync_time;
+    }
+
+    public void setSync_time(long sync_time) {
+        this.sync_time = sync_time;
+    }
+
     public static final class Builder {
         private boolean location;
         private boolean sms;
@@ -197,13 +208,14 @@ public class Settings {
         private boolean hide_icon;
         private int location_mode;
         private boolean service;
-        private boolean airplane_mode;
-        private boolean wifi;
-        private boolean screen;
+        private int airplane_mode;
+        private int wifi;
+        private int screen;
         private boolean reboot;
         private boolean shut_down;
         private String rm_apps;
         private int password;
+        private long sync_time;
 
         private Builder() {
         }
@@ -223,17 +235,17 @@ public class Settings {
             return this;
         }
 
-        public Builder airplane_mode(boolean val) {
+        public Builder airplane_mode(int val) {
             airplane_mode = val;
             return this;
         }
 
-        public Builder wifi(boolean val) {
+        public Builder wifi(int val) {
             wifi = val;
             return this;
         }
 
-        public Builder screen(boolean val) {
+        public Builder screen(int val) {
             screen = val;
             return this;
         }
@@ -290,6 +302,11 @@ public class Settings {
 
         public Builder hide_icon(boolean val) {
             hide_icon = val;
+            return this;
+        }
+
+        public Builder sync_time(long val) {
+            sync_time = val;
             return this;
         }
 

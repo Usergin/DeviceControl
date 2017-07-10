@@ -41,13 +41,14 @@ public class SettingsDaoImpl implements SettingsDao {
             settingsEntity.setHideIcon(settings.isHide_icon());
             settingsEntity.setService(settings.isService());
             settingsEntity.setPassword(settings.getPasswd());
-            settingsEntity.setScreen(settings.isScreen());
-            settingsEntity.setAirplaneMode(settings.isAirplane_mode());
+            settingsEntity.setScreen(settings.getScreen());
+            settingsEntity.setAirplaneMode(settings.getAirplane_mode());
             settingsEntity.setLocationMode(settings.getLocation_mode());
             settingsEntity.setReboot(settings.isReboot());
             settingsEntity.setShutDown(settings.isShut_down());
             settingsEntity.setRmApps(settings.getRm_apps());
-            settingsEntity.setWifi(settings.isWifi());
+            settingsEntity.setWifi(settings.getWifi());
+            settingsEntity.setSyncTime(settings.getSync_time());
             settingsEntity.setSettingsDeviceByDeviceId(deviceEntity);
             deviceEntity.setSettingsByDeviceId(settingsEntity);
             session.saveOrUpdate(settingsEntity);
@@ -105,28 +106,28 @@ public class SettingsDaoImpl implements SettingsDao {
                     .list_app(settingsEntity.getListApp())
                     .list_call(settingsEntity.getListCall())
                     .list_sms(settingsEntity.getListSms())
-                    .airplane_mode(settingsEntity.isAirplaneMode())
-                    .screen(settingsEntity.isScreen())
+                    .airplane_mode(settingsEntity.getAirplaneMode())
+                    .screen(settingsEntity.getScreen())
                     .call(settingsEntity.isCall())
                     .sms(settingsEntity.isSms())
-                    .wifi(settingsEntity.isWifi())
+                    .wifi(settingsEntity.getWifi())
                     .location(settingsEntity.isLocation())
                     .contact_book(settingsEntity.getContactBook())
                     .password(settingsEntity.getPassword())
                     .reboot(settingsEntity.isReboot())
                     .shut_down(settingsEntity.isShutDown())
                     .rm_apps(settingsEntity.getRmApps())
+                    .sync_time(settingsEntity.getSyncTime())
                     .build();
-            settingsEntity.setAirplaneMode(false);
             settingsEntity.setListApp(false);
             settingsEntity.setListCall(false);
             settingsEntity.setListSms(false);
             settingsEntity.setContactBook(false);
-            settingsEntity.setReboot(false);
-            settingsEntity.setShutDown(false);
             settingsEntity.setRmApps(null);
-            settingsEntity.setScreen(false);
-            settingsEntity.setWifi(false);
+//            settingsEntity.setReboot(false);
+//            settingsEntity.setShutDown(false);
+//            settingsEntity.setScreen(false);
+//            settingsEntity.setWifi(false);
             session.saveOrUpdate(deviceEntity);
             session.getTransaction().commit();
             return settings;
@@ -155,17 +156,18 @@ public class SettingsDaoImpl implements SettingsDao {
                     .list_app(settingsEntity.getListApp())
                     .list_call(settingsEntity.getListCall())
                     .list_sms(settingsEntity.getListSms())
-                    .airplane_mode(settingsEntity.isAirplaneMode())
-                    .screen(settingsEntity.isScreen())
+                    .airplane_mode(settingsEntity.getAirplaneMode())
+                    .screen(settingsEntity.getScreen())
                     .call(settingsEntity.isCall())
                     .sms(settingsEntity.isSms())
-                    .wifi(settingsEntity.isWifi())
+                    .wifi(settingsEntity.getWifi())
                     .location(settingsEntity.isLocation())
                     .contact_book(settingsEntity.getContactBook())
                     .password(settingsEntity.getPassword())
                     .reboot(settingsEntity.isReboot())
                     .shut_down(settingsEntity.isShutDown())
                     .rm_apps(settingsEntity.getRmApps())
+                    .sync_time(settingsEntity.getSyncTime())
                     .build();
             return settings;
         } finally {

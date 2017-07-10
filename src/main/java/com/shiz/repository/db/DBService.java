@@ -3,6 +3,8 @@ package com.shiz.repository.db;
 import com.shiz.model.respose.BaseResponse;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Date;
+
 /**
  * Created by oldman on 28.04.17.
  */
@@ -58,6 +60,8 @@ public interface DBService {
     ResponseEntity<BaseResponse> getDeviceInfo(int deviceId);
 
     ResponseEntity<BaseResponse> getLocationList(int deviceId);
+
+    ResponseEntity<BaseResponse> getLocationListByDate(int deviceId, String date);
 
     ResponseEntity<BaseResponse> getMessageList(int deviceId);
 
