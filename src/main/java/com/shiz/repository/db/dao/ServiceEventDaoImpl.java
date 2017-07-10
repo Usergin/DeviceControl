@@ -35,7 +35,7 @@ public class ServiceEventDaoImpl implements ServiceEventDao {
             for (ServiceEvent serviceEvent : serviceEventList) {
                 ServiceEventEntity serviceEventEntity = new ServiceEventEntity();
                 serviceEventEntity.setEvent(serviceEvent.getEvent());
-                serviceEventEntity.setDate(new java.sql.Timestamp(serviceEvent.getDate().getTime()));
+                serviceEventEntity.setDate(serviceEvent.getDate());
                 serviceEventEntity.setArea(serviceEvent.getArea());
                 serviceEventEntity.setServiceEventByDeviceId(deviceEntity);
                 deviceEntity.addServiceEventByDeviceId(serviceEventEntity);

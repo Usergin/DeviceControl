@@ -1,7 +1,7 @@
 package com.shiz.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by OldMan on 08.05.2017.
@@ -14,7 +14,7 @@ public class ServiceEventEntity {
     private DeviceEntity serviceEventByDeviceId;
     private String area;
     private String event;
-    private Timestamp date;
+    private Date date;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,11 +59,12 @@ public class ServiceEventEntity {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

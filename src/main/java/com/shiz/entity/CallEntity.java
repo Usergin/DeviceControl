@@ -1,7 +1,7 @@
 package com.shiz.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by oldman on 07.05.17.
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 public class CallEntity {
     private int id;
     private String number;
-    private Timestamp date;
+    private Date date;
     private int typeEventId;
     private int duration;
     private DeviceEntity callByDeviceId;
@@ -50,11 +50,12 @@ public class CallEntity {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

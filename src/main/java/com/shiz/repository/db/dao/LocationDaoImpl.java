@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +38,7 @@ public class LocationDaoImpl implements LocationDao {
                 Location location = iterator.next();
                 LocationEntity locationEntity = new LocationEntity();
                 locationEntity.setAccuracy(location.getAccuracy());
-                locationEntity.setDate(new java.sql.Timestamp(location.getDate().getTime()));
+                locationEntity.setDate(location.getDate());
                 locationEntity.setLatitude(location.getLatitude());
                 locationEntity.setLongitude(location.getLongitude());
                 locationEntity.setMethod(location.getMethod());
@@ -99,21 +96,20 @@ public class LocationDaoImpl implements LocationDao {
         try {
             session = sessionFactory.getCurrentSession();
             session.beginTransaction();
-//            DeviceEntity deviceEntity = (DeviceEntity) session
-//                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
-//                    .setParameter("device_id", deviceId)
-//                    .getSingleResult();
+            DeviceEntity deviceEntity = (DeviceEntity) session
+                    .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
+                    .setParameter("device_id", deviceId)
+                    .getSingleResult();
 //            List<LocationEntity> locationEntities = deviceEntity.getLocationByDeviceId();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<LocationEntity> criteria = cb.createQuery(LocationEntity.class);
             Root<LocationEntity> locationEntityRoot = criteria.from(LocationEntity.class);
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-YYYY");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date minDate = formatter.parse(date);
-            long minDateTime = minDate.getTime();
             Date maxDate = new Date(minDate.getTime() + TimeUnit.DAYS.toMillis(1));
-            long maxDateTime = maxDate.getTime();
             Predicate p = cb.and(cb.between(locationEntityRoot.get(LocationEntity_.date), minDate, maxDate)
-                    ,(cb.equal(locationEntityRoot.get(LocationEntity_.locationByDeviceId),deviceId)));
+                    ,(cb.equal(locationEntityRoot.get(LocationEntity_.locationByDeviceId),deviceEntity.getId())));
             criteria.where(p);
             List<LocationEntity> locations = session.createQuery(criteria).getResultList();
 

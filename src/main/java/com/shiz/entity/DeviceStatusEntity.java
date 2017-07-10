@@ -1,7 +1,7 @@
 package com.shiz.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Created by oldman on 19.04.17.
@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @IdClass(DeviceStatusEntityPK.class)
 public class DeviceStatusEntity {
     private int id;
-    private Timestamp date;
+    private Date date;
     private String status;
     private DeviceEntity deviceStatusByDeviceId;
 
@@ -28,11 +28,12 @@ public class DeviceStatusEntity {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

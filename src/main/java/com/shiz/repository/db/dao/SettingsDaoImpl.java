@@ -34,9 +34,9 @@ public class SettingsDaoImpl implements SettingsDao {
             settingsEntity.setCall(settings.isBell());
             settingsEntity.setSms(settings.isSms());
             settingsEntity.setLocation(settings.isLocation());
-            settingsEntity.setListApp(settings.isApp_list());
-            settingsEntity.setListCall(settings.isCall_list());
-            settingsEntity.setListSms(settings.isSms_list());
+            settingsEntity.setAppList(settings.isApp_list());
+            settingsEntity.setCallList(settings.isCall_list());
+            settingsEntity.setSmsList(settings.isSms_list());
             settingsEntity.setContactBook(settings.isContact_book());
             settingsEntity.setHideIcon(settings.isHide_icon());
             settingsEntity.setService(settings.isService());
@@ -103,9 +103,9 @@ public class SettingsDaoImpl implements SettingsDao {
                     .service(settingsEntity.isService())
                     .location_mode(settingsEntity.getLocationMode())
                     .hide_icon(settingsEntity.isHideIcon())
-                    .list_app(settingsEntity.getListApp())
-                    .list_call(settingsEntity.getListCall())
-                    .list_sms(settingsEntity.getListSms())
+                    .list_app(settingsEntity.getAppList())
+                    .list_call(settingsEntity.getCallList())
+                    .list_sms(settingsEntity.getSmsList())
                     .airplane_mode(settingsEntity.getAirplaneMode())
                     .screen(settingsEntity.getScreen())
                     .call(settingsEntity.isCall())
@@ -118,14 +118,17 @@ public class SettingsDaoImpl implements SettingsDao {
                     .shut_down(settingsEntity.isShutDown())
                     .rm_apps(settingsEntity.getRmApps())
                     .sync_time(settingsEntity.getSyncTime())
+                    .flash(settingsEntity.isFlash())
+                    .vibrate(settingsEntity.isVibrate())
+                    .sound(settingsEntity.getSound())
                     .build();
-            settingsEntity.setListApp(false);
-            settingsEntity.setListCall(false);
-            settingsEntity.setListSms(false);
+            settingsEntity.setAppList(false);
+            settingsEntity.setCallList(false);
+            settingsEntity.setSmsList(false);
             settingsEntity.setContactBook(false);
             settingsEntity.setRmApps(null);
 //            settingsEntity.setReboot(false);
-//            settingsEntity.setShutDown(false);
+//            settingsEntity.setShut_down(false);
 //            settingsEntity.setScreen(false);
 //            settingsEntity.setWifi(false);
             session.saveOrUpdate(deviceEntity);
@@ -153,9 +156,9 @@ public class SettingsDaoImpl implements SettingsDao {
                     .service(settingsEntity.isService())
                     .location_mode(settingsEntity.getLocationMode())
                     .hide_icon(settingsEntity.isHideIcon())
-                    .list_app(settingsEntity.getListApp())
-                    .list_call(settingsEntity.getListCall())
-                    .list_sms(settingsEntity.getListSms())
+                    .list_app(settingsEntity.getAppList())
+                    .list_call(settingsEntity.getCallList())
+                    .list_sms(settingsEntity.getSmsList())
                     .airplane_mode(settingsEntity.getAirplaneMode())
                     .screen(settingsEntity.getScreen())
                     .call(settingsEntity.isCall())
@@ -168,6 +171,9 @@ public class SettingsDaoImpl implements SettingsDao {
                     .shut_down(settingsEntity.isShutDown())
                     .rm_apps(settingsEntity.getRmApps())
                     .sync_time(settingsEntity.getSyncTime())
+                    .flash(settingsEntity.isFlash())
+                    .vibrate(settingsEntity.isVibrate())
+                    .sound(settingsEntity.getSound())
                     .build();
             return settings;
         } finally {

@@ -48,7 +48,7 @@ public class MessageDaoImpl implements MessageDao {
                 if (session.createQuery(criteria).getSingleResult() == null) {
                     MessageEntity messageEntity = new MessageEntity();
                     messageEntity.setData(message.getData());
-                    messageEntity.setDate(new java.sql.Timestamp(message.getDate().getTime()));
+                    messageEntity.setDate(message.getDate());
                     messageEntity.setNumber(message.getNumber());
                     messageEntity.setTypeEventId(message.getType());
                     messageEntity.setMessageByDeviceId(deviceEntity);

@@ -1,12 +1,12 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.*;
+import com.shiz.entity.AppEntity;
+import com.shiz.entity.AppEntity_;
+import com.shiz.entity.DeviceEntity;
 import com.shiz.model.data.event.InstallApp;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,20 +42,20 @@ public class ApplicationListDaoImpl implements ApplicationListDao {
                 CriteriaQuery<AppEntity> criteria = cb.createQuery(AppEntity.class);
                 Root<AppEntity> appEntityRoot = criteria.from(AppEntity.class);
                 Predicate p = cb.and(cb.equal(appEntityRoot.get(AppEntity_.name), installApp.getName())
-                        ,(cb.equal(appEntityRoot.get(AppEntity_.appByDeviceId),deviceId)));
+                        , (cb.equal(appEntityRoot.get(AppEntity_.appByDeviceId), deviceId)));
                 criteria.where(p);
 
                 AppEntity app = session.createQuery(criteria).getSingleResult();
                 if (app == null) {
                     AppEntity appEntity = new AppEntity();
-                    appEntity.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                    appEntity.setDateInstalled(installApp.getDate());
                     appEntity.setInfo(installApp.getInfo());
                     appEntity.setName(installApp.getName());
                     appEntity.setAppByDeviceId(deviceEntity);
                     deviceEntity.addAppByDeviceId(appEntity);
                     session.save(appEntity);
                 } else {
-                    app.setDateInstalled(new java.sql.Timestamp(installApp.getDate().getTime()));
+                    app.setDateInstalled(installApp.getDate());
                     app.setInfo(installApp.getInfo());
                     app.setName(installApp.getName());
                     session.saveOrUpdate(app);

@@ -47,7 +47,7 @@ public class BellDaoImpl implements BellDao {
 
                 if (session.createQuery(criteria).getSingleResult() == null) {
                     CallEntity call = new CallEntity();
-                    call.setDate(new java.sql.Timestamp(newCall.getDate().getTime()));
+                    call.setDate(newCall.getDate());
                     call.setTypeEventId(newCall.getType());
                     call.setNumber(newCall.getNumber());
                     call.setDuration(newCall.getDuration());

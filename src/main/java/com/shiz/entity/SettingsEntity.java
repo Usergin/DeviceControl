@@ -20,13 +20,16 @@ public class SettingsEntity {
     private boolean service;
     private int password;
     //one time settings
-    private boolean listSms;
-    private boolean listCall;
-    private boolean listApp;
+    private boolean smsList;
+    private boolean callList;
+    private boolean appList;
     private boolean contactBook;
     private int airplaneMode;
     private int wifi;
     private int screen;
+    private boolean flash;
+    private boolean vibrate;
+    private int sound;
     private boolean reboot;
     private boolean shutDown;
     private long syncTime;
@@ -170,32 +173,32 @@ public class SettingsEntity {
 
     @Basic
     @Column(name = "sms_list", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean getListSms() {
-        return listSms;
+    public boolean getSmsList() {
+        return smsList;
     }
 
-    public void setListSms(boolean listSms) {
-        this.listSms = listSms;
+    public void setSmsList(boolean listSms) {
+        this.smsList = listSms;
     }
 
     @Basic
     @Column(name = "call_list", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean getListCall() {
-        return listCall;
+    public boolean getCallList() {
+        return callList;
     }
 
-    public void setListCall(boolean listCall) {
-        this.listCall = listCall;
+    public void setCallList(boolean listCall) {
+        this.callList = listCall;
     }
 
     @Basic
     @Column(name = "app_list", nullable = false, columnDefinition = "TINYINT(1)")
-    public boolean getListApp() {
-        return listApp;
+    public boolean getAppList() {
+        return appList;
     }
 
-    public void setListApp(boolean listApp) {
-        this.listApp = listApp;
+    public void setAppList(boolean listApp) {
+        this.appList = listApp;
     }
 
     @Basic
@@ -224,6 +227,35 @@ public class SettingsEntity {
 
     public void setSyncTime(long syncTime) {this.syncTime = syncTime;}
 
+    @Basic
+    @Column(name = "flash", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isFlash() {
+        return flash;
+    }
+
+    public void setFlash(boolean flash) {
+        this.flash = flash;
+    }
+
+    @Basic
+    @Column(name = "vibrate", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean isVibrate() {
+        return vibrate;
+    }
+
+    public void setVibrate(boolean vibrate) {
+        this.vibrate = vibrate;
+    }
+
+    @Basic
+    @Column(name = "sound", nullable = false, columnDefinition = "TINYINT(1)")
+    public int getSound() {
+        return sound;
+    }
+
+    public void setSound(int sound) {
+        this.sound = sound;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -236,9 +268,9 @@ public class SettingsEntity {
         if (location != that.location) return false;
         if (sms != that.sms) return false;
         if (call != that.call) return false;
-        if (listSms != that.listSms) return false;
-        if (listCall != that.listCall) return false;
-        if (listApp != that.listApp) return false;
+        if (smsList != that.smsList) return false;
+        if (callList != that.callList) return false;
+        if (appList != that.appList) return false;
         if (contactBook != that.contactBook) return false;
         if (hideIcon != that.hideIcon) return false;
         if (airplaneMode != that.airplaneMode) return false;
@@ -246,6 +278,9 @@ public class SettingsEntity {
         if (screen != that.screen) return false;
         if (service != that.service) return false;
         if (syncTime != that.syncTime) return false;
+        if (sound != that.sound) return false;
+        if (vibrate != that.vibrate) return false;
+        if (flash != that.flash) return false;
         if (deviceByDeviceId != that.deviceByDeviceId) return false;
 
         return true;

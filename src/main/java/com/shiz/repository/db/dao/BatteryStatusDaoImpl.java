@@ -36,7 +36,7 @@ public class BatteryStatusDaoImpl implements BatteryStatusDao {
             for (BatteryEvent batteryEvent : batteryEvents) {
                 BatteryEntity batteryStatusEntity = new BatteryEntity();
                 batteryStatusEntity.setBatteryStatus(batteryEvent.getBattery_status());
-                batteryStatusEntity.setDate(new java.sql.Timestamp(batteryEvent.getDate().getTime()));
+                batteryStatusEntity.setDate(batteryEvent.getDate());
                 batteryStatusEntity.setLevel(batteryEvent.getLevel());
                 batteryStatusEntity.setStatus(batteryEvent.getStatus());
                 batteryStatusEntity.setTypeCharging(batteryEvent.getType_charging());

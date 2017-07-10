@@ -1,6 +1,5 @@
 package com.shiz.model.data.event;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -45,7 +44,7 @@ public class Call extends BaseEvent {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

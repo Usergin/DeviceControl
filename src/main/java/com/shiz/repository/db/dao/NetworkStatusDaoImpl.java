@@ -34,7 +34,7 @@ public class NetworkStatusDaoImpl implements NetworkStatusDao {
                     .uniqueResult());
             for (NetworkEvent networkEvent : networkEventList) {
                 NetworkStatusEntity networkStatusEntity = new NetworkStatusEntity();
-                networkStatusEntity.setDate(new java.sql.Timestamp(networkEvent.getDate().getTime()));
+                networkStatusEntity.setDate(networkEvent.getDate());
                 networkStatusEntity.setIp(networkEvent.getIp());
                 networkStatusEntity.setState(networkEvent.getState());
                 networkStatusEntity.setNetworkStatusByDeviceId(deviceEntity);

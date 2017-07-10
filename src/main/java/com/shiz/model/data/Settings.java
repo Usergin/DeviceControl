@@ -1,7 +1,7 @@
 package com.shiz.model.data;
 
 /**
- * Created by oldman on 05.04.17.
+ * Created by OldMan on 18.06.2017.
  */
 public class Settings {
     private boolean location;
@@ -17,22 +17,23 @@ public class Settings {
     private int airplane_mode;
     private int wifi;
     private int screen;
+    private boolean flash;
+    private boolean vibrate;
+    private int sound;
     private boolean reboot;
     private boolean shut_down;
     private String rm_apps;
     private int passwd;
     private long sync_time;
 
-    public Settings() {
-    }
 
     private Settings(Builder builder) {
         setLocation(builder.location);
         setSms(builder.sms);
         setBell(builder.call);
-        setSms_list(builder.sms_list);
-        setCall_list(builder.call_list);
-        setApp_list(builder.app_list);
+        setSms_list(builder.list_sms);
+        setCall_list(builder.list_call);
+        setApp_list(builder.list_app);
         setContact_book(builder.contact_book);
         setHide_icon(builder.hide_icon);
         setLocation_mode(builder.location_mode);
@@ -44,12 +45,16 @@ public class Settings {
         setReboot(builder.reboot);
         setShut_down(builder.shut_down);
         setRm_apps(builder.rm_apps);
+        setFlash(builder.flash);
+        setSound(builder.sound);
+        setVibrate(builder.vibrate);
         setSync_time(builder.sync_time);
     }
 
     public static Builder newBuilder() {
         return new Builder();
     }
+
 
     public boolean isReboot() {
         return reboot;
@@ -107,6 +112,37 @@ public class Settings {
         this.airplane_mode = airplane_mode;
     }
 
+    public boolean getFlash() {
+        return flash;
+    }
+
+    public void setFlash(boolean flash) {
+        this.flash = flash;
+    }
+
+    public boolean getVibrate() {
+        return vibrate;
+    }
+
+    public void setVibrate(boolean vibrate) {
+        this.vibrate = vibrate;
+    }
+
+    public int getSound() {
+        return sound;
+    }
+
+    public void setSound(int sound) {
+        this.sound = sound;
+    }
+
+    public long getSync_time() {
+        return sync_time;
+    }
+
+    public void setSync_time(long sync_time) {
+        this.sync_time = sync_time;
+    }
 
     public boolean isLocation() {
         return location;
@@ -188,22 +224,13 @@ public class Settings {
         this.service = is_service;
     }
 
-
-    public long getSync_time() {
-        return sync_time;
-    }
-
-    public void setSync_time(long sync_time) {
-        this.sync_time = sync_time;
-    }
-
     public static final class Builder {
         private boolean location;
         private boolean sms;
         private boolean call;
-        private boolean sms_list;
-        private boolean call_list;
-        private boolean app_list;
+        private boolean list_sms;
+        private boolean list_call;
+        private boolean list_app;
         private boolean contact_book;
         private boolean hide_icon;
         private int location_mode;
@@ -216,8 +243,32 @@ public class Settings {
         private String rm_apps;
         private int password;
         private long sync_time;
+        private boolean flash;
+        private boolean vibrate;
+        private int sound;
+
 
         private Builder() {
+        }
+
+        public Builder sync_time(long val) {
+            sync_time = val;
+            return this;
+        }
+
+        public Builder flash(boolean flash) {
+            flash = flash;
+            return this;
+        }
+
+        public Builder vibrate(boolean val) {
+            vibrate = val;
+            return this;
+        }
+
+        public Builder sound(int val) {
+            sound = val;
+            return this;
         }
 
         public Builder reboot(boolean val) {
@@ -281,17 +332,17 @@ public class Settings {
         }
 
         public Builder list_sms(boolean val) {
-            sms_list = val;
+            list_sms = val;
             return this;
         }
 
         public Builder list_call(boolean val) {
-            call_list = val;
+            list_call = val;
             return this;
         }
 
         public Builder list_app(boolean val) {
-            app_list = val;
+            list_app = val;
             return this;
         }
 
@@ -302,11 +353,6 @@ public class Settings {
 
         public Builder hide_icon(boolean val) {
             hide_icon = val;
-            return this;
-        }
-
-        public Builder sync_time(long val) {
-            sync_time = val;
             return this;
         }
 
