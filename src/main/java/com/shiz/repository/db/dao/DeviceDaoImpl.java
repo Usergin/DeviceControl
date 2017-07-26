@@ -49,8 +49,10 @@ public class DeviceDaoImpl implements DeviceDao {
                     .getSingleResult()).getDeviceId();
             return deviceId;
         } catch (NoResultException | NonUniqueResultException nre) {
-            session.save(deviceEntity);
-            session.getTransaction().commit();
+            if(session!=null) {
+                session.save(deviceEntity);
+                session.getTransaction().commit();
+            }
             return deviceEntity.getDeviceId();
         } catch (Exception e) {
             return -1;

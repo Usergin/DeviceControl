@@ -1,12 +1,12 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.*;
+import com.shiz.entity.CallEntity;
+import com.shiz.entity.CallEntity_;
+import com.shiz.entity.DeviceEntity;
 import com.shiz.model.data.event.Call;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -42,10 +42,11 @@ public class BellDaoImpl implements BellDao {
                 CriteriaQuery<CallEntity> criteria = cb.createQuery(CallEntity.class);
                 Root<CallEntity> userRoot = criteria.from(CallEntity.class);
                 Predicate p = cb.and(cb.equal(userRoot.get(CallEntity_.date), newCall.getDate())
-                        ,(cb.equal(userRoot.get(CallEntity_.callByDeviceId),deviceId)));
+                        , (cb.equal(userRoot.get(CallEntity_.callByDeviceId), deviceId)));
                 criteria.where(p);
 
-                if (session.createQuery(criteria).getSingleResult() == null) {
+                if (session.createQuery(criteria) == null
+                        && session.createQuery(criteria).getSingleResult() != null) {
                     CallEntity call = new CallEntity();
                     call.setDate(newCall.getDate());
                     call.setTypeEventId(newCall.getType());

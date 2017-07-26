@@ -45,7 +45,8 @@ public class MessageDaoImpl implements MessageDao {
                         , (cb.equal(userRoot.get(MessageEntity_.messageByDeviceId), deviceId)));
                 criteria.where(p);
 
-                if (session.createQuery(criteria).getSingleResult() == null) {
+                if (session.createQuery(criteria) != null &&
+                        session.createQuery(criteria).getSingleResult() == null) {
                     MessageEntity messageEntity = new MessageEntity();
                     messageEntity.setData(message.getData());
                     messageEntity.setDate(message.getDate());

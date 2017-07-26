@@ -71,18 +71,7 @@ public class LocationDaoImpl implements LocationDao {
                     .getNamedQuery(DeviceEntity.NamedQuery.DEVICE_FIND_BY_ID)
                     .setParameter("device_id", deviceId)
                     .getSingleResult();
-            List<LocationEntity> locationEntities = deviceEntity.getLocationByDeviceId();
-            List<Location> locationList = new ArrayList<>();
-            for (LocationEntity locationEntity : locationEntities) {
-                Location location = new Location();
-                location.setAccuracy(locationEntity.getAccuracy());
-                location.setDate(locationEntity.getDate());
-                location.setLatitude(locationEntity.getLatitude());
-                location.setLongitude(locationEntity.getLongitude());
-                location.setMethod(locationEntity.getMethod());
-                locationList.add(location);
-            }
-            return locationList;
+            return getLocationList(deviceEntity.getLocationByDeviceId());
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
@@ -111,23 +100,24 @@ public class LocationDaoImpl implements LocationDao {
             Predicate p = cb.and(cb.between(locationEntityRoot.get(LocationEntity_.date), minDate, maxDate)
                     ,(cb.equal(locationEntityRoot.get(LocationEntity_.locationByDeviceId),deviceEntity.getId())));
             criteria.where(p);
-            List<LocationEntity> locations = session.createQuery(criteria).getResultList();
-
-            List<Location> locationList = new ArrayList<>();
-            for (LocationEntity locationEntity : locations) {
-                Location location = new Location();
-                location.setAccuracy(locationEntity.getAccuracy());
-                location.setDate(locationEntity.getDate());
-                location.setLatitude(locationEntity.getLatitude());
-                location.setLongitude(locationEntity.getLongitude());
-                location.setMethod(locationEntity.getMethod());
-                locationList.add(location);
-            }
-            return locationList;
+            return getLocationList(session.createQuery(criteria).getResultList());
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
+    }
+    private  List<Location> getLocationList(List<LocationEntity> locations){
+        List<Location> locationList = new ArrayList<>();
+        for (LocationEntity locationEntity : locations) {
+            Location location = new Location();
+            location.setAccuracy(locationEntity.getAccuracy());
+            location.setDate(locationEntity.getDate());
+            location.setLatitude(locationEntity.getLatitude());
+            location.setLongitude(locationEntity.getLongitude());
+            location.setMethod(locationEntity.getMethod());
+            locationList.add(location);
+        }
+        return locationList;
     }
 }

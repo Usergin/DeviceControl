@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InformationDaoImpl implements InformationDao {
     private SessionFactory sessionFactory;
-    private Logger logger = LoggerFactory.getLogger(DBServiceImpl.class);
 
     public InformationDaoImpl() {
         sessionFactory = HibernateSessionFactory.getSessionFactory();

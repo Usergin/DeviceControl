@@ -72,9 +72,9 @@ public class DeviceController {
 
     @RequestMapping(value = "device/{id}/contacts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<BaseResponse> getContactList(@PathVariable String id) {
+    public ResponseEntity<BaseResponse> getContactList(@PathVariable int id) {
         System.out.println("getContactList deviceId " + id);
-        return dbService.getContactList(Integer.valueOf(id));
+        return dbService.getContactList(id);
     }
 
     @RequestMapping(value = "device/{id}/status", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -107,9 +107,9 @@ public class DeviceController {
 
     @RequestMapping(value = "device/{id}/messages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<BaseResponse> getMessageList(@PathVariable String id) {
+    public ResponseEntity<BaseResponse> getMessageList(@PathVariable int id) {
         System.out.println("getMessageList " + id);
-        return dbService.getMessageList(Integer.valueOf(id));
+        return dbService.getMessageList(id);
     }
 
     @RequestMapping(value = "device/{id}/network", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

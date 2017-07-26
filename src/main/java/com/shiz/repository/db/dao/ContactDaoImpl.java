@@ -1,7 +1,9 @@
 package com.shiz.repository.db.dao;
 
 import com.shiz.config.HibernateSessionFactory;
-import com.shiz.entity.*;
+import com.shiz.entity.ContactBookEntity;
+import com.shiz.entity.ContactBookEntity_;
+import com.shiz.entity.DeviceEntity;
 import com.shiz.model.data.Contact;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -40,11 +42,12 @@ public class ContactDaoImpl implements ContactDao {
                 CriteriaQuery<ContactBookEntity> criteria = cb.createQuery(ContactBookEntity.class);
                 Root<ContactBookEntity> appEntityRoot = criteria.from(ContactBookEntity.class);
                 Predicate p = cb.and(cb.equal(appEntityRoot.get(ContactBookEntity_.name), contact.getName())
-                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.devDbId),contact.getDb_id()))
-                        ,(cb.equal(appEntityRoot.get(ContactBookEntity_.contactBookByDeviceId),deviceId)));
+                        , (cb.equal(appEntityRoot.get(ContactBookEntity_.devDbId), contact.getDb_id()))
+                        , (cb.equal(appEntityRoot.get(ContactBookEntity_.contactBookByDeviceId), deviceId)));
                 criteria.where(p);
-
-                ContactBookEntity contactBookEntity = session.createQuery(criteria).getSingleResult();
+                ContactBookEntity contactBookEntity = null;
+                if (session.createQuery(criteria) != null)
+                    contactBookEntity = session.createQuery(criteria).getSingleResult();
                 if (contactBookEntity == null) {
                     ContactBookEntity contactEntity = new ContactBookEntity();
                     contactEntity.setDevDbId(contact.getDb_id());
@@ -58,7 +61,6 @@ public class ContactDaoImpl implements ContactDao {
                     contactEntity.setContactBookByDeviceId(deviceEntity);
                     deviceEntity.addContactByDeviceId(contactEntity);
                     session.save(contactEntity);
-
                 } else {
                     contactBookEntity.setEMail(contact.getE_mail());
                     contactBookEntity.setInfo(contact.getInfo());

@@ -44,8 +44,9 @@ public class ApplicationListDaoImpl implements ApplicationListDao {
                 Predicate p = cb.and(cb.equal(appEntityRoot.get(AppEntity_.name), installApp.getName())
                         , (cb.equal(appEntityRoot.get(AppEntity_.appByDeviceId), deviceId)));
                 criteria.where(p);
-
-                AppEntity app = session.createQuery(criteria).getSingleResult();
+                AppEntity app = null;
+                if (session.createQuery(criteria) != null)
+                    app = session.createQuery(criteria).getSingleResult();
                 if (app == null) {
                     AppEntity appEntity = new AppEntity();
                     appEntity.setDateInstalled(installApp.getDate());
@@ -60,6 +61,7 @@ public class ApplicationListDaoImpl implements ApplicationListDao {
                     app.setName(installApp.getName());
                     session.saveOrUpdate(app);
                 }
+
                 session.flush();
                 session.clear();
                 session.saveOrUpdate(deviceEntity);
